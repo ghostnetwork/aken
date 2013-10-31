@@ -9,6 +9,9 @@ function Cento(canvas) {
   var rect = {x:0, y:0, width:50, height:50};
   that.dogbone.drawFilledRect(rect, fillStyle);
 
+  // var pulse = Pulse.create();
+  // pulse.start(1000);
+  
   return that;
 }
 
