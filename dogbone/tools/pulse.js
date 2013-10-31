@@ -1,16 +1,11 @@
 function Pulse() {
-  var that = {
-    get interval(){return _interval;}
-  };
+  var that = PubSub.create();
 
-  that.create = function(){return new Pulse();};
-  
   that.start = function(interval) {
     _interval = interval;
     timerId = setInterval(function() {
-        //that.emit('pulse');
-        console.log('pulse emitted');
-      }, interval);
+      that.publish('pulse');
+    }, interval);
   }
 
   that.stop = function() {
