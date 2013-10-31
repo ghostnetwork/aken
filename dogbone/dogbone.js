@@ -1,5 +1,3 @@
-console.log("dogbone.js didLoad");
-
 function Dogbone(canvas) {
 
   var that = {

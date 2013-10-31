@@ -1,5 +1,3 @@
-console.log("point.js didLoad");
-
 function Point(x, y) {
   var that = {
     get x(){return _x;},

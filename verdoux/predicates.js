@@ -1,5 +1,3 @@
-console.log("predicates.js didLoad");
-
 not = function(x) { return !x; };
 
 existy = function (x) { return x != null; }; // Using != here to force conversion

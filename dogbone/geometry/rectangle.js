@@ -1,5 +1,3 @@
-console.log("rectangle.js didLoad");
-
 function Rectangle(x, y, width, height) {
   var that = {
     get origin(){return _origin;},
@@ -10,7 +8,9 @@ function Rectangle(x, y, width, height) {
     get height(){return _size.height;}
   };
 
-  that.create = function(x, y, width, height) {return new Rectangle(x, y, width, height);};
+  that.create = function(x, y, width, height) {
+    return new Rectangle(x, y, width, height);
+  };
   
   var _origin = Point.create(x, y)
     , _size = Size.create(width, height);
