@@ -5,13 +5,23 @@ function Cento(canvas) {
 
   that.dogbone = new Dogbone(canvas);
 
-  var rect = {x:0, y:0, width:50, height:50};
-  var fillStyle = colorWithAlpha('#4682B4', 0.50);
-  that.dogbone.graphics.drawFilledRect(rect, fillStyle);
+  function testGraphics() {
+    var rect = {x:0, y:0, width:50, height:50};
+    var fillStyle = colorWithAlpha('#4682B4', 0.50);
+    that.dogbone.graphics.drawFilledRect(rect, fillStyle);
 
-  rect = {x:25, y:25, width:50, height:50};
-  fillStyle = colorWithAlpha('#82B446', 0.50);
-  that.dogbone.graphics.drawFilledRect(rect, fillStyle);
+    rect = {x:25, y:25, width:50, height:50};
+    fillStyle = colorWithAlpha('#82B446', 0.50);
+    that.dogbone.graphics.drawFilledRect(rect, fillStyle);
+  }
+
+  testGraphics();
+  that.dogbone.start();
+
+  setTimeout(function() {
+    that.dogbone.stop();
+  }, 3000);
+
   return that;
 }
 
