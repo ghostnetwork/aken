@@ -5,11 +5,23 @@ function Cento(canvas) {
 
   that.dogbone = new Dogbone(canvas);
 
-  /*
-  var fillStyle = colorWithAlpha('#4682B4', 0.80);
   var rect = {x:0, y:0, width:50, height:50};
-  that.dogbone.drawFilledRect(rect, fillStyle);
+  var fillStyle = colorWithAlpha('#4682B4', 0.50);
+  that.dogbone.graphics.drawFilledRect(rect, fillStyle);
 
+  rect = {x:25, y:25, width:50, height:50};
+  fillStyle = colorWithAlpha('#82B446', 0.50);
+  that.dogbone.graphics.drawFilledRect(rect, fillStyle);
+  return that;
+}
+
+function initialize() {
+  var canvasElem = document.getElementById('canvas');
+  globals.cento = new Cento(canvasElem)
+}
+
+
+  /*
   var counter = 0;
   var maxTimes = 5;
   var limit = maxTimes * 2;
@@ -37,10 +49,3 @@ function Cento(canvas) {
 
   pulse.start(500);
   */
-  return that;
-}
-
-function initialize() {
-  var canvasElem = document.getElementById('canvas');
-  globals.cento = new Cento(canvasElem)
-}
