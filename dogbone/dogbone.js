@@ -11,6 +11,7 @@ function Dogbone(canvas) {
   }
 
   function update() {
+    sortDisplayListByZOrder();
   }
 
   function render() {
@@ -39,6 +40,24 @@ function Dogbone(canvas) {
     }
     inspect(displayList);
     return that;
+  }
+
+  function sortDisplayListByZOrder() {
+    displayList.sort(function(a, b) {
+      var result = 0;
+      if (a.zOrder < b.zOrder)
+        result = -1;
+      else if (a.zOrder > b.zOrder)
+        result = 1;
+      return result;
+    });
+  }
+
+  function logDisplayList() {
+    for (var i = 0; i < displayList.length; i++) {
+      var shape = displayList[i];
+      console.log(shape.frame.debugString() + '(' + shape.zOrder + ')');
+    };
   }
 
   var origFillStyle;

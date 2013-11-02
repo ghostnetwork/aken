@@ -10,6 +10,7 @@ function Cento(canvas) {
 
 function initialize() {
   console.log('initialize()');
+  
   var canvasElem = document.getElementById('canvas');
   globals.cento = new Cento(canvasElem)
 
@@ -40,13 +41,15 @@ function testDogboneAddRemoveChildren(that) {
   var frame = makeRectangle(100, 110, 120, 130);
   console.log('frame: ' + frame.debugString());
 
-  var shape = Shape.create(frame);
+  var shape = Box.create(frame);
   shape.backgroundColor = colorWithAlpha('#c70000', 0.5);
+  shape.zOrder = 1000;
   that.dogbone.addChild(shape);
 
-  frame = makeRectangle(150, 150, 100, 100);
+  frame = makeRectangle(150, 175, 100, 100);
   var box = Box.create(frame);
   box.backgroundColor = colorWithAlpha('#00c700', 0.5);
+  box.zOrder = 999;
   that.dogbone.addChild(box);
 
   setTimeout(function() {
