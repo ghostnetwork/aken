@@ -4,12 +4,14 @@ function Size(width, height) {
     get height(){return _height;}
   };
 
-  that.create = function(width, height) {
-    return new Size(width, height);
-  };
-  
+  that.debugString = function() {return _width + ", " + _height;};
+
   var _width = width
     , _height = height;
 
   return that;
+}
+
+Size.create = function(width, height) {
+  return new Size(width, height);
 }

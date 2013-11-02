@@ -4,10 +4,12 @@ function Point(x, y) {
     get y(){return _y;}
   };
 
-  that.create = function(x, y) {return new Point(x, y);};
+  that.debugString = function() {return _x + ", " + _y;};
 
   var _x = x
     , _y = y;
 
   return that;
 }
+
+Point.create = function(x, y){return new Point(x,y);};

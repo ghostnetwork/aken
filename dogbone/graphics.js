@@ -3,8 +3,8 @@ function Graphics(context) {
     get context(){return _context;}
   }
 
-  that.drawFilledRect = function(rect, fillStyle) {
-    pushFillStyle(fillStyle);
+  that.drawFilledRect = function(rect, color) {
+    pushFillStyle(color);
     _context.fillRect(rect.x, rect.y, rect.width, rect.height);
     popFillStyle();
   };
