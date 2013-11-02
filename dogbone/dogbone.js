@@ -5,7 +5,7 @@ function Dogbone(canvas) {
     get gameLoop(){return _gameLoop;}
   };
 
-  function gameLoopHandler() {
+  function updateAndRender() {
     update();
     render();
   }
@@ -64,7 +64,7 @@ function Dogbone(canvas) {
   var displayList = [];
 
   var _graphics = Graphics.create(canvas.getContext('2d'))
-    , _gameLoop = GameLoop.create(gameLoopHandler);
+    , _gameLoop = GameLoop.create(updateAndRender);
 
   return that;
 }

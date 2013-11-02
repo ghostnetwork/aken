@@ -3,12 +3,13 @@ function GameLoop(callback) {
 
   that.start = function() {
     console.log('GameLoop.start');
-    pulse.on('pulse', callback);
+    pulse.addObserver(_callback);
     pulse.start(20);
   }
 
   that.stop = function() {
     console.log('GameLoop.stop');
+    pulse.removeObserver(_callback);
     pulse.stop();
   }
 
