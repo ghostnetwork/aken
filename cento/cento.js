@@ -9,12 +9,9 @@ function Cento(canvas) {
 }
 
 function initialize() {
-  console.log('initialize()');
-  
   var canvasElem = document.getElementById('canvas');
   globals.cento = new Cento(canvasElem)
 
-  testGraphics(globals.cento);
   testDogboneAddRemoveChildren(globals.cento);
   testGameLoop(globals.cento);
 }
@@ -39,8 +36,6 @@ function testGameLoop(that) {
 
 function testDogboneAddRemoveChildren(that) {
   var frame = makeRectangle(100, 110, 120, 130);
-  console.log('frame: ' + frame.debugString());
-
   var shape = Box.create(frame);
   shape.backgroundColor = colorWithAlpha('#c70000', 0.5);
   shape.zOrder = 1000;

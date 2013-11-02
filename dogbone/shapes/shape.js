@@ -19,20 +19,20 @@ function Shape(frame) {
   that.onRender = function(graphics){};
 
   that.hitTest = function(point) {
-    var result = _frame.contains(point);
-    if (result) that.pubsub.publish('touched', that);
-    return result;
+    return _frame.contains(point);
   };
-  that.onTouched = function(){console.log('onTouch()');};
+
+  that.onTouch = function(){
+    console.log('onTouch(' + _frame.debugString() + ')');
+  };
 
   function clearBackground(graphics, frame) {graphics.clearRect(frame);}
 
   var _frame = frame
     , _pubsub = PubSub.create();
 
-  that.pubsub.subscribe('touched', that.onTouched);
   return that;
 }
 
 Shape.create = function(frame){return new Shape(frame);};
-Shape.prototype = new Shape();
+// Shape.prototype = new Shape(frame);
