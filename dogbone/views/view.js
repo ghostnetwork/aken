@@ -1,5 +1,5 @@
 function View(frame) {
-  var that = Shape.create(frame);
+  var that = Box.create(frame);
 
   Object.defineProperty(that, 'childCount', {get : function() {return displayList.length;},enumerable : true});
 
@@ -8,6 +8,7 @@ function View(frame) {
   };
 
   that.render = function(graphics) {
+    graphics.drawFilledRect(that.frame, that.backgroundColor);
     displayList.forEach(function(shape) {
       shape.render(graphics);
     });
@@ -32,11 +33,12 @@ function View(frame) {
   that.frameContainsPoint = function(point, handler) {
     var didHit = false;
     displayListReverseOrder(function(shape) {
-      didHit = shape.hitTest(point);
-
-      if (shape.hitTest(point)) {
-        handler(shape);
-        shape.onTouch();
+      if (not(didHit)) {
+        didHit = shape.hitTest(point);
+        if (didHit) {
+          handler(shape);
+          shape.onTouch();
+        }
       }
     });
 
@@ -83,5 +85,6 @@ if (typeof module !== 'undefined') {
   module.exports = View;
   var util = require('util');
   var Graphics = require('../graphics.js')
-    , Shape = require('../shapes/shape.js');
+    , Shape = require('../shapes/shape.js')
+    , Box = require('../shapes/box.js');
 }

@@ -9,3 +9,10 @@ function Box(frame) {
 }
 
 Box.create = function(frame){return new Box(frame);};
+
+if (typeof module !== 'undefined') {
+  module.exports = Box;
+  var util = require('util');
+  var Graphics = require('../graphics.js')
+    , Shape = require('./shape.js');
+}

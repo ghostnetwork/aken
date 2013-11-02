@@ -1,7 +1,8 @@
 function Dogbone(canvas) {
   var that = {
     get graphics(){return _graphics;},
-    get gameLoop(){return _gameLoop;}
+    get gameLoop(){return _gameLoop;},
+    get childCount(){return mainView.childCount;}
   };
 
   // Publis API
@@ -69,13 +70,17 @@ function Dogbone(canvas) {
 
   function onMouseUp(event) {
     console.log('onMouseUp:_selectionFrame: ' + _selectionFrame.debugString());
-    console.log('target: ' + inspect(target));
+    console.log('target: ' + inspect(target.frame.debugString()));
     mouseDownReceived = false;
     _selectionFrame = Rectangle.Empty;
   }
 
   function frameContainsPoint(point, handler) {
     mainView.frameContainsPoint(point, handler);
+  }
+
+  function configureMainView() {
+    mainView.backgroundColor = colorWithAlpha('#4682B4', 1.0);
   }
 
   var origFillStyle
@@ -93,6 +98,7 @@ function Dogbone(canvas) {
 
   // Configuration
   configureMouseListeners();
+  configureMainView();
   return that;
 }
 

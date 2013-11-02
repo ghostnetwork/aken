@@ -16,9 +16,8 @@ function Rectangle(x, y, width, height) {
     get height(){return _size.height;}
   };
 
-  that.create = function(x, y, width, height) {
-    return new Rectangle(x, y, width, height);
-  };
+  that.create = function(x, y, width, height) {return new Rectangle(x, y, width, height);};
+  that.clone = function() {return Rectangle.create(that.x, that.y, that.width, that.height);};
     
   that.contains = function(point) {
     var okX = (point.x >= _origin.x && point.x <= _origin.x + _size.width)

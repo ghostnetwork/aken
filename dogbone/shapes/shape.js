@@ -1,8 +1,9 @@
 
 if (typeof module !== 'undefined') {
   module.exports = Shape;
-  var Graphics = require('../graphics.js');
-  var colorWithAlpha = Graphics.colorWithAlpha;
+  var Graphics = require('../graphics.js')
+    , colorWithAlpha = Graphics.colorWithAlpha
+    , PubSub = require('../../verdoux/pubsub.js');
 }
 
 var ZORDER_TOP        = Number.MAX_VALUE;
@@ -19,17 +20,15 @@ function Shape(frame) {
   that.backgroundColor = colorWithAlpha('#FFFFFF', 1.0);
   that.zOrder = ZORDER_MIDDLE;
 
+  that.hitTest = function(point) {return existy(_frame) ? _frame.contains(point) : false;};
   that.render = function(graphics){
     clearBackground(graphics, that.frame);
     that.onRender(graphics);
   };
-  that.onRender = function(graphics){};
-
-  that.hitTest = function(point) {
-    return existy(_frame) ? _frame.contains(point) : false;
-  };
+  that.resizeFrame = function(newFrame) {_frame = newFrame.clone();};
 
   that.onTouch = function(){console.log('onTouch(' + _frame.debugString() + ')');};
+  that.onRender = function(graphics){};
 
   function clearBackground(graphics, frame) {graphics.clearRect(frame);}
 
@@ -40,8 +39,3 @@ function Shape(frame) {
 }
 
 Shape.create = function(frame){return new Shape(frame);};
-
-if (typeof module !== 'undefined') {
-  module.exports = Shape;
-  var PubSub = require('../../verdoux/pubsub.js');
-}

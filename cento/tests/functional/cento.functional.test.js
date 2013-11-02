@@ -29,14 +29,14 @@ function FunctionalTests() {
 
   function testDogboneAddRemoveChildren(cento) {
     var frame = makeRectangle(100, 110, 120, 130);
-    var shape = Box.create(frame);
-    shape.backgroundColor = colorWithAlpha('#c70000', 0.5);
+    var shape = View.create(frame);
+    shape.backgroundColor = colorWithAlpha('#c70033', 0.5);
     shape.zOrder = 1000;
     cento.dogbone.addChild(shape);
 
     frame = makeRectangle(150, 175, 100, 100);
     var box = Box.create(frame);
-    box.backgroundColor = colorWithAlpha('#00c700', 0.5);
+    box.backgroundColor = colorWithAlpha('#0033c7', 1.0);
     box.zOrder = 999;
     cento.dogbone.addChild(box);
 
