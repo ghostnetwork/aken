@@ -13,10 +13,15 @@ function Dogbone(canvas) {
     sortDisplayListByZOrder();
   }
 
+  var selectionFrameColor = colorWithAlpha('#777777', 1.0);
   function render() {
+    clearDisplay();
     displayList.forEach(function(shape) {
       shape.render(_graphics);
     });
+    if (_selectionFrame.size.width > 0 && _selectionFrame.size.height > 0) {
+      _graphics.drawRect(_selectionFrame, selectionFrameColor);
+    }
   }
 
   that.start = function() {_gameLoop.start();};
@@ -55,6 +60,10 @@ function Dogbone(canvas) {
       var shape = displayList[i];
       console.log(shape.frame.debugString() + '(' + shape.zOrder + ')');
     };
+  }
+
+  function clearDisplay() {
+    _graphics.clearRect(canvasFrame);
   }
 
   var mouseListenersConfigured = false;
@@ -118,7 +127,8 @@ function Dogbone(canvas) {
 
   var _graphics = Graphics.create(canvas.getContext('2d'))
     , _gameLoop = GameLoop.create(updateAndRender)
-    , _selectionFrame = Rectangle.Empty;
+    , _selectionFrame = Rectangle.Empty
+    , canvasFrame = Rectangle.createWithSize(Size.createWithCanvas(canvas));
 
   configureMouseListeners();
   return that;

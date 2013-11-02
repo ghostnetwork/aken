@@ -44,7 +44,9 @@ Rectangle.create = function(x, y, width, height){return new Rectangle(x, y, widt
 Rectangle.createWithOriginAndSize = function(origin, size) {
   return Rectangle.create(origin.x, origin.y, size.width, size.height);
 };
-
+Rectangle.createWithSize = function(size) {
+  return Rectangle.create(0, 0, size.width, size.height);
+};
 function makeRectangle(x, y, width, height){return Rectangle.create(x, y, width, height);};
 
 Rectangle.Empty = Rectangle.create(0, 0, 0, 0);

@@ -24,5 +24,6 @@ function Size(width, height) {
   return that;
 }
 
-Size.create = function(width, height) {return new Size(width, height);}
+Size.create = function(width, height) {return new Size(width, height);};
+Size.createWithCanvas = function(canvas) {return Size.create(canvas.width, canvas.height);}
 Size.Empty = Size.create(0, 0);
