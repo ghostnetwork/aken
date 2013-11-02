@@ -52,3 +52,8 @@ function colorWithAlpha(color, alpha) {
   var blue = parseInt(color.substring(5, 7), 16);
   return 'rgba(' + red + ',' + green + ',' + blue + ',' + alpha +')';
 }
+
+if (typeof module !== 'undefined') {
+  Graphics.colorWithAlpha = colorWithAlpha;
+  module.exports = Graphics;
+}

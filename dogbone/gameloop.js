@@ -22,3 +22,9 @@ function GameLoop(callback) {
 GameLoop.create = function(callback) {
   return new GameLoop(callback);
 };
+
+if (typeof module !== 'undefined') {
+  module.exports = GameLoop;
+  var PubSub = require('../verdoux/pubsub.js')
+    , Pulse = require('../verdoux/pulse.js');
+}

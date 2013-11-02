@@ -68,3 +68,9 @@ function View(frame) {
 }
 
 View.create = function(frame){return new View(frame);};
+
+if (typeof module !== 'undefined') {
+  module.exports = View;
+  var Graphics = require('../graphics.js')
+    , Shape = require('../shapes/shape.js');
+}

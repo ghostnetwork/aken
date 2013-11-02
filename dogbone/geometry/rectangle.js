@@ -1,3 +1,11 @@
+
+if (typeof module !== 'undefined') {
+  var util = require('util');
+  var Point = require('./point.js')
+    , Size = require('./size.js');
+  module.exports = Rectangle;
+}
+
 function Rectangle(x, y, width, height) {
   var that = {
     get origin(){return _origin;},

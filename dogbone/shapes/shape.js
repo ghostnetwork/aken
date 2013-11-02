@@ -1,3 +1,10 @@
+
+if (typeof module !== 'undefined') {
+  module.exports = Shape;
+  var Graphics = require('../graphics.js');
+  var colorWithAlpha = Graphics.colorWithAlpha;
+}
+
 var ZORDER_TOP        = Number.MAX_VALUE;
 var ZORDER_MIDDLE     = 0;
 var ZORDER_BOTTOM     = Number.MIN_VALUE;
@@ -35,4 +42,8 @@ function Shape(frame) {
 }
 
 Shape.create = function(frame){return new Shape(frame);};
-// Shape.prototype = new Shape(frame);
+
+if (typeof module !== 'undefined') {
+  module.exports = Shape;
+  var PubSub = require('../../verdoux/pubsub.js');
+}

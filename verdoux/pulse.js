@@ -29,3 +29,10 @@ function Pulse() {
 }
 
 Pulse.create = function(){return new Pulse();};
+
+if (typeof module !== 'undefined') {
+  module.exports = Pulse;
+  var PubSub = require('../verdoux/pubsub.js');
+  // var Graphics = require('../graphics.js')
+  //   , Shape = require('../shapes/shape.js');
+}

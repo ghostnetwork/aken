@@ -94,3 +94,14 @@ function Dogbone(canvas) {
   configureMouseListeners();
   return that;
 }
+
+if (typeof module !== 'undefined') {
+  module.exports = Dogbone;
+  var Graphics = require('../dogbone/graphics.js')
+    , colorWithAlpha = Graphics.colorWithAlpha
+    , Point = require('../dogbone/geometry/point.js')
+    , Rectangle = require('../dogbone/geometry/rectangle.js')
+    , Size = require('../dogbone/geometry/size.js')
+    , View = require('../dogbone/views/view.js')
+    , GameLoop = require('../dogbone/gameLoop.js');
+}
