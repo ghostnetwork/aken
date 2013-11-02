@@ -52,7 +52,8 @@ function Dogbone(canvas) {
     console.log('startPoint: ' + startPoint.debugString());
 
     frameContainsPoint(startPoint, function(shape) {
-      target = shape;
+      if (shape !== mainView)
+        target = shape;
     });
   }
 

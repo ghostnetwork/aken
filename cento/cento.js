@@ -12,7 +12,7 @@ function initialize() {
   var canvasElem = document.getElementById('canvas');
   globals.cento = new Cento(canvasElem);
 
-  FunctionalTests.perform(globals.cento);
+  // FunctionalTests.perform(globals.cento);
 }
 
 if (typeof module !== 'undefined') {
