@@ -25,13 +25,8 @@ function Shape(frame) {
   };
   that.onRender = function(graphics){};
 
-  that.hitTest = function(point) {
-    return _frame.contains(point);
-  };
-
-  that.onTouch = function(){
-    console.log('onTouch(' + _frame.debugString() + ')');
-  };
+  that.hitTest = function(point) {return _frame.contains(point);};
+  that.onTouch = function(){console.log('onTouch(' + _frame.debugString() + ')');};
 
   function clearBackground(graphics, frame) {graphics.clearRect(frame);}
 
