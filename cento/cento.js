@@ -33,8 +33,6 @@ if (typeof module !== 'undefined') {
   };
   MockCanvas.create = function(){return new MockCanvas();};
 
-  console.log('Dogbone: ' + util.inspect(Dogbone));
   Cento.app = new Cento(MockCanvas.create());
-  console.log('Cento.app: ' + util.inspect(Cento.app));
 }
 

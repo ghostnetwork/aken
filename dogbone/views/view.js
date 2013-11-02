@@ -1,6 +1,8 @@
 function View(frame) {
   var that = Shape.create(frame);
 
+  Object.defineProperty(that, 'childCount', {get : function() {return displayList.length;},enumerable : true});
+
   that.update = function() {
     sortDisplayListByZOrder();
   };
@@ -11,31 +13,39 @@ function View(frame) {
     });
   };
 
-  that.addChild = function(child) { 
-    var numChildren = displayList.push(child);
-    inspect(displayList);
+  that.addChild = function(child) {
+    if (existy(child)) {displayList.push(child);}
     return that;
   };
 
   that.removeChild = function(child) {
-    var index = displayList.indexOf(child);
-    if (index >= 0) {
-      var shape = displayList[index];
-      displayList.splice(index, 1);
+    if (existy(child)) {
+      var index = displayList.indexOf(child);
+      if (index >= 0) {
+        var shape = displayList[index];
+        displayList.splice(index, 1);
+      }
     }
-    inspect(displayList);
     return that;
   }
 
-  that.hitTest = function(point, handler) {
+  that.frameContainsPoint = function(point, handler) {
     var didHit = false;
     displayListReverseOrder(function(shape) {
-      if (shape.hitTest(point) && not(didHit)) {
+      didHit = shape.hitTest(point);
+
+      if (shape.hitTest(point)) {
         handler(shape);
         shape.onTouch();
-        didHit = true;
       }
     });
+
+    if (not(didHit)) {
+      if (that.frame.contains(point)) {
+        handler(that);
+        that.onTouch();
+      }
+    }
   }
 
   that.logDisplayList = function() {
@@ -71,6 +81,7 @@ View.create = function(frame){return new View(frame);};
 
 if (typeof module !== 'undefined') {
   module.exports = View;
+  var util = require('util');
   var Graphics = require('../graphics.js')
     , Shape = require('../shapes/shape.js');
 }

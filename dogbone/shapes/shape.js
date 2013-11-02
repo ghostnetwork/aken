@@ -25,7 +25,10 @@ function Shape(frame) {
   };
   that.onRender = function(graphics){};
 
-  that.hitTest = function(point) {return _frame.contains(point);};
+  that.hitTest = function(point) {
+    return existy(_frame) ? _frame.contains(point) : false;
+  };
+
   that.onTouch = function(){console.log('onTouch(' + _frame.debugString() + ')');};
 
   function clearBackground(graphics, frame) {graphics.clearRect(frame);}

@@ -1,0 +1,6 @@
+#!/bin/sh
+
+pushd aken-test
+clear
+mocha --recursive test --grep "$1"
+popd

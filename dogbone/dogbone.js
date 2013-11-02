@@ -51,7 +51,7 @@ function Dogbone(canvas) {
     startPoint = Point.createFromMouseEvent(event);
     console.log('startPoint: ' + startPoint.debugString());
 
-    hitTest(startPoint, function(shape) {
+    frameContainsPoint(startPoint, function(shape) {
       target = shape;
     });
   }
@@ -73,8 +73,8 @@ function Dogbone(canvas) {
     _selectionFrame = Rectangle.Empty;
   }
 
-  function hitTest(point, handler) {
-    mainView.hitTest(point, handler);
+  function frameContainsPoint(point, handler) {
+    mainView.frameContainsPoint(point, handler);
   }
 
   var origFillStyle
