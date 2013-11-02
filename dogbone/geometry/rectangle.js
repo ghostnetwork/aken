@@ -11,6 +11,24 @@ function Rectangle(x, y, width, height) {
   that.create = function(x, y, width, height) {
     return new Rectangle(x, y, width, height);
   };
+    
+  that.contains = function(point) {
+    var okX = (point.x >= _origin.x && point.x <= _origin.x + _size.width)
+    var okY = (point.y >= that.y && point.y <= _origin.y + _size.height);
+    return okX && okY;
+  }
+
+  that.growBy = function(amount) {
+    _origin.growBy(amount);
+    _size.growBy(amount);
+    return that;
+  }
+
+  that.shrinkBy = function(amount) {
+    _origin.shrinkBy(amount);
+    _size.shrinkBy(amount);
+    return that;
+  }
 
   that.debugString = function() {
     return "[" + _origin.debugString() + "; " + _size.debugString() + "]";
@@ -23,4 +41,10 @@ function Rectangle(x, y, width, height) {
 }
 
 Rectangle.create = function(x, y, width, height){return new Rectangle(x, y, width, height);};
+Rectangle.createWithOriginAndSize = function(origin, size) {
+  return Rectangle.create(origin.x, origin.y, size.width, size.height);
+};
+
 function makeRectangle(x, y, width, height){return Rectangle.create(x, y, width, height);};
+
+Rectangle.Empty = Rectangle.create(0, 0, 0, 0);

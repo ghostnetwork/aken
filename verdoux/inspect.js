@@ -44,6 +44,7 @@ function inspect(obj, showHidden, depth, colors) {
     // Provide a hook for user-specified inspect functions.
     // Check that value is an object with an inspect function on it
     if (value && typeof value.inspect === 'function' &&
+        typeof exports !== 'undefined' && 
         // Filter out the util module, it's inspect function is special
         value !== exports &&
         // Also filter out any prototype objects using the circular check.

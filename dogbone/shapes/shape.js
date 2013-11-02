@@ -6,6 +6,7 @@ function Shape(frame) {
   var that = {
     get frame(){return _frame;},
     get bounds(){return _frame.size;},
+    get pubsub(){return _pubsub;}
   };
 
   that.backgroundColor = colorWithAlpha('#FFFFFF', 1.0);
@@ -17,11 +18,19 @@ function Shape(frame) {
   };
   that.onRender = function(graphics){};
 
-  function clearBackground(graphics, frame) {
-    graphics.clearRect(frame);
-  }
+  that.hitTest = function(point) {
+    var result = _frame.contains(point);
+    if (result) that.pubsub.publish('touched', that);
+    return result;
+  };
+  that.onTouched = function(){console.log('onTouch()');};
 
-  var _frame = frame;
+  function clearBackground(graphics, frame) {graphics.clearRect(frame);}
+
+  var _frame = frame
+    , _pubsub = PubSub.create();
+
+  that.pubsub.subscribe('touched', that.onTouched);
   return that;
 }
 

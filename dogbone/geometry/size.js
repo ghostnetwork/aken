@@ -4,6 +4,18 @@ function Size(width, height) {
     get height(){return _height;}
   };
 
+  that.growBy = function(amount) {
+    _width += amount;
+    _height += amount;
+    return that;
+  }
+
+  that.shrinkBy = function(amount) {
+    _width -= amount;
+    _height -= amount;
+    return that;
+  };
+
   that.debugString = function() {return _width + ", " + _height;};
 
   var _width = width
@@ -12,6 +24,5 @@ function Size(width, height) {
   return that;
 }
 
-Size.create = function(width, height) {
-  return new Size(width, height);
-}
+Size.create = function(width, height) {return new Size(width, height);}
+Size.Empty = Size.create(0, 0);

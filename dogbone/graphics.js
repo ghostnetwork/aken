@@ -3,15 +3,20 @@ function Graphics(context) {
     get context(){return _context;}
   }
 
+  that.clearRect = function(rect) {
+    _context.clearRect(rect.x, rect.y, rect.width, rect.height);
+  };
+
   that.drawFilledRect = function(rect, color) {
     pushFillStyle(color);
     _context.fillRect(rect.x, rect.y, rect.width, rect.height);
     popFillStyle();
   };
 
-  that.clearRect = function(rect) {
-    _context.clearRect(rect.x, rect.y, rect.width, rect.height);
-  };
+  that.drawRect = function(rect, color) {
+    _context.strokeStyle = color;
+    _context.strokeRect(rect.x, rect.y, rect.width, rect.height);
+  }
 
   that.strokeRect = function(rect) {
     _context.strokeRect(rect.x, rect.y, rect.width, rect.height);
