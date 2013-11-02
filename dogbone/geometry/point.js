@@ -4,16 +4,10 @@ function Point(x, y) {
     get y(){return _y;}
   };
 
-  that.growBy = function(amount) {
+  that.translate = function(amount) {
     _x += amount;
     _y += amount;
-  }
-
-  that.shrinkBy = function(amount) {
-    _x -= amount;
-    _y -= amount;
-  }
-
+  };
   that.debugString = function() {return _x + ", " + _y;};
 
   var _x = x
@@ -27,10 +21,4 @@ Point.createFromMouseEvent = function(event) {return Point.create(event.pageX, e
 
 Point.Empty = Point.create(0, 0);
 
-if (typeof module !== 'undefined') {
-  module.exports = Point;
-  
-  // var Point = require('../dogbone/geometry/point.js')
-  //   , Rectangle = require('../dogbone/geometry/rectangle.js')
-  //   , View = require('../dogbone/views/view.js');
-}
+if (typeof module !== 'undefined') {module.exports = Point;}

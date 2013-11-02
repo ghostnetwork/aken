@@ -27,13 +27,13 @@ function Rectangle(x, y, width, height) {
   }
 
   that.growBy = function(amount) {
-    _origin.growBy(amount);
+    _origin.translate(-amount);
     _size.growBy(amount);
     return that;
   }
 
   that.shrinkBy = function(amount) {
-    _origin.shrinkBy(amount);
+    _origin.translate(amount);
     _size.shrinkBy(amount);
     return that;
   }

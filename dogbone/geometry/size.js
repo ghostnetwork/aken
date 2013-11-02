@@ -28,10 +28,4 @@ Size.create = function(width, height) {return new Size(width, height);};
 Size.createWithCanvas = function(canvas) {return Size.create(canvas.width, canvas.height);}
 Size.Empty = Size.create(0, 0);
 
-if (typeof module !== 'undefined') {
-  module.exports = Size;
-  
-  // var Point = require('../dogbone/geometry/point.js')
-  //   , Rectangle = require('../dogbone/geometry/rectangle.js')
-  //   , View = require('../dogbone/views/view.js');
-}
+if (typeof module !== 'undefined') {module.exports = Size;}
