@@ -1,7 +1,12 @@
 function View(frame) {
   var that = Box.create(frame);
 
-  Object.defineProperty(that, 'childCount', {get : function() {return displayList.length;},enumerable : true});
+  Object.defineProperty(that, 'childCount', {get : function() {
+    return displayList.length;},enumerable : true
+  });
+  Object.defineProperty(that, 'center', {get : function() {
+    return that.frame.center;},enumerable : true
+  });
 
   that.update = function() {
     sortDisplayListByZOrder();

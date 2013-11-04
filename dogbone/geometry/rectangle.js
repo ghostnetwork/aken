@@ -13,7 +13,12 @@ function Rectangle(x, y, width, height) {
     get x(){return _origin.x;},
     get y(){return _origin.y;},
     get width(){return _size.width;},
-    get height(){return _size.height;}
+    get height(){return _size.height;},
+    get center(){
+      var cX = that.frame.size.width / 2;
+      var cY = that.frame.size.height / 2;
+      return Point.create(cX, cY);
+    }
   };
 
   that.create = function(x, y, width, height) {return new Rectangle(x, y, width, height);};

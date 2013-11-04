@@ -23,31 +23,48 @@ function initialize() {
   // FunctionalTests.perform(globals.cento);
 }
 
+var kProgramViewAlpha  = 0.5;
+var kToolViewAlpha  = 0.7;
 function configureViews(cento, canvasSize) {
   console.log('canvasSize: ' + canvasSize.debugString());
 
   configureToolsView(canvasSize, cento.dogbone);
   configureLibraryView(canvasSize, cento.dogbone);
   configureFooView(canvasSize, cento.dogbone);
+  configureProgramView(canvasSize, cento.dogbone);
+
+  console.log('mainView.childCount: ' + cento.dogbone.childCount);
+}
+
+function configureProgramView(canvasSize, mainView) {
+  var pad = 30;
+  var x = (canvasSize.width * 0.05) + pad;
+  var frame = Rectangle.create(x, pad, 200, 100);
+  var programView = ProgramView.create(frame);
+  programView.name = "Cento.ProgramView";
+  programView.backgroundColor = colorWithAlpha('#333333', kProgramViewAlpha);
+  mainView.addChild(programView);
 }
 
 function configureToolsView(canvasSize, mainView) {
   var frame = Rectangle.create(0, 0, canvasSize.width * 0.05, canvasSize.height);
   var toolsView = View.create(frame);
-  toolsView.backgroundColor = colorWithAlpha('#c70000', 0.5);
+  toolsView.backgroundColor = colorWithAlpha('#c70000', kToolViewAlpha);
   toolsView.name = "ToolsView";
-  mainView.addChild(toolsView);
+  toolsView.zOrder = 100;
   toolsView.onTouch = function() {
     console.log(toolsView.name + ' was touched');
     touchHandler(toolsView, canvasSize, 0, 0);
   }
+  mainView.addChild(toolsView);
 }
 
 function configureLibraryView(canvasSize, mainView) {
   var frame = Rectangle.create(0, 50, canvasSize.width * 0.05, canvasSize.height);
   var toolsView = View.create(frame);
-  toolsView.backgroundColor = colorWithAlpha('#00c700', 0.5);
+  toolsView.backgroundColor = colorWithAlpha('#00c700', kToolViewAlpha);
   toolsView.name = "LibraryView";
+  toolsView.zOrder = 101;
   toolsView.onTouch = function() {
     console.log(toolsView.name + ' was touched');
     touchHandler(toolsView, canvasSize, 0, 50);
@@ -58,15 +75,15 @@ function configureLibraryView(canvasSize, mainView) {
 function configureFooView(canvasSize, mainView) {
   var frame = Rectangle.create(0, 100, canvasSize.width * 0.05, canvasSize.height);
   var toolsView = View.create(frame);
-  toolsView.backgroundColor = colorWithAlpha('#0000c7', 0.5);
+  toolsView.backgroundColor = colorWithAlpha('#0000c7', kToolViewAlpha);
   toolsView.name = "FooView";
   toolsView.isOpened = false;
+  toolsView.zOrder = 102;
   toolsView.onTouch = function() {
     console.log(toolsView.name + ' was touched');
     touchHandler(toolsView, canvasSize, 0, 100);
   }
   mainView.addChild(toolsView);
-  console.log('mainView.childCount: ' + mainView.childCount);
 }
 
 function touchHandler(view, canvasSize, startX, startY) {
