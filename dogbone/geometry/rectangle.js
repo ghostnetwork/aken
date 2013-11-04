@@ -45,7 +45,7 @@ function Rectangle(x, y, width, height) {
   that.debugString = function() {
     return "[" + _origin.debugString() + "; " + _size.debugString() + "]";
   };
-  
+
   var _origin = Point.create(x, y)
     , _size = Size.create(width, height);
 

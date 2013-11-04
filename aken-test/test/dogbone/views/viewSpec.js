@@ -1,4 +1,3 @@
-require('verdoux');
 var assert = require('assert');
 var should = require('should');
 var sinon = require('sinon');
@@ -7,6 +6,7 @@ var View = require('../../../../dogbone/views/view.js');
 var Point = require('../../../../dogbone/geometry/point.js');
 var Size = require('../../../../dogbone/geometry/size.js');
 var Rectangle = require('../../../../dogbone/geometry/rectangle.js');
+require('../../../../verdoux/predicates.js');
 
 describe('View', function(){
   'use strict';

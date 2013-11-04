@@ -13,6 +13,7 @@
   "devDependencies": {
     "mocha": "*",
     "should": "1.2.2",
+    "sinon": "1.7.3",
     "util": "0.4.9"
   },
   "author": "@codeswimmer",

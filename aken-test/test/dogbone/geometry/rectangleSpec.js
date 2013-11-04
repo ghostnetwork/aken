@@ -1,4 +1,3 @@
-require('verdoux');
 var assert = require('assert');
 var should = require('should');
 var sinon = require('sinon');
@@ -6,6 +5,7 @@ var util = require('util');
 var Rectangle = require('../../../../dogbone/geometry/rectangle.js');
 var Point = require('../../../../dogbone/geometry/point.js');
 var Size = require('../../../../dogbone/geometry/size.js');
+require('../../../../verdoux/predicates.js');
 
 describe('Rectangle', function(){
   'use strict';
@@ -22,6 +22,12 @@ describe('Rectangle', function(){
 
   it('should be able to be created', function(){assert(existy(rectangle));});
 
+  describe('create', function(){
+    it('should adjust the origin if width is negative', function(){
+      var width = kWidth * -1;
+      var height = kHeight;
+    });
+  });
   describe('createWithOriginAndSize', function(){
     it('should create a rectangle of the expected origin and size', function(){
       var expectedOrigin = kOrigin;

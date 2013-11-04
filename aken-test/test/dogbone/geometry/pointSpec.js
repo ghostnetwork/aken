@@ -1,9 +1,9 @@
-require('verdoux');
 var assert = require('assert');
 var should = require('should');
 var sinon = require('sinon');
 var util = require('util');
 var Point = require('../../../../dogbone/geometry/point.js');
+require('../../../../verdoux/predicates.js');
 
 describe('Point', function(){
   'use strict';

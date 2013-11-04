@@ -63,14 +63,13 @@ function Dogbone(canvas) {
       var deltaX = event.pageX - startPoint.x;
       var deltaY = event.pageY - startPoint.y;
       var size = Size.create(deltaX, deltaY);
+
       _selectionFrame = Rectangle.createWithOriginAndSize(startPoint, size);
-      console.log('onMouseMove:_selectionFrame: ' + _selectionFrame.debugString());
     }
   }
 
   function onMouseUp(event) {
     console.log('onMouseUp:_selectionFrame: ' + _selectionFrame.debugString());
-    console.log('target: ' + inspect(target.frame.debugString()));
     mouseDownReceived = false;
     _selectionFrame = Rectangle.Empty;
   }
@@ -85,7 +84,7 @@ function Dogbone(canvas) {
 
   var origFillStyle
     , mainView = View.create(Rectangle.createWithCanvas(canvas))
-    , selectionFrameColor = colorWithAlpha('#777777', 1.0)
+    , selectionFrameColor = colorWithAlpha('#333333', 1.0)
     , mouseListenersConfigured = false
     , startPoint = Point.Empty
     , mouseDownReceived = false

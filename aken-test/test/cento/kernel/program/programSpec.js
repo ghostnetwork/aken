@@ -1,4 +1,3 @@
-require('verdoux');
 var assert = require('assert');
 var should = require('should');
 var sinon = require('sinon');
@@ -6,6 +5,7 @@ var util = require('util');
 var _ = require('underscore');
 var Program = require('../../../../../cento/kernel/program/program.js');
 var Action = require('../../../../../cento/kernel/action/action.js');
+require('../../../../../verdoux/predicates.js');
 
 describe('Program', function(){
   'use strict';
