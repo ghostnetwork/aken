@@ -75,6 +75,7 @@ function Dogbone(canvas) {
     console.log('onMouseUp:_selectionFrame: ' + _selectionFrame.debugString());
     mouseDownReceived = false;
     _selectionFrame = Rectangle.Empty;
+    target = null;
   }
 
   function frameContainsPoint(point, handler) {
