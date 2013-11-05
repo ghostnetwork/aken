@@ -50,32 +50,43 @@ function Dogbone(canvas) {
   function onMouseDown(event) {
     mouseDownReceived = true;
     startPoint = Point.createFromMouseEventWithPageCoords(event);
-    console.log('startPoint: ' + startPoint.debugString());
 
     frameContainsPoint(startPoint, function(shape) {
       if (shape !== mainView) {
         target = shape;
-        console.log('target: ' + target.name);
         dragdrop.beginDrag(target, startPoint);
       }
     });
   }
 
   function onMouseMove(event) {
-    if (mouseDownReceived && notExisty(target)) {
+    if (mouseDownReceived) { 
+      if (existy(target)) {
+        if (dragdrop.isDragging) {
+          dragdrop.moveDrag(event);
+        }
+      }
+      else {
+        calculateSelectionFrame(event);
+      }
+    }
+  }
+
+  function calculateSelectionFrame(event) {
       var deltaX = event.pageX - startPoint.x;
       var deltaY = event.pageY - startPoint.y;
       var size = Size.create(deltaX, deltaY);
 
       _selectionFrame = Rectangle.createWithOriginAndSize(startPoint, size);
-    }
   }
 
   function onMouseUp(event) {
-    console.log('onMouseUp:_selectionFrame: ' + _selectionFrame.debugString());
     mouseDownReceived = false;
     _selectionFrame = Rectangle.Empty;
     target = null;
+    if (dragdrop.isDragging) {
+      dragdrop.endDrag();
+    }
   }
 
   function frameContainsPoint(point, handler) {

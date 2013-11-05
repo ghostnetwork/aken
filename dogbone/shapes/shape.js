@@ -31,7 +31,7 @@ function Shape(frame) {
   that.makeUndraggable = function() {_draggable = false;};
   that.makeDraggable = function() {_draggable = true;};
 
-  that.onTouch = function(){console.log('onTouch(' + _frame.debugString() + ')');};
+  that.onTouch = function(){};
   that.onRender = function(graphics){};
 
   function clearBackground(graphics, frame) {graphics.clearRect(frame);}

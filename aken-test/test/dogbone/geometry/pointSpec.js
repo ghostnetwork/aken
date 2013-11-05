@@ -39,4 +39,14 @@ describe('Point', function(){
     });
   });
 
+  describe('moveTo', function(){
+    it('should move the point to the given coordinates', function(){
+      var x = 123;
+      var y = 456;
+      point.moveTo(x, y);
+      point.x.should.equal(x);
+      point.y.should.equal(y);
+    });
+  });
+
 });

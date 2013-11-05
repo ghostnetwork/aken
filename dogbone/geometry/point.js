@@ -8,6 +8,16 @@ function Point(x, y) {
     _x += amount;
     _y += amount;
   };
+
+  that.moveTo = function(x, y) {
+    _x = x;
+    _y = y;
+  };
+  that.moveToPoint = function(point) {
+    _x = point.x;
+    _y = point.y;
+  };
+
   that.debugString = function() {return _x + ", " + _y;};
 
   var _x = x

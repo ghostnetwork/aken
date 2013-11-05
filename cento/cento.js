@@ -32,18 +32,9 @@ function configureViews(cento, canvasSize) {
   configureLibraryView(canvasSize, cento.dogbone);
   configureFooView(canvasSize, cento.dogbone);
   configureProgramView(canvasSize, cento.dogbone);
+  configureDraggableViews(canvasSize, cento.dogbone);
 
   console.log('mainView.childCount: ' + cento.dogbone.childCount);
-}
-
-function configureProgramView(canvasSize, mainView) {
-  var pad = 30;
-  var x = (canvasSize.width * 0.05) + pad;
-  var frame = Rectangle.create(x, pad, 200, 100);
-  var programView = ProgramView.create(frame);
-  programView.name = "Cento.ProgramView";
-  programView.backgroundColor = colorWithAlpha('#333333', kProgramViewAlpha);
-  mainView.addChild(programView);
 }
 
 function configureToolsView(canvasSize, mainView) {
@@ -87,6 +78,43 @@ function configureFooView(canvasSize, mainView) {
     touchHandler(toolsView, canvasSize, 0, 100);
   }
   mainView.addChild(toolsView);
+}
+
+function configureProgramView(canvasSize, mainView) {
+  var pad = 30;
+  var x = (canvasSize.width * 0.05) + pad;
+  var frame = Rectangle.create(x, pad, 200, 100);
+  var programView = ProgramView.create(frame);
+  programView.name = "Cento.ProgramView";
+  programView.backgroundColor = colorWithAlpha('#333333', kProgramViewAlpha);
+  programView.makeUndraggable();
+  mainView.addChild(programView);
+}
+
+function configureDraggableViews(canvasSize, mainView) {
+  var pad = 30;
+  var x = (canvasSize.width * 0.05) + pad;
+  var y = 150;
+  var frame;
+  var draggableView;
+  var colors = [
+    '#ffffff',
+    '#aaaaaa',
+    '#555555'
+  ];
+  var orders = [1001, 1000, 1002];
+
+  for (var i = 0; i < 3; i++) {
+    frame = Rectangle.create(x, y, 50, 50);
+    draggableView = View.create(frame);
+    draggableView.name = "Cento.draggableView." + i;
+    draggableView.backgroundColor = colorWithAlpha(colors[i], 1.0);
+    draggableView.zOrder = orders[i];
+
+    mainView.addChild(draggableView);
+    x += 10;
+    y += 10;
+  }
 }
 
 function touchHandler(view, canvasSize, startX, startY) {
