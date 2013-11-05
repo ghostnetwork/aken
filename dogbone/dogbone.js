@@ -56,6 +56,7 @@ function Dogbone(canvas) {
       if (shape !== mainView) {
         target = shape;
         console.log('target: ' + target.name);
+        dragdrop.beginDrag(target, startPoint);
       }
     });
   }
@@ -91,7 +92,8 @@ function Dogbone(canvas) {
     , startPoint = Point.Empty
     , mouseDownReceived = false
     , target = null
-    , canvasFrame = Rectangle.createWithSize(Size.createWithCanvas(canvas));
+    , canvasFrame = Rectangle.createWithSize(Size.createWithCanvas(canvas))
+    , dragdrop = DragDrop.create();
 
   var _graphics = Graphics.create(canvas.getContext('2d'))
     , _gameLoop = GameLoop.create(updateAndRender)
@@ -107,6 +109,7 @@ if (typeof module !== 'undefined') {
   module.exports = Dogbone;
   var Graphics = require('../dogbone/graphics.js')
     , colorWithAlpha = Graphics.colorWithAlpha
+    , DragDrop = require('../dogbone/dragdrop.js')
     , Point = require('../dogbone/geometry/point.js')
     , Rectangle = require('../dogbone/geometry/rectangle.js')
     , Size = require('../dogbone/geometry/size.js')

@@ -123,4 +123,13 @@ describe('Rectangle', function(){
     });
   });
 
+  describe('center', function(){
+    it('should return the center of the rectangle', function(){
+      var center = rectangle.center;
+      existy(center).should.be.true;
+      Math.floor(center.x).should.equal(66);
+      Math.floor(center.y).should.equal(133);
+    });
+  });
+
 });

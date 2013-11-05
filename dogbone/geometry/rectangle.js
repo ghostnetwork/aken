@@ -15,9 +15,9 @@ function Rectangle(x, y, width, height) {
     get width(){return _size.width;},
     get height(){return _size.height;},
     get center(){
-      var cX = that.frame.size.width / 2;
-      var cY = that.frame.size.height / 2;
-      return Point.create(cX, cY);
+      var cX = that.size.width / 2;
+      var cY = that.size.height / 2;
+      return Point.create(that.origin.x + cX, that.origin.y + cY);
     }
   };
 
