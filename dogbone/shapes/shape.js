@@ -45,7 +45,7 @@ function Shape(frame) {
   var _frame = frame
     , _pubsub = PubSub.create()
     , _draggable = true;
-
+    
   return that;
 }
 

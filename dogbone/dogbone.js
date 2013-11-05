@@ -96,6 +96,7 @@ function Dogbone(canvas) {
 
   function configureMainView() {
     mainView.backgroundColor = colorWithAlpha('#4682B4', 1.0);
+    mainView.name = 'Dogbone';
   }
 
   var origFillStyle

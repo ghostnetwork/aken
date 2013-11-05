@@ -132,6 +132,8 @@ function configureDropTargets(canvasSize, mainView) {
   dropTargetView.pubsub.on(kDropTargetItemDropped, function(item){
     console.log(dropTargetView.name + ' did accept drop of ' + item.name);
     dropTargetView.backgroundColor = colorWithAlpha('#77c777', 1.0);
+    dropTargetView.transferChild(item);
+    console.log('item.parent: ' + item.parent.name);
   });
 
   mainView.dragdrop.registerDropTarget(dropTargetView);

@@ -20,7 +20,10 @@ function View(frame) {
   };
 
   that.addChild = function(child) {
-    if (existy(child)) {displayList.push(child);}
+    if (existy(child)) {
+      displayList.push(child);
+      child.parent = that;
+    }
     return that;
   };
 
@@ -30,6 +33,7 @@ function View(frame) {
       if (index >= 0) {
         var shape = displayList[index];
         displayList.splice(index, 1);
+        child.parent = null;
       }
     }
     return that;
@@ -37,7 +41,8 @@ function View(frame) {
 
   that.transferChild = function(child) {
     if (existy(child)) {
-      
+      child.parent = that;
+      that.addChild(child);
     }
   }
 
@@ -89,6 +94,8 @@ function View(frame) {
   }
 
   var displayList = [];
+  var parent;
+
   return that;
 }
 
