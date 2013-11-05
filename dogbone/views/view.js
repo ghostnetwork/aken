@@ -8,9 +8,7 @@ function View(frame) {
     return that.frame.center;},enumerable : true
   });
 
-  that.update = function() {
-    sortDisplayListByZOrder();
-  };
+  that.update = function() {sortDisplayListByZOrder();};
 
   that.render = function(graphics) {
     graphics.drawFilledRect(that.frame, that.backgroundColor);
@@ -98,8 +96,10 @@ function View(frame) {
 
   function configure() {
     that.pubsub.on(kDropTargetItemDropped, function(item) {
-      console.log(that.name + ' did accept drop of ' + item.name);
-      that.transferChild(item);
+      if (existy(item)) {
+        console.log(that.name + ' did accept drop of ' + item.name);
+        that.transferChild(item);
+      }
     });
   }
 

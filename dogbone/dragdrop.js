@@ -44,6 +44,9 @@ function DragDrop() {
   }
 
   that.endDrag = function(event) {
+    if (notExisty(draggedItem))
+      return;
+    
     var targets = sortDropTargetsZOrderDescending();
     var numTargets = targets.length;
 
@@ -51,7 +54,7 @@ function DragDrop() {
       var target = targets[i];
 
       console.log(target.name + ': ' + (target !== draggedItem && target.doesNotContainChild(draggedItem)));
-      
+
       if (target !== draggedItem && target.doesNotContainChild(draggedItem)) {
         if (target.frame.contains(Point.createFromMouseEventWithClientCoords(event))) {
           target.onDragEnd();

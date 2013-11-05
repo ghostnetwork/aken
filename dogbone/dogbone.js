@@ -54,8 +54,8 @@ function Dogbone(canvas) {
     startPoint = Point.createFromMouseEventWithPageCoords(event);
 
     frameContainsPoint(startPoint, function(shape) {
+      mouseDownReceived = true;
       if (shape !== mainView) {
-        mouseDownReceived = true;
         target = shape;
         that.dragdrop.beginDrag(target, startPoint);
       }
@@ -90,9 +90,7 @@ function Dogbone(canvas) {
       _selectionFrame = Rectangle.createWithOriginAndSize(startPoint, size);
   }
 
-  function frameContainsPoint(point, handler) {
-    mainView.frameContainsPoint(point, handler);
-  }
+  function frameContainsPoint(point, handler) {mainView.frameContainsPoint(point, handler);}
 
   function configureMainView() {
     mainView.backgroundColor = colorWithAlpha('#4682B4', 1.0);
