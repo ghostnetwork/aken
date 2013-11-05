@@ -52,6 +52,7 @@ function configureToolsView(canvasSize, mainView) {
   toolsView.backgroundColor = colorWithAlpha('#c70000', kToolViewAlpha);
   toolsView.name = "ToolsView";
   toolsView.zOrder = 100;
+  toolsView.makeUndraggable();
   toolsView.onTouch = function() {
     console.log(toolsView.name + ' was touched');
     touchHandler(toolsView, canvasSize, 0, 0);
@@ -65,6 +66,7 @@ function configureLibraryView(canvasSize, mainView) {
   toolsView.backgroundColor = colorWithAlpha('#00c700', kToolViewAlpha);
   toolsView.name = "LibraryView";
   toolsView.zOrder = 101;
+  toolsView.makeUndraggable();
   toolsView.onTouch = function() {
     console.log(toolsView.name + ' was touched');
     touchHandler(toolsView, canvasSize, 0, 50);
@@ -79,6 +81,7 @@ function configureFooView(canvasSize, mainView) {
   toolsView.name = "FooView";
   toolsView.isOpened = false;
   toolsView.zOrder = 102;
+  toolsView.makeUndraggable();
   toolsView.onTouch = function() {
     console.log(toolsView.name + ' was touched');
     touchHandler(toolsView, canvasSize, 0, 100);

@@ -49,7 +49,7 @@ function Dogbone(canvas) {
 
   function onMouseDown(event) {
     mouseDownReceived = true;
-    startPoint = Point.createFromMouseEvent(event);
+    startPoint = Point.createFromMouseEventWithPageCoords(event);
     console.log('startPoint: ' + startPoint.debugString());
 
     frameContainsPoint(startPoint, function(shape) {

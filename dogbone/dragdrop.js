@@ -6,15 +6,13 @@ function DragDrop() {
 
   that.beginDrag = function(dragTarget, startPoint) {
     draggedItem = dragTarget;
-    console.log('draggedItem: ' + inspect(dragTarget));
-
     dragStartPoint = startPoint;
-    console.log('dragStartPoint: ' + dragStartPoint.debugString());
-
     offsetFromDraggedItemCenter = offsetFromCenter();
-    console.log('offsetFromDraggedItemCenter: ' + offsetFromDraggedItemCenter.debugString());
+    _isDragging = dragTarget.isDraggable;
 
-    _isDragging = true;
+    console.log('draggedItem: ' + inspect(dragTarget));
+    console.log('dragStartPoint: ' + dragStartPoint.debugString());
+    console.log('offsetFromDraggedItemCenter: ' + offsetFromDraggedItemCenter.debugString());
     console.log('that.isDragging: ' + that.isDragging);
   }
 

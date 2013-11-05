@@ -14,7 +14,8 @@ function Shape(frame) {
   var that = {
     get frame(){return _frame;},
     get bounds(){return _frame.size;},
-    get pubsub(){return _pubsub;}
+    get pubsub(){return _pubsub;},
+    get isDraggable(){return _draggable;}
   };
 
   that.backgroundColor = colorWithAlpha('#FFFFFF', 1.0);
@@ -27,13 +28,17 @@ function Shape(frame) {
   };
   that.resizeFrame = function(newFrame) {_frame = newFrame.clone();};
 
+  that.makeUndraggable = function() {_draggable = false;};
+  that.makeDraggable = function() {_draggable = true;};
+
   that.onTouch = function(){console.log('onTouch(' + _frame.debugString() + ')');};
   that.onRender = function(graphics){};
 
   function clearBackground(graphics, frame) {graphics.clearRect(frame);}
 
   var _frame = frame
-    , _pubsub = PubSub.create();
+    , _pubsub = PubSub.create()
+    , _draggable = true;
 
   return that;
 }
