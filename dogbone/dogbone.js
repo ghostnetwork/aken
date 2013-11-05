@@ -53,13 +53,15 @@ function Dogbone(canvas) {
     console.log('startPoint: ' + startPoint.debugString());
 
     frameContainsPoint(startPoint, function(shape) {
-      if (shape !== mainView)
+      if (shape !== mainView) {
         target = shape;
+        console.log('target: ' + target.name);
+      }
     });
   }
 
   function onMouseMove(event) {
-    if (mouseDownReceived) {
+    if (mouseDownReceived && notExisty(target)) {
       var deltaX = event.pageX - startPoint.x;
       var deltaY = event.pageY - startPoint.y;
       var size = Size.create(deltaX, deltaY);

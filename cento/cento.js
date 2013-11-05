@@ -87,7 +87,6 @@ function configureFooView(canvasSize, mainView) {
 }
 
 function touchHandler(view, canvasSize, startX, startY) {
-  console.log(view.name + ' was touched');
   if (view.isOpened) {
     closeView(view, canvasSize, startX, startY);
   } 
