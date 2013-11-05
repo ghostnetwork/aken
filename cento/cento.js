@@ -33,6 +33,7 @@ function configureViews(cento, canvasSize) {
   configureFooView(canvasSize, cento.dogbone);
   configureProgramView(canvasSize, cento.dogbone);
   configureDraggableViews(canvasSize, cento.dogbone);
+  configureDropTargets(canvasSize, cento.dogbone);
 
   console.log('mainView.childCount: ' + cento.dogbone.childCount);
 }
@@ -97,11 +98,7 @@ function configureDraggableViews(canvasSize, mainView) {
   var y = 150;
   var frame;
   var draggableView;
-  var colors = [
-    '#ffffff',
-    '#aaaaaa',
-    '#555555'
-  ];
+  var colors = ['#ffffff','#aaaaaa','#555555'];
   var orders = [1001, 1000, 1002];
 
   for (var i = 0; i < 3; i++) {
@@ -112,9 +109,51 @@ function configureDraggableViews(canvasSize, mainView) {
     draggableView.zOrder = orders[i];
 
     mainView.addChild(draggableView);
-    x += 10;
-    y += 10;
+    x += 20;
+    y += 20;
   }
+}
+
+function configureDropTargets(canvasSize, mainView) {
+  var x = 200;
+  var y = 200;
+  var frame = Rectangle.create(x, y, 100, 100);
+  var dropTargetView = View.create(frame);
+  dropTargetView.name = "Cento.DropTargetView.01";
+  dropTargetView.backgroundColor = colorWithAlpha('#77c777', 1.0);
+  dropTargetView.willAcceptDrop = acceptsDrop;
+
+  dropTargetView.pubsub.on(kDropTargetItemEnter, function() {
+    dropTargetView.backgroundColor = colorWithAlpha('#c7c700', 1.0);
+  });
+  dropTargetView.pubsub.on(kDropTargetItemExit, function() {
+    dropTargetView.backgroundColor = colorWithAlpha('#77c777', 1.0);
+  });
+  dropTargetView.pubsub.on(kDropTargetItemDropped, function(item){
+    console.log(dropTargetView.name + ' did accept drop of ' + item.name);
+    dropTargetView.backgroundColor = colorWithAlpha('#77c777', 1.0);
+  });
+
+  mainView.dragdrop.registerDropTarget(dropTargetView);
+  mainView.addChild(dropTargetView);
+
+  x = 325;
+  y = 200;
+  frame = Rectangle.create(x, y, 100, 100);
+  var dropTargetViewB = View.create(frame);
+  dropTargetViewB.name = "Cento.DropTargetView.02";
+  dropTargetViewB.backgroundColor = colorWithAlpha('#5555c7', 1.0);
+
+  dropTargetViewB.pubsub.on(kDropTargetItemEnter, function() {
+    dropTargetViewB.backgroundColor = colorWithAlpha('#c7c700', 1.0);
+  });
+  dropTargetViewB.pubsub.on(kDropTargetItemExit, function() {
+    dropTargetViewB.backgroundColor = colorWithAlpha('#5555c7', 1.0);
+  });
+  dropTargetViewB.willAcceptDrop = acceptsDrop;
+
+  mainView.addChild(dropTargetViewB);
+  mainView.dragdrop.registerDropTarget(dropTargetViewB);
 }
 
 function touchHandler(view, canvasSize, startX, startY) {

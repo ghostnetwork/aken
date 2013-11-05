@@ -30,6 +30,12 @@ function Shape(frame) {
 
   that.makeUndraggable = function() {_draggable = false;};
   that.makeDraggable = function() {_draggable = true;};
+  
+  that.willAcceptDrop = function(item) {
+    console.log('+++ ' + that.name);
+    return false;
+  };
+  that.acceptDrop = function(item) {};
 
   that.onTouch = function(){};
   that.onRender = function(graphics){};

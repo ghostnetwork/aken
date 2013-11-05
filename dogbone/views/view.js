@@ -35,6 +35,12 @@ function View(frame) {
     return that;
   }
 
+  that.transferChild = function(child) {
+    if (existy(child)) {
+      
+    }
+  }
+
   that.frameContainsPoint = function(point, handler) {
     var didHit = false;
     displayListReverseOrder(function(shape) {
@@ -54,6 +60,8 @@ function View(frame) {
       }
     }
   }
+
+  that.acceptDrop = function(item) {that.addChild(item);};
 
   that.logDisplayList = function() {
     for (var i = 0; i < displayList.length; i++) {

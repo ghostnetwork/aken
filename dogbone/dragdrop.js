@@ -1,7 +1,14 @@
+var kDropTargetItemEnter    = "droptarget.item.enter";
+var kDropTargetItemExit     = "droptarget.item.exit";
+var kDropTargetItemDropped  = "droptarget.item.dropped";
+
+var acceptsDrop = function() {return true;};
+var deniesDrop = function(){return false;};
 
 function DragDrop() {
   var that = { 
-    get isDragging(){return _isDragging;}
+    get isDragging(){return _isDragging;},
+    get dropTargetCount(){return dropTargets.length;}
   };
 
   that.beginDrag = function(dragTarget, startPoint) {
@@ -10,13 +17,7 @@ function DragDrop() {
     offsetFromDraggedItemCenter = offsetFromCenter();
     _isDragging = dragTarget.isDraggable;
     origZOrder = draggedItem.zOrder;
-
     draggedItem.zOrder = ZORDER_TOP;
-
-    // console.log('draggedItem: ' + inspect(dragTarget));
-    // console.log('dragStartPoint: ' + dragStartPoint.debugString());
-    // console.log('offsetFromDraggedItemCenter: ' + offsetFromDraggedItemCenter.debugString());
-    // console.log('that.isDragging: ' + that.isDragging);
   }
 
   that.moveDrag = function(event) {
@@ -26,11 +27,35 @@ function DragDrop() {
 
     draggedItem.frame.moveTo(newX, newY);
     dragStartPoint.moveTo(event.clientX, event.clientY);
+
+    var mousePoint = Point.createFromMouseEventWithClientCoords(event);
+    checkForDraggedItemOverDropTarget(mousePoint, function(target, action) {
+      target.pubsub.publish(action);
+    });
   }
 
   that.endDrag = function() {
+    var mousePoint = Point.createFromMouseEventWithClientCoords(event);
+    checkForDraggedItemOverDropTarget(mousePoint, function(target, action) {
+      if (action === kDropTargetItemEnter) {
+        if (existy(target.acceptDrop)) {
+          target.pubsub.publish(kDropTargetItemDropped, draggedItem);
+        }
+      }
+    });
+
     draggedItem.zOrder = origZOrder;
+    origZOrder = undefined;
   }
+
+  that.registerDropTarget = function(dropTarget) {dropTargets.push(dropTarget);}
+  that.unregisterDropTarget = function(dropTarget) {
+    var index = dropTargets.indexOf(dropTarget);
+    if (index >= 0) {
+      dropTargets.splice(index, 1);
+    }
+  }
+  that.containsDropTarget = function(dropTarget) {return dropTargets.indexOf(dropTarget) === 0;}
 
   function offsetFromCenter() {
     var center = draggedItem.frame.center;
@@ -39,10 +64,26 @@ function DragDrop() {
     return Point.create(x, y);
   }
 
+  function checkForDraggedItemOverDropTarget(mousePoint, worker) {
+    dropTargets.forEach(function(target) {
+      if (not(target === draggedItem)) {
+        if (existy(target.willAcceptDrop) && target.willAcceptDrop(draggedItem)) {
+          if (target.frame.contains(mousePoint)) {
+            worker(target, kDropTargetItemEnter);
+          }
+          else {
+            worker(target, kDropTargetItemExit);
+          }
+        }
+      }
+    })
+  }
+
   var draggedItem 
       , dragStartPoint
       , offsetFromDraggedItemCenter
-      , origZOrder;
+      , origZOrder
+      , dropTargets = [];
 
   var _isDragging = false;
 

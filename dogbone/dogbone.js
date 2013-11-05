@@ -2,7 +2,8 @@ function Dogbone(canvas) {
   var that = {
     get graphics(){return _graphics;},
     get gameLoop(){return _gameLoop;},
-    get childCount(){return mainView.childCount;}
+    get childCount(){return mainView.childCount;},
+    get dragdrop(){return _dragdrop;}
   };
 
   // Publis API
@@ -54,7 +55,7 @@ function Dogbone(canvas) {
     frameContainsPoint(startPoint, function(shape) {
       if (shape !== mainView) {
         target = shape;
-        dragdrop.beginDrag(target, startPoint);
+        that.dragdrop.beginDrag(target, startPoint);
       }
     });
   }
@@ -62,8 +63,8 @@ function Dogbone(canvas) {
   function onMouseMove(event) {
     if (mouseDownReceived) { 
       if (existy(target)) {
-        if (dragdrop.isDragging) {
-          dragdrop.moveDrag(event);
+        if (that.dragdrop.isDragging) {
+          that.dragdrop.moveDrag(event);
         }
       }
       else {
@@ -84,8 +85,8 @@ function Dogbone(canvas) {
     mouseDownReceived = false;
     _selectionFrame = Rectangle.Empty;
     target = null;
-    if (dragdrop.isDragging) {
-      dragdrop.endDrag();
+    if (that.dragdrop.isDragging) {
+      that.dragdrop.endDrag();
     }
   }
 
@@ -104,12 +105,12 @@ function Dogbone(canvas) {
     , startPoint = Point.Empty
     , mouseDownReceived = false
     , target = null
-    , canvasFrame = Rectangle.createWithSize(Size.createWithCanvas(canvas))
-    , dragdrop = DragDrop.create();
+    , canvasFrame = Rectangle.createWithSize(Size.createWithCanvas(canvas));
 
   var _graphics = Graphics.create(canvas.getContext('2d'))
     , _gameLoop = GameLoop.create(updateAndRender)
-    , _selectionFrame = Rectangle.Empty;
+    , _selectionFrame = Rectangle.Empty
+    , _dragdrop = DragDrop.create();
 
   // Configuration
   configureMouseListeners();
