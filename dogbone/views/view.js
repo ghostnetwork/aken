@@ -41,10 +41,15 @@ function View(frame) {
 
   that.transferChild = function(child) {
     if (existy(child)) {
-      child.parent = that;
+      if (existy(child.parent)) {
+        child.parent.removeChild(child);
+      }
       that.addChild(child);
     }
   }
+
+  that.containsChild = function(child) {return (existy(child)) ? displayList.indexOf(child) >= 0 : false;};
+  that.doesNotContainChild = function(child) {return not(that.containsChild(child));};
 
   that.frameContainsPoint = function(point, handler) {
     var didHit = false;
@@ -65,8 +70,6 @@ function View(frame) {
       }
     }
   }
-
-  that.acceptDrop = function(item) {that.addChild(item);};
 
   that.logDisplayList = function() {
     for (var i = 0; i < displayList.length; i++) {
@@ -93,8 +96,39 @@ function View(frame) {
     };
   }
 
-  var displayList = [];
-  var parent;
+  function configure() {
+    that.pubsub.on(kDropTargetItemDropped, function(item) {
+      console.log(that.name + ' did accept drop of ' + item.name);
+      that.transferChild(item);
+    });
+  }
+
+  that.moveTo = function(x, y) {
+    var delta = Point.create(x - that.frame.origin.x, y - that.frame.origin.y);
+    that.frame.origin.moveTo(x, y);
+    that.onMoved(delta);
+  }
+
+  that.onMoved = function(delta) {
+    moveChildren(delta);
+  }
+
+  function moveChildren(delta) {
+    displayList.forEach(function(child) {
+      var x = child.frame.origin.x + delta.x;
+      var y = child.frame.origin.y + delta.y;
+      console.log(child.name + ' did move to ' + x + ', ' + y 
+        + ' (' + delta.debugString() + ')'
+        + ' [' + child.frame.origin.debugString() + ']' );
+      child.moveTo(x, y);
+    });
+  }
+
+  configure();
+
+  var displayList = []
+    , parent
+    , previousOrigin;
 
   return that;
 }

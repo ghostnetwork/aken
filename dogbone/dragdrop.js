@@ -8,11 +8,23 @@ var deniesDrop = function(){return false;};
 function DragDrop() {
   var that = { 
     get isDragging(){return _isDragging;},
-    get dropTargetCount(){return dropTargets.length;}
+    get dropTargetCount(){return dropTargets.length;},
+    get theDraggedItem(){return draggedItem;}
   };
 
   that.beginDrag = function(dragTarget, startPoint) {
-    draggedItem = dragTarget;
+    // Is this feature necessary?
+    // - when a child view has been selected, we'll drag the parent around instead of the child
+    // if (existy(dragTarget.parent)) {
+    //   if (Dogbone.viewItNotChild(dragTarget)) {
+    //     console.log(dragTarget.parent.name + ' is not a Dogbone child view');
+    //     draggedItem = dragTarget.parent;
+    //   }
+    // }
+    if (notExisty(draggedItem)) {
+      draggedItem = dragTarget;
+    }
+
     dragStartPoint = startPoint;
     offsetFromDraggedItemCenter = offsetFromCenter();
     _isDragging = dragTarget.isDraggable;
@@ -25,27 +37,46 @@ function DragDrop() {
     var newX = draggedItem.frame.x + dragOffset.x;
     var newY = draggedItem.frame.y + dragOffset.y;
 
-    draggedItem.frame.moveTo(newX, newY);
+    draggedItem.moveTo(newX, newY);
     dragStartPoint.moveTo(event.clientX, event.clientY);
 
-    var mousePoint = Point.createFromMouseEventWithClientCoords(event);
-    checkForDraggedItemOverDropTarget(mousePoint, function(target, action) {
-      target.pubsub.publish(action);
-    });
+    checkForDraggedItemOverDropTarget(Point.createFromMouseEventWithClientCoords(event));
   }
 
-  that.endDrag = function() {
-    var mousePoint = Point.createFromMouseEventWithClientCoords(event);
-    checkForDraggedItemOverDropTarget(mousePoint, function(target, action) {
-      if (action === kDropTargetItemEnter) {
-        if (existy(target.acceptDrop)) {
+  that.endDrag = function(event) {
+    var targets = sortDropTargetsZOrderDescending();
+    var numTargets = targets.length;
+
+    for (var i = numTargets - 1; i >= 0; i--) {
+      var target = targets[i];
+
+      console.log(target.name + ': ' + (target !== draggedItem && target.doesNotContainChild(draggedItem)));
+      
+      if (target !== draggedItem && target.doesNotContainChild(draggedItem)) {
+        if (target.frame.contains(Point.createFromMouseEventWithClientCoords(event))) {
+          target.onDragEnd();
           target.pubsub.publish(kDropTargetItemDropped, draggedItem);
+          break;
         }
       }
-    });
+    };
 
     draggedItem.zOrder = origZOrder;
     origZOrder = undefined;
+    draggedItem = undefined;
+  }
+
+  function sortDropTargetsZOrderDescending() {
+    var targets = dropTargets.slice(0);
+    targets.sort(function(a, b) {
+      var result = 0;
+      if (a.zOrder < b.zOrder)
+        result = -1;
+      else if (a.zOrder > b.zOrder)
+        result = 1;
+      return result;
+    });
+    return targets;
   }
 
   that.registerDropTarget = function(dropTarget) {dropTargets.push(dropTarget);}
@@ -64,19 +95,21 @@ function DragDrop() {
     return Point.create(x, y);
   }
 
-  function checkForDraggedItemOverDropTarget(mousePoint, worker) {
+  function checkForDraggedItemOverDropTarget(mousePoint) {
     dropTargets.forEach(function(target) {
       if (not(target === draggedItem)) {
         if (existy(target.willAcceptDrop) && target.willAcceptDrop(draggedItem)) {
           if (target.frame.contains(mousePoint)) {
-            worker(target, kDropTargetItemEnter);
+            target.onDragEnter();
+            return;
           }
           else {
-            worker(target, kDropTargetItemExit);
+            target.onDragExit();
+            return;
           }
         }
       }
-    })
+    });
   }
 
   var draggedItem 

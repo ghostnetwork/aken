@@ -1,3 +1,4 @@
+var kShapeMoved       = "shape.moved";
 
 if (typeof module !== 'undefined') {
   module.exports = Shape;
@@ -18,7 +19,8 @@ function Shape(frame) {
     get isDraggable(){return _draggable;}
   };
 
-  that.backgroundColor = colorWithAlpha('#FFFFFF', 1.0);
+  var backgroundColor = colorWithAlpha('#FFFFFF', 1.0);
+  var highlightBgColor = colorWithAlpha('#c7c70000', 1.0);
   that.zOrder = ZORDER_MIDDLE;
 
   that.hitTest = function(point) {return existy(_frame) ? _frame.contains(point) : false;};
@@ -26,26 +28,38 @@ function Shape(frame) {
     clearBackground(graphics, that.frame);
     that.onRender(graphics);
   };
+
   that.resizeFrame = function(newFrame) {_frame = newFrame.clone();};
 
   that.makeUndraggable = function() {_draggable = false;};
   that.makeDraggable = function() {_draggable = true;};
   
-  that.willAcceptDrop = function(item) {
-    console.log('+++ ' + that.name);
-    return false;
-  };
+  that.willAcceptDrop = function(item) {return false;};
   that.acceptDrop = function(item) {};
 
   that.onTouch = function(){};
   that.onRender = function(graphics){};
+  that.onDragEnter = function() {
+    if (notExisty(origBgColor)) {origBgColor = that.backgroundColor;}
+    that.backgroundColor = that.highlightBgColor;
+  };
+  that.onDragExit = function() {restoreSavedBgColor();};
+  that.onDragEnd = function() {restoreSavedBgColor();};
 
   function clearBackground(graphics, frame) {graphics.clearRect(frame);}
+  function restoreSavedBgColor() {
+    if (existy(origBgColor)) {
+      that.backgroundColor = origBgColor;
+      origBgColor = null;
+    }
+  }
+
+  var origBgColor;
 
   var _frame = frame
     , _pubsub = PubSub.create()
     , _draggable = true;
-    
+
   return that;
 }
 

@@ -1,3 +1,5 @@
+var kDogboneMainViewName  = 'Dogbone';
+
 function Dogbone(canvas) {
   var that = {
     get graphics(){return _graphics;},
@@ -49,11 +51,11 @@ function Dogbone(canvas) {
   }
 
   function onMouseDown(event) {
-    mouseDownReceived = true;
     startPoint = Point.createFromMouseEventWithPageCoords(event);
 
     frameContainsPoint(startPoint, function(shape) {
       if (shape !== mainView) {
+        mouseDownReceived = true;
         target = shape;
         that.dragdrop.beginDrag(target, startPoint);
       }
@@ -73,6 +75,13 @@ function Dogbone(canvas) {
     }
   }
 
+  function onMouseUp(event) {
+    mouseDownReceived = false;
+    _selectionFrame = Rectangle.Empty;
+    target = null;
+    that.dragdrop.endDrag(event);
+  }
+
   function calculateSelectionFrame(event) {
       var deltaX = event.pageX - startPoint.x;
       var deltaY = event.pageY - startPoint.y;
@@ -81,22 +90,18 @@ function Dogbone(canvas) {
       _selectionFrame = Rectangle.createWithOriginAndSize(startPoint, size);
   }
 
-  function onMouseUp(event) {
-    mouseDownReceived = false;
-    _selectionFrame = Rectangle.Empty;
-    target = null;
-    if (that.dragdrop.isDragging) {
-      that.dragdrop.endDrag();
-    }
-  }
-
   function frameContainsPoint(point, handler) {
     mainView.frameContainsPoint(point, handler);
   }
 
   function configureMainView() {
     mainView.backgroundColor = colorWithAlpha('#4682B4', 1.0);
-    mainView.name = 'Dogbone';
+    mainView.highlightBgColor = mainView.backgroundColor;
+    mainView.name = kDogboneMainViewName;
+    mainView.zOrder = -1000;
+
+    that.dragdrop.registerDropTarget(mainView);
+    mainView.willAcceptDrop = acceptsDrop;
   }
 
   var origFillStyle
@@ -118,6 +123,11 @@ function Dogbone(canvas) {
   configureMainView();
   return that;
 }
+
+Dogbone.viewIsChild = function(view) {
+  return (existy(view.parent) && view.parent.name === kDogboneMainViewName);
+}
+Dogbone.viewItNotChild = function(view) {return not(Dogbone.viewIsChild(view))};
 
 if (typeof module !== 'undefined') {
   module.exports = Dogbone;

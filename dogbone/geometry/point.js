@@ -10,13 +10,12 @@ function Point(x, y) {
   };
 
   that.moveTo = function(x, y) {
+    var deltaX = x - _x;
+    var deltaY = y - _y;
     _x = x;
     _y = y;
   };
-  that.moveToPoint = function(point) {
-    _x = point.x;
-    _y = point.y;
-  };
+  that.moveToPoint = function(point) {that.moveTo(point.x, point.y);};
 
   that.debugString = function() {return _x + ", " + _y;};
 
