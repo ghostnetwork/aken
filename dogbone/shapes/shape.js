@@ -3,7 +3,6 @@ var kShapeMoved       = "shape.moved";
 if (typeof module !== 'undefined') {
   module.exports = Shape;
   var Graphics = require('../graphics.js')
-    , colorWithAlpha = Graphics.colorWithAlpha
     , PubSub = require('../../verdoux/pubsub.js');
 }
 

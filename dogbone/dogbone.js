@@ -130,7 +130,6 @@ Dogbone.viewItNotChild = function(view) {return not(Dogbone.viewIsChild(view))};
 if (typeof module !== 'undefined') {
   module.exports = Dogbone;
   var Graphics = require('../dogbone/graphics.js')
-    , colorWithAlpha = Graphics.colorWithAlpha
     , DragDrop = require('../dogbone/dragdrop.js')
     , Point = require('../dogbone/geometry/point.js')
     , Rectangle = require('../dogbone/geometry/rectangle.js')

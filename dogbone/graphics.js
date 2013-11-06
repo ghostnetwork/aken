@@ -45,7 +45,7 @@ function Graphics(context) {
 
 Graphics.create = function(context) {return new Graphics(context);};
 
-function colorWithAlpha(color, alpha) {
+colorWithAlpha = function(color, alpha) {
   // Assumes color has format of '#RRGGBB'
   var red = parseInt(color.substring(1, 3), 16);
   var green = parseInt(color.substring(3, 5), 16);
@@ -53,7 +53,51 @@ function colorWithAlpha(color, alpha) {
   return 'rgba(' + red + ',' + green + ',' + blue + ',' + alpha +')';
 }
 
+incrementAlphaInColor = function(rgbaColor, amount) {
+  var result = adjustAlphaInColor(rgbaColor, function(a) {
+    var alpha = parseFloat(a);
+    alpha += amount;
+    if (alpha > 1.0) 
+      alpha = 1.0;
+    return alpha;
+  });
+  return result;
+}
+
+decrementAlphaInColor = function(rgbaColor, amount) {
+  return adjustAlphaInColor(rgbaColor, function(a) {
+    var alpha = parseFloat(a);
+    alpha -= amount;
+    if (alpha < 0.0) 
+      alpha = 0.0;
+    return alpha;
+  });
+}
+
+function adjustAlphaInColor(rgbaColor, adjust) {
+  var color = rgbColorFromRGBA(rgbaColor);
+  var alpha = alphaFromRGBA(rgbaColor);
+  alpha = adjust(alpha);
+  return color + ',' + alpha + ')';
+}
+
+function rgbColorFromRGBA(rgbaColor) {
+  var index = rgbaColor.lastIndexOf(',');
+  if (index >= 0) {
+    return rgbaColor.substring(0, index);
+  }
+}
+
+alphaFromRGBA = function(rgbaColor) {
+  var index = rgbaColor.lastIndexOf(',');
+  if (index >= 0) {
+    var end = rgbaColor.lastIndexOf(')');
+    if (end >= 0) {
+      return rgbaColor.substring(index + 1, end);
+    }
+  }
+}
+
 if (typeof module !== 'undefined') {
-  Graphics.colorWithAlpha = colorWithAlpha;
   module.exports = Graphics;
 }

@@ -9,18 +9,12 @@ function Pulse() {
       that.publish(kPulseEvent);
     }, interval);
   }
+  that.stop = function() {clearInterval(timerId);};
 
-  that.stop = function() {
-    clearInterval(timerId);
-  };
+  that.addObserver = function(subscriber) {that.subscribe(kPulseEvent, subscriber);};
+  that.removeObserver = function(subscriber) {that.unsubscribe(kPulseEvent, subscriber);}
 
-  that.addObserver = function(subscriber) {
-    that.subscribe(kPulseEvent, subscriber);
-  };
-
-  that.removeObserver = function(subscriber) {
-    that.unsubscribe(kPulseEvent, subscriber);
-  }
+  that.onPulse = function(pulseReceiver) {that.on(kPulseEvent, pulseReceiver);};
 
   var _interval
     , timerId;

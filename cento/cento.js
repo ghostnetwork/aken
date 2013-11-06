@@ -34,6 +34,7 @@ function configureViews(cento, canvasSize) {
   configureProgramView(canvasSize, cento.dogbone);
   configureDraggableViews(canvasSize, cento.dogbone);
   configureDropTargets(canvasSize, cento.dogbone);
+  configureFadeableView(canvasSize, cento.dogbone);
 
   console.log('mainView.childCount: ' + cento.dogbone.childCount);
 }
@@ -43,8 +44,9 @@ function configureToolsView(canvasSize, mainView) {
   var toolsView = View.create(frame);
   toolsView.backgroundColor = colorWithAlpha('#c70000', kToolViewAlpha);
   toolsView.name = "ToolsView";
-  toolsView.zOrder = 100;
+  toolsView.zOrder = ZORDER_TOP - 1000000;
   toolsView.makeUndraggable();
+  var isOpen = false;
   toolsView.onTouch = function() {
     console.log(toolsView.name + ' was touched');
     touchHandler(toolsView, canvasSize, 0, 0);
@@ -57,7 +59,7 @@ function configureLibraryView(canvasSize, mainView) {
   var toolsView = View.create(frame);
   toolsView.backgroundColor = colorWithAlpha('#00c700', kToolViewAlpha);
   toolsView.name = "LibraryView";
-  toolsView.zOrder = 101;
+  toolsView.zOrder = ZORDER_TOP - 2000000;
   toolsView.makeUndraggable();
   toolsView.onTouch = function() {
     console.log(toolsView.name + ' was touched');
@@ -72,7 +74,7 @@ function configureFooView(canvasSize, mainView) {
   toolsView.backgroundColor = colorWithAlpha('#0000c7', kToolViewAlpha);
   toolsView.name = "FooView";
   toolsView.isOpened = false;
-  toolsView.zOrder = 102;
+  toolsView.zOrder = ZORDER_TOP - 3000000;
   toolsView.makeUndraggable();
   toolsView.onTouch = function() {
     console.log(toolsView.name + ' was touched');
@@ -140,6 +142,32 @@ function configureDropTargets(canvasSize, mainView) {
 
   mainView.dragdrop.registerDropTarget(dropTargetViewB);
   mainView.addChild(dropTargetViewB);
+}
+
+function configureFadeableView(canvasSize, mainView) {
+  var x = 400;
+  var y = 400;
+  var frame = Rectangle.create(x, y, 200, 200);
+  var view = View.create(frame);
+  view.backgroundColor = colorWithAlpha('#ff0000', 0.7);
+  view.name = 'Cento.fadeable.view';
+
+  var isOpen = true;
+  var origBgColor = view.backgroundColor;
+  view.onTouch = function() {
+    var fadeDuration = 500;
+    if (!isOpen) {
+      View.fadeIn(view, origBgColor, fadeDuration);
+      isOpen = true;
+    }
+    else {
+      View.fadeOut(view, fadeDuration);
+      isOpen = false;
+    }
+    
+  }
+
+  mainView.addChild(view);
 }
 
 function touchHandler(view, canvasSize, startX, startY) {
