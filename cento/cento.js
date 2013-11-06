@@ -23,15 +23,18 @@ function initialize() {
   // FunctionalTests.perform(globals.cento);
 }
 
-var kProgramViewAlpha  = 0.5;
-var kToolViewAlpha  = 0.7;
+// var kProgramViewAlpha  = 0.5;
+var kToolViewAlpha      = 0.8;
+var kToolsViewBgColor   = '#633200'; //#c70000
+var kLibraryViewBgColor = '#008141'; //#00c700
+var kFooViewBgColor     = '#FFCC66'; //#0000c7
+
 function configureViews(cento, canvasSize) {
   console.log('canvasSize: ' + canvasSize.debugString());
 
   configureToolsView(canvasSize, cento.dogbone);
   configureLibraryView(canvasSize, cento.dogbone);
   configureFooView(canvasSize, cento.dogbone);
-  configureProgramView(canvasSize, cento.dogbone);
   configureDraggableViews(canvasSize, cento.dogbone);
   configureDropTargets(canvasSize, cento.dogbone);
   configureFadeableView(canvasSize, cento.dogbone);
@@ -42,14 +45,14 @@ function configureViews(cento, canvasSize) {
 function configureToolsView(canvasSize, mainView) {
   var frame = Rectangle.create(0, 0, canvasSize.width * 0.05, canvasSize.height);
   var toolsView = View.create(frame);
-  toolsView.backgroundColor = colorWithAlpha('#c70000', kToolViewAlpha);
+  toolsView.backgroundColor = colorWithAlpha(kToolsViewBgColor, kToolViewAlpha);
   toolsView.name = "ToolsView";
   toolsView.zOrder = ZORDER_TOP - 1000000;
   toolsView.makeUndraggable();
   var isOpen = false;
   toolsView.onTouch = function() {
     console.log(toolsView.name + ' was touched');
-    touchHandler(toolsView, canvasSize, 0, 0);
+    toggleToolViewOpenClose(toolsView, canvasSize, 0, 0);
   }
   mainView.addChild(toolsView);
 }
@@ -57,13 +60,13 @@ function configureToolsView(canvasSize, mainView) {
 function configureLibraryView(canvasSize, mainView) {
   var frame = Rectangle.create(0, 50, canvasSize.width * 0.05, canvasSize.height);
   var toolsView = View.create(frame);
-  toolsView.backgroundColor = colorWithAlpha('#00c700', kToolViewAlpha);
+  toolsView.backgroundColor = colorWithAlpha(kLibraryViewBgColor, kToolViewAlpha);
   toolsView.name = "LibraryView";
   toolsView.zOrder = ZORDER_TOP - 2000000;
   toolsView.makeUndraggable();
   toolsView.onTouch = function() {
     console.log(toolsView.name + ' was touched');
-    touchHandler(toolsView, canvasSize, 0, 50);
+    toggleToolViewOpenClose(toolsView, canvasSize, 0, 50);
   }
   mainView.addChild(toolsView);
 }
@@ -71,33 +74,22 @@ function configureLibraryView(canvasSize, mainView) {
 function configureFooView(canvasSize, mainView) {
   var frame = Rectangle.create(0, 100, canvasSize.width * 0.05, canvasSize.height);
   var toolsView = View.create(frame);
-  toolsView.backgroundColor = colorWithAlpha('#0000c7', kToolViewAlpha);
+  toolsView.backgroundColor = colorWithAlpha(kFooViewBgColor, kToolViewAlpha);
   toolsView.name = "FooView";
   toolsView.isOpened = false;
   toolsView.zOrder = ZORDER_TOP - 3000000;
   toolsView.makeUndraggable();
   toolsView.onTouch = function() {
     console.log(toolsView.name + ' was touched');
-    touchHandler(toolsView, canvasSize, 0, 100);
+    toggleToolViewOpenClose(toolsView, canvasSize, 0, 100);
   }
   mainView.addChild(toolsView);
 }
 
-function configureProgramView(canvasSize, mainView) {
-  var pad = 30;
-  var x = (canvasSize.width * 0.05) + pad;
-  var frame = Rectangle.create(x, pad, 200, 100);
-  var programView = ProgramView.create(frame);
-  programView.name = "Cento.ProgramView";
-  programView.backgroundColor = colorWithAlpha('#333333', kProgramViewAlpha);
-  programView.makeUndraggable();
-  mainView.addChild(programView);
-}
-
 function configureDraggableViews(canvasSize, mainView) {
   var pad = 30;
-  var x = (canvasSize.width * 0.05) + pad;
-  var y = 150;
+  var x = 200;
+  var y = 100;
   var frame;
   var draggableView;
   var colors = ['#ffffff','#aaaaaa','#555555'];
@@ -117,27 +109,29 @@ function configureDraggableViews(canvasSize, mainView) {
 }
 
 function configureDropTargets(canvasSize, mainView) {
-  var x = 200;
-  var y = 200;
+  var w = 100;
+  var h = 100;
+  var centerPt = canvasSize.center;
+  var x = centerPt.x - (w / 2);
+  var y = 40;
   var frame = Rectangle.create(x, y, 100, 100);
   var dropTargetView = View.create(frame);
   dropTargetView.name = "Cento.DropTargetView.01";
-  dropTargetView.backgroundColor = colorWithAlpha('#77c777', 1.0);
-  dropTargetView.highlightBgColor = colorWithAlpha('#c7c700', 1.0);
+  dropTargetView.backgroundColor = colorWithAlpha('#CCCCCC', 1.0);
+  dropTargetView.highlightBgColor = colorWithAlpha('#FFCC66', 1.0); //c7c700
   dropTargetView.zOrder = 100;
   dropTargetView.willAcceptDrop = acceptsDrop;
 
   mainView.dragdrop.registerDropTarget(dropTargetView);
   mainView.addChild(dropTargetView);
 
-  x = 325;
-  y = 200;
+  y = y + h + 10;
   frame = Rectangle.create(x, y, 100, 100);
   var dropTargetViewB = View.create(frame);
   dropTargetViewB.name = "Cento.DropTargetView.02";
   dropTargetViewB.zOrder = 200;
-  dropTargetViewB.backgroundColor = colorWithAlpha('#5555c7', 1.0);
-  dropTargetViewB.highlightBgColor = colorWithAlpha('#c7c700', 1.0);
+  dropTargetViewB.backgroundColor = colorWithAlpha('#433BCC', 1.0);
+  dropTargetViewB.highlightBgColor = colorWithAlpha('#00FF80', 1.0);
   dropTargetViewB.willAcceptDrop = acceptsDrop;
 
   mainView.dragdrop.registerDropTarget(dropTargetViewB);
@@ -145,12 +139,16 @@ function configureDropTargets(canvasSize, mainView) {
 }
 
 function configureFadeableView(canvasSize, mainView) {
-  var x = 400;
-  var y = 400;
-  var frame = Rectangle.create(x, y, 200, 200);
+  var w = 200;
+  var h = 200;
+  var centerPt = canvasSize.center;
+  var x = centerPt.x - (w / 2);
+  var y = centerPt.y - (h / 2);
+  var frame = Rectangle.create(x, y, w, h);
   var view = View.create(frame);
-  view.backgroundColor = colorWithAlpha('#ff0000', 0.7);
   view.name = 'Cento.fadeable.view';
+  view.backgroundColor = colorWithAlpha('#004080', 0.7);
+  view.makeUndraggable();;
 
   var isOpen = true;
   var origBgColor = view.backgroundColor;
@@ -182,7 +180,7 @@ function configureFadeableView(canvasSize, mainView) {
   mainView.addChild(view);
 }
 
-function touchHandler(view, canvasSize, startX, startY) {
+function toggleToolViewOpenClose(view, canvasSize, startX, startY) {
   if (view.isOpened) {
     closeView(view, canvasSize, startX, startY);
   } 
@@ -210,7 +208,8 @@ if (typeof module !== 'undefined') {
   var util = require('util')
     , Dogbone = require('../dogbone/dogbone.js')
     , PubSub = require('../verdoux/pubsub.js');
-  
+
+  // Remove this; use sinon mock (stub or spy)  
   var MockCanvas = function() {
     var that = {};
     that.getContext = function(type){return 'MockCanvas.getContext';};
@@ -225,3 +224,15 @@ if (typeof module !== 'undefined') {
   Cento.app = new Cento(MockCanvas.create());
 }
 
+  // configureProgramView(canvasSize, cento.dogbone);
+
+// function configureProgramView(canvasSize, mainView) {
+//   var pad = 30;
+//   var x = (canvasSize.width * 0.05) + pad;
+//   var frame = Rectangle.create(x, pad, 200, 100);
+//   var programView = ProgramView.create(frame);
+//   programView.name = "Cento.ProgramView";
+//   programView.backgroundColor = colorWithAlpha('#333333', kProgramViewAlpha);
+//   programView.makeUndraggable();
+//   mainView.addChild(programView);
+// }

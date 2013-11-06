@@ -1,7 +1,8 @@
 function Size(width, height) {
   var that = {
     get width(){return _width;},
-    get height(){return _height;}
+    get height(){return _height;},
+    get center(){ return Point.create(_width/2, _height/2);}
   };
 
   that.clone = function() {return Size.create(that.width, that.height);};
