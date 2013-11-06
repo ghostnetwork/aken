@@ -4,6 +4,8 @@ function Size(width, height) {
     get height(){return _height;}
   };
 
+  that.clone = function() {return Size.create(that.width, that.height);};
+
   that.growBy = function(amount) {
     _width += amount;
     _height += amount;

@@ -171,7 +171,6 @@ function configureFadeableView(canvasSize, mainView) {
       isOpen = false;
 
       setTimeout(function() {
-        var destPt = origFrame.origin.clone();
         View.animatedMoveTo(view, destPoint, startPoint, 1000);
         View.fadeIn(view, origBgColor, fadeDuration);
         isOpen = true;

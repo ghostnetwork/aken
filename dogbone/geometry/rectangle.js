@@ -42,8 +42,9 @@ function Rectangle(x, y, width, height) {
     return that;
   }
 
-  that.moveTo = function(x, y) {_origin.moveTo(x, y);}
-  that.moveToPoint = function(point) {_origin.moveToPoint(point);}
+  that.moveTo = function(x, y) {_origin.moveTo(x, y);};
+  that.moveToPoint = function(point) {_origin.moveToPoint(point);};
+  that.resize = function(newSize) {_size = newSize.clone();}
 
   that.debugString = function() {
     return "[" + _origin.debugString() + "; " + _size.debugString() + "]";
