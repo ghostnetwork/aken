@@ -23,7 +23,7 @@ function Rectangle(x, y, width, height) {
 
   that.create = function(x, y, width, height) {return new Rectangle(x, y, width, height);};
   that.clone = function() {return Rectangle.create(that.x, that.y, that.width, that.height);};
-    
+
   that.contains = function(point) {
     var okX = (point.x >= _origin.x && point.x <= _origin.x + _size.width)
     var okY = (point.y >= that.y && point.y <= _origin.y + _size.height);
@@ -48,6 +48,7 @@ function Rectangle(x, y, width, height) {
   that.debugString = function() {
     return "[" + _origin.debugString() + "; " + _size.debugString() + "]";
   };
+  that.jsonString = function() {return JSON.stringify(that);};
 
   var _origin = Point.create(x, y)
     , _size = Size.create(width, height);
@@ -56,6 +57,9 @@ function Rectangle(x, y, width, height) {
 }
 
 Rectangle.create = function(x, y, width, height){return new Rectangle(x, y, width, height);};
+Rectangle.createFromJSON = function(rectJSON) {return JSON.parse(rectJSON);};
+rectangleToJSON = function(rectangle){return rectangle.jsonString();};
+
 Rectangle.createWithOriginAndSize = function(origin, size) {
   return Rectangle.create(origin.x, origin.y, size.width, size.height);
 };
@@ -65,6 +69,8 @@ Rectangle.createWithSize = function(size) {
 Rectangle.createWithCanvas = function(canvas) {
   return Rectangle.create(0, 0, canvas.width, canvas.height);
 };
-function makeRectangle(x, y, width, height){return Rectangle.create(x, y, width, height);};
+
+makeRectangle = function(x, y, width, height){return Rectangle.create(x, y, width, height);};
+makeRectangleFromJSON = function(rectJSON){return Rectangle.createFromJSON(rectJSON);};
 
 Rectangle.Empty = Rectangle.create(0, 0, 0, 0);

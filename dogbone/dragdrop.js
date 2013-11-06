@@ -1,9 +1,9 @@
-var kDropTargetItemEnter    = "droptarget.item.enter";
-var kDropTargetItemExit     = "droptarget.item.exit";
-var kDropTargetItemDropped  = "droptarget.item.dropped";
+kDropTargetItemEnter    = "droptarget.item.enter";
+kDropTargetItemExit     = "droptarget.item.exit";
+kDropTargetItemDropped  = "droptarget.item.dropped";
 
-var acceptsDrop = function() {return true;};
-var deniesDrop = function(){return false;};
+acceptsDrop = function() {return true;};
+deniesDrop = function(){return false;};
 
 function DragDrop() {
   var that = { 

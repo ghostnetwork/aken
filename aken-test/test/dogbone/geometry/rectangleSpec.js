@@ -132,4 +132,34 @@ describe('Rectangle', function(){
     });
   });
 
+  describe('jsonString', function(){
+    it('should return a non-empty JSON string', function(){
+      var rectJSON = rectangle.jsonString();
+      existy(rectJSON).should.be.true;
+    });
+  });
+
+  describe('createFromJSON', function(){
+    it('should create a rectangle using the given JSON string', function(){
+      testRectangleFromJSON(rectangle, Rectangle.createFromJSON);
+    });
+  });
+
+  describe('makeRectangleFromJSON', function(){
+    it('should create a rectangle from the given JSON string', function(){
+      testRectangleFromJSON(rectangle, makeRectangleFromJSON);
+    });
+  });
+
+  function testRectangleFromJSON(sourceRect, rectMaker) {
+    var rectJSON = sourceRect.jsonString();
+    existy(rectJSON).should.be.true;
+
+    var result = rectMaker(rectJSON);
+    existy(result).should.be.true;
+    result.origin.x.should.equal(rectangle.origin.x);
+    result.origin.y.should.equal(rectangle.origin.y);
+    result.size.width.should.equal(rectangle.size.width);
+    result.size.height.should.equal(rectangle.size.height);
+  }
 });

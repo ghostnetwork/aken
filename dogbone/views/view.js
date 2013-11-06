@@ -136,5 +136,6 @@ if (typeof module !== 'undefined') {
   var util = require('util');
   var Graphics = require('../graphics.js')
     , Shape = require('../shapes/shape.js')
-    , Box = require('../shapes/box.js');
+    , Box = require('../shapes/box.js')
+    , DragDrop = require('../dragdrop.js');
 }
