@@ -53,10 +53,7 @@ function configureBrownSideView(canvasSize, mainView) {
   view.name = "BrownView";
   view.zOrder = ZORDER_TOP - 1000000;
   view.makeUndraggable();
-  var isOpen = false;
-  view.onTouch = function() {
-    toggleToolViewOpenClose(view, canvasSize, 0, 0);
-  }
+  view.onTouch = function() {toggleToolViewOpenClose(view, canvasSize, 0, 0);}
   mainView.addChild(view);
 }
 
@@ -67,9 +64,7 @@ function configureGreenSideView(canvasSize, mainView) {
   view.name = "Green.Side.View";
   view.zOrder = ZORDER_TOP - 2000000;
   view.makeUndraggable();
-  view.onTouch = function() {
-    toggleToolViewOpenClose(view, canvasSize, 0, 50);
-  }
+  view.onTouch = function() {toggleToolViewOpenClose(view, canvasSize, 0, 50);}
   mainView.addChild(view);
 }
 
@@ -81,9 +76,7 @@ function configureYellowSideView(canvasSize, mainView) {
   view.isOpened = false;
   view.zOrder = ZORDER_TOP - 3000000;
   view.makeUndraggable();
-  view.onTouch = function() {
-    toggleToolViewOpenClose(view, canvasSize, 0, 100);
-  }
+  view.onTouch = function() {toggleToolViewOpenClose(view, canvasSize, 0, 100);}
   mainView.addChild(view);
 }
 
@@ -214,9 +207,7 @@ if (typeof module !== 'undefined') {
   var MockCanvas = function() {
     var that = {};
     that.getContext = function(type){return 'MockCanvas.getContext';};
-    that.addEventListener = function(topic, subscriber) {
-      pubsub.subscribe(topic, subscriber);
-    };
+    that.addEventListener = function(topic, subscriber) {pubsub.subscribe(topic, subscriber);};
     var pubsub = PubSub.create();
     return that;
   };
