@@ -51,7 +51,6 @@ function configureToolsView(canvasSize, mainView) {
   toolsView.makeUndraggable();
   var isOpen = false;
   toolsView.onTouch = function() {
-    console.log(toolsView.name + ' was touched');
     toggleToolViewOpenClose(toolsView, canvasSize, 0, 0);
   }
   mainView.addChild(toolsView);
@@ -65,7 +64,6 @@ function configureLibraryView(canvasSize, mainView) {
   toolsView.zOrder = ZORDER_TOP - 2000000;
   toolsView.makeUndraggable();
   toolsView.onTouch = function() {
-    console.log(toolsView.name + ' was touched');
     toggleToolViewOpenClose(toolsView, canvasSize, 0, 50);
   }
   mainView.addChild(toolsView);
@@ -80,7 +78,6 @@ function configureFooView(canvasSize, mainView) {
   toolsView.zOrder = ZORDER_TOP - 3000000;
   toolsView.makeUndraggable();
   toolsView.onTouch = function() {
-    console.log(toolsView.name + ' was touched');
     toggleToolViewOpenClose(toolsView, canvasSize, 0, 100);
   }
   mainView.addChild(toolsView);
