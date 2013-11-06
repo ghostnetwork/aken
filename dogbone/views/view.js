@@ -97,7 +97,6 @@ function View(frame) {
   function configure() {
     that.pubsub.on(kDropTargetItemDropped, function(item) {
       if (existy(item)) {
-        console.log(that.name + ' did accept drop of ' + item.name);
         that.transferChild(item);
       }
     });
@@ -117,9 +116,6 @@ function View(frame) {
     displayList.forEach(function(child) {
       var x = child.frame.origin.x + delta.x;
       var y = child.frame.origin.y + delta.y;
-      console.log(child.name + ' did move to ' + x + ', ' + y 
-        + ' (' + delta.debugString() + ')'
-        + ' [' + child.frame.origin.debugString() + ']' );
       child.moveTo(x, y);
     });
   }

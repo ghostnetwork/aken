@@ -17,7 +17,6 @@ function DragDrop() {
     // - when a child view has been selected, we'll drag the parent around instead of the child
     // if (existy(dragTarget.parent)) {
     //   if (Dogbone.viewItNotChild(dragTarget)) {
-    //     console.log(dragTarget.parent.name + ' is not a Dogbone child view');
     //     draggedItem = dragTarget.parent;
     //   }
     // }
@@ -46,14 +45,12 @@ function DragDrop() {
   that.endDrag = function(event) {
     if (notExisty(draggedItem))
       return;
-    
+
     var targets = sortDropTargetsZOrderDescending();
     var numTargets = targets.length;
 
     for (var i = numTargets - 1; i >= 0; i--) {
       var target = targets[i];
-
-      console.log(target.name + ': ' + (target !== draggedItem && target.doesNotContainChild(draggedItem)));
 
       if (target !== draggedItem && target.doesNotContainChild(draggedItem)) {
         if (target.frame.contains(Point.createFromMouseEventWithClientCoords(event))) {
