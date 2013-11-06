@@ -5,8 +5,8 @@ function Cento(canvas) {
 
   that.dogbone = new Dogbone(canvas);
   
-  that.start = function(){that.dogbone.start();};
-  that.stop = function(){that.dogbone.stop();};
+  that.start = that.dogbone.start;
+  that.stop = that.dogbone.stop;
 
   return that;
 }
@@ -161,8 +161,21 @@ function configureFadeableView(canvasSize, mainView) {
       isOpen = true;
     }
     else {
+      var origFrame = view.frame.clone();
+      var startPoint = view.frame.origin.clone();
+      var destPoint = startPoint.clone();
+      var maxX = view.frame.origin.x + (canvasSize.width - view.frame.size.width);
+      destPoint.moveTo(maxX, view.frame.origin.y);
+      View.animatedMoveTo(view, startPoint, destPoint, 1000);
       View.fadeOut(view, fadeDuration);
       isOpen = false;
+
+      setTimeout(function() {
+        var destPt = origFrame.origin.clone();
+        View.animatedMoveTo(view, destPoint, startPoint, 1000);
+        View.fadeIn(view, origBgColor, fadeDuration);
+        isOpen = true;
+      }, 1000);
     }
     
   }

@@ -4,6 +4,8 @@ function Point(x, y) {
     get y(){return _y;}
   };
 
+  that.clone = function() {return Point.create(that.x, that.y);};
+  
   that.translate = function(amount) {
     _x += amount;
     _y += amount;

@@ -16,3 +16,17 @@ function fadeView(view, durationMS, alpha, fade) {
     view.backgroundColor = fade(view.backgroundColor, amount);
   });
 }
+
+View.animatedMoveTo = function(view, startPoint, destPoint, durationMS) {
+  var pulseInterval = 15;
+  var numSteps = durationMS / (pulseInterval + 1);
+  var deltaX = destPoint.x - startPoint.x;
+  var deltaY = destPoint.y - startPoint.y;
+  var amountX = deltaX / numSteps;
+  var amountY = deltaY / numSteps;
+  FX.start(pulseInterval, durationMS, function() {
+    var x = view.frame.origin.x + amountX;
+    var y = view.frame.origin.y + amountY;
+    view.frame.origin.moveTo(x, y);
+  });
+}
