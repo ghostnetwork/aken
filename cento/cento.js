@@ -23,18 +23,16 @@ function initialize() {
   // FunctionalTests.perform(globals.cento);
 }
 
-// var kProgramViewAlpha  = 0.5;
-var kToolViewAlpha      = 0.8;
-var kToolsViewBgColor   = '#633200'; //#c70000
-var kLibraryViewBgColor = '#008141'; //#00c700
-var kFooViewBgColor     = '#FFCC66'; //#0000c7
+var kSideViewsAlpha     = 0.8;
+var kBrownViewBgColor   = '#633200'; //#c70000
+var kGreenViewBgColor   = '#008141'; //#00c700
+var kYellowViewBgColor  = '#FFCC66'; //#0000c7
 
 function configureViews(cento, canvasSize) {
   console.log('canvasSize: ' + canvasSize.debugString());
 
-  configureToolsView(canvasSize, cento.dogbone);
-  configureLibraryView(canvasSize, cento.dogbone);
-  configureFooView(canvasSize, cento.dogbone);
+  configureSideViews(canvasSize, cento.dogbone);
+
   configureDraggableViews(canvasSize, cento.dogbone);
   configureDropTargets(canvasSize, cento.dogbone);
   configureFadeableView(canvasSize, cento.dogbone);
@@ -42,45 +40,51 @@ function configureViews(cento, canvasSize) {
   console.log('mainView.childCount: ' + cento.dogbone.childCount);
 }
 
-function configureToolsView(canvasSize, mainView) {
+function configureSideViews(canvasSize, mainView) {
+  configureBrownSideView(canvasSize, mainView);
+  configureGreenSideView(canvasSize, mainView);
+  configureYellowSideView(canvasSize, mainView);
+}
+
+function configureBrownSideView(canvasSize, mainView) {
   var frame = Rectangle.create(0, 0, canvasSize.width * 0.05, canvasSize.height);
-  var toolsView = View.create(frame);
-  toolsView.backgroundColor = colorWithAlpha(kToolsViewBgColor, kToolViewAlpha);
-  toolsView.name = "ToolsView";
-  toolsView.zOrder = ZORDER_TOP - 1000000;
-  toolsView.makeUndraggable();
+  var view = View.create(frame);
+  view.backgroundColor = colorWithAlpha(kBrownViewBgColor, kSideViewsAlpha);
+  view.name = "BrownView";
+  view.zOrder = ZORDER_TOP - 1000000;
+  view.makeUndraggable();
   var isOpen = false;
-  toolsView.onTouch = function() {
-    toggleToolViewOpenClose(toolsView, canvasSize, 0, 0);
+  view.onTouch = function() {
+    toggleToolViewOpenClose(view, canvasSize, 0, 0);
   }
-  mainView.addChild(toolsView);
+  mainView.addChild(view);
 }
 
-function configureLibraryView(canvasSize, mainView) {
+function configureGreenSideView(canvasSize, mainView) {
   var frame = Rectangle.create(0, 50, canvasSize.width * 0.05, canvasSize.height);
-  var toolsView = View.create(frame);
-  toolsView.backgroundColor = colorWithAlpha(kLibraryViewBgColor, kToolViewAlpha);
-  toolsView.name = "LibraryView";
-  toolsView.zOrder = ZORDER_TOP - 2000000;
-  toolsView.makeUndraggable();
-  toolsView.onTouch = function() {
-    toggleToolViewOpenClose(toolsView, canvasSize, 0, 50);
+  var view = View.create(frame);
+  view.backgroundColor = colorWithAlpha(kGreenViewBgColor, kSideViewsAlpha);
+  view.name = "Green.Side.View";
+  view.zOrder = ZORDER_TOP - 2000000;
+  view.makeUndraggable();
+  view.onTouch = function() {
+    toggleToolViewOpenClose(view, canvasSize, 0, 50);
   }
-  mainView.addChild(toolsView);
+  mainView.addChild(view);
 }
 
-function configureFooView(canvasSize, mainView) {
+function configureYellowSideView(canvasSize, mainView) {
   var frame = Rectangle.create(0, 100, canvasSize.width * 0.05, canvasSize.height);
-  var toolsView = View.create(frame);
-  toolsView.backgroundColor = colorWithAlpha(kFooViewBgColor, kToolViewAlpha);
-  toolsView.name = "FooView";
-  toolsView.isOpened = false;
-  toolsView.zOrder = ZORDER_TOP - 3000000;
-  toolsView.makeUndraggable();
-  toolsView.onTouch = function() {
-    toggleToolViewOpenClose(toolsView, canvasSize, 0, 100);
+  var view = View.create(frame);
+  view.backgroundColor = colorWithAlpha(kYellowViewBgColor, kSideViewsAlpha);
+  view.name = "Yellow.Side.View";
+  view.isOpened = false;
+  view.zOrder = ZORDER_TOP - 3000000;
+  view.makeUndraggable();
+  view.onTouch = function() {
+    toggleToolViewOpenClose(view, canvasSize, 0, 100);
   }
-  mainView.addChild(toolsView);
+  mainView.addChild(view);
 }
 
 function configureDraggableViews(canvasSize, mainView) {
