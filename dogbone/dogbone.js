@@ -1,14 +1,21 @@
 var kDogboneMainViewName  = 'Dogbone';
+var kDogboneMouseDown     = 'dogbone.mousedown';
+var kDogboneMouseMove     = 'dogbone.mousemove';
+var kDogboneMouseUp       = 'dogbone.mouseup';
 
 function Dogbone(canvas) {
-  var that = {
-    get graphics(){return _graphics;},
-    get gameLoop(){return _gameLoop;},
-    get childCount(){return mainView.childCount;},
-    get dragdrop(){return _dragdrop;}
-  };
+  var that = PubSub.create();
 
-  // Publis API
+  Object.defineProperty(that, 'graphics', 
+    {get : function() {return _graphics;},enumerable : true});
+  Object.defineProperty(that, 'gameLoop', 
+    {get : function() {return _gameLoop;},enumerable : true});
+  Object.defineProperty(that, 'childCount', 
+    {get : function() {return mainView.childCount;},enumerable : true});
+  Object.defineProperty(that, 'dragdrop', 
+    {get : function() {return _dragdrop;},enumerable : true});
+
+  // Public API
   that.start = function() {_gameLoop.start();};
   that.stop = function() {_gameLoop.stop();};
 
@@ -33,8 +40,8 @@ function Dogbone(canvas) {
   function render() {
     clearDisplay();
     mainView.render(_graphics);
-    if (_selectionFrame.size.width > 0 && _selectionFrame.size.height > 0) {
-      _graphics.drawRect(_selectionFrame, selectionFrameColor);
+    if (selectionFrame.size.width > 0 && selectionFrame.size.height > 0) {
+      _graphics.drawRect(selectionFrame, selectionFrameColor);
     }
   }
 
@@ -60,10 +67,16 @@ function Dogbone(canvas) {
         that.dragdrop.beginDrag(target, startPoint);
       }
     });
+
+    var payload = {
+      "mousePoint":startPoint, 
+      "target":target, 
+      "dragging":that.dragdrop.isDragging};
+    that.publish(kDogboneMouseDown, JSON.stringify(payload));
   }
 
   function onMouseMove(event) {
-    var mousePoint = Point.createFromMouseEventWithScreenCoords(event);
+    var mousePoint = Point.createFromMouseEventWithPageCoords(event);
     if (mouseDownReceived) { 
       if (existy(target)) {
         if (that.dragdrop.isDragging) {
@@ -74,13 +87,27 @@ function Dogbone(canvas) {
         calculateSelectionFrame(event);
       }
     }
+
+    var payload = {
+      "mousePoint":mousePoint, 
+      "target":target, 
+      "dragging":that.dragdrop.isDragging,
+      "selectionFrame":selectionFrame};
+    that.publish(kDogboneMouseMove, JSON.stringify(payload));
   }
 
   function onMouseUp(event) {
+    var mousePoint = Point.createFromMouseEventWithPageCoords(event);
     mouseDownReceived = false;
-    _selectionFrame = Rectangle.Empty;
+    selectionFrame = Rectangle.Empty;
     target = null;
     that.dragdrop.endDrag(event);
+
+    var payload = {
+      "mousePoint":mousePoint, 
+      "target":target, 
+      "selectionFrame":selectionFrame};
+    that.publish(kDogboneMouseUp, JSON.stringify(payload));
   }
 
   function calculateSelectionFrame(event) {
@@ -88,7 +115,7 @@ function Dogbone(canvas) {
       var deltaY = event.pageY - startPoint.y;
       var size = Size.create(deltaX, deltaY);
 
-      _selectionFrame = Rectangle.createWithOriginAndSize(startPoint, size);
+      selectionFrame = Rectangle.createWithOriginAndSize(startPoint, size);
   }
 
   function frameContainsPoint(point, handler) {mainView.frameContainsPoint(point, handler);}
@@ -110,11 +137,11 @@ function Dogbone(canvas) {
     , startPoint = Point.Empty
     , mouseDownReceived = false
     , target = null
+    , selectionFrame = Rectangle.Empty
     , canvasFrame = Rectangle.createWithSize(Size.createWithCanvas(canvas));
 
   var _graphics = Graphics.create(canvas.getContext('2d'))
     , _gameLoop = GameLoop.create(updateAndRender)
-    , _selectionFrame = Rectangle.Empty
     , _dragdrop = DragDrop.create();
 
   // Configuration
@@ -130,7 +157,8 @@ Dogbone.viewItNotChild = function(view) {return not(Dogbone.viewIsChild(view))};
 
 if (typeof module !== 'undefined') {
   module.exports = Dogbone;
-  var Graphics = require('../dogbone/graphics.js')
+  var PubSub = require('../verdoux/pubsub.js')
+    , Graphics = require('../dogbone/graphics.js')
     , DragDrop = require('../dogbone/dragdrop.js')
     , Point = require('../dogbone/geometry/point.js')
     , Rectangle = require('../dogbone/geometry/rectangle.js')
