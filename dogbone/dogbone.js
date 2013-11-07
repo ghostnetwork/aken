@@ -63,6 +63,7 @@ function Dogbone(canvas) {
   }
 
   function onMouseMove(event) {
+    var mousePoint = Point.createFromMouseEventWithScreenCoords(event);
     if (mouseDownReceived) { 
       if (existy(target)) {
         if (that.dragdrop.isDragging) {

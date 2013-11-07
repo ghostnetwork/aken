@@ -1,10 +1,10 @@
-var kShapeMoved       = "shape.moved";
-
 if (typeof module !== 'undefined') {
   module.exports = Shape;
   var Graphics = require('../graphics.js')
     , PubSub = require('../../verdoux/pubsub.js');
 }
+
+var kShapeMoved       = "shape.moved";
 
 var ZORDER_TOP        = Number.MAX_VALUE;
 var ZORDER_MIDDLE     = 0;
