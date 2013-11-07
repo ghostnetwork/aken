@@ -23,7 +23,7 @@ function Shape(frame) {
   that.zOrder = ZORDER_MIDDLE;
 
   that.hitTest = function(point) {return existy(_frame) ? _frame.contains(point) : false;};
-  that.render = function(graphics){
+  that.renderShape = function(graphics){
     clearBackground(graphics, that.frame);
     that.onRender(graphics);
   };
