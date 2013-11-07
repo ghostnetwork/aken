@@ -30,6 +30,10 @@ function Graphics(context) {
     _context.fillText(what, where.x, where.y);
   }
 
+  that.drawImage = function(image, x, y, width, height) {
+    _context.drawImage(image, x, y, width, height);
+  }
+
   function pushFillStyle(fillStyle) {
     origFillStyle = _context.fillStyle;
     _context.fillStyle = fillStyle;

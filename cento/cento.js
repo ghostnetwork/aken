@@ -36,6 +36,7 @@ function configureViews(cento, canvasSize) {
   configureDraggableViews(canvasSize, cento.dogbone);
   configureDropTargets(canvasSize, cento.dogbone);
   configureFadeableView(canvasSize, cento.dogbone);
+  configureImageView(canvasSize, cento.dogbone);
 
   console.log('mainView.childCount: ' + cento.dogbone.childCount);
 }
@@ -172,6 +173,18 @@ function configureFadeableView(canvasSize, mainView) {
   }
 
   mainView.addChild(view);
+}
+
+function configureImageView(canvasSize, mainView) {
+  var x = 125;
+  var w = 238;
+  var h = 163;
+  var centerPt = canvasSize.center;
+  var y = centerPt.y - (h / 2);
+  var frame = Rectangle.create(x, y, w, h);
+  var imageView = ImageView.create(frame, 'resources/images/darth-vader.png');
+  imageView.name = 'Cento.image.view';
+  mainView.addChild(imageView);
 }
 
 function toggleToolViewOpenClose(view, canvasSize, startX, startY) {

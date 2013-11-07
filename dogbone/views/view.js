@@ -13,7 +13,7 @@ function View(frame) {
   that.render = function(graphics) {
     graphics.drawFilledRect(that.frame, that.backgroundColor);
     displayList.forEach(function(shape) {
-      shape.render(graphics);
+      shape.renderShape(graphics);
     });
   };
 

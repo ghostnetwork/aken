@@ -47,6 +47,12 @@ function Dogbone(canvas) {
 
   function clearDisplay() {_graphics.clearRect(canvasFrame);}
 
+  function renderBackground() {
+    if (canDisplay) {
+      _graphics.drawImage(vader, 0, 0, 100, 100);
+    }
+  }
+
   // Mouse Events
   function configureMouseListeners() {
     if (mouseListenersConfigured) {return;}
@@ -147,6 +153,26 @@ function Dogbone(canvas) {
   // Configuration
   configureMouseListeners();
   configureMainView();
+
+
+
+
+
+
+  //-----------------------------------------------------------------------------
+var ctx = canvas.getContext('2d');
+
+
+// ctx.fillRect(50,50,200,200); // something in the background
+
+var img = new Image();
+img.onload = function() {
+    // ctx.drawImage(img, 10, 50);
+}
+  img.src = "http://upload.wikimedia.org/wikipedia/commons/thumb/4/47/PNG_transparency_demonstration_1.png/280px-PNG_transparency_demonstration_1.png"; //transparent png
+
+
+  //-----------------------------------------------------------------------------
   return that;
 }
 
