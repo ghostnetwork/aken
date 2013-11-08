@@ -7,11 +7,13 @@ function View(frame) {
   Object.defineProperty(that, 'center', {get : function() {
     return that.frame.center;},enumerable : true
   });
-
+  
   that.update = function() {sortDisplayListByZOrder();};
 
   that.render = function(graphics) {
     graphics.drawFilledRect(that.frame, that.backgroundColor);
+    if (existy(that.borderColor))
+      graphics.drawRect(that.frame, that.borderColor);
     displayList.forEach(function(shape) {
       shape.render(graphics);
     });
@@ -74,6 +76,9 @@ function View(frame) {
       }
     }
   }
+
+  that.borderColor;
+  that.clearBorderColor = function() {that.borderColor = undefined;};
 
   that.logDisplayList = function() {
     for (var i = 0; i < displayList.length; i++) {

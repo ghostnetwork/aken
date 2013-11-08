@@ -20,9 +20,7 @@ function Shape(frame) {
   };
 
   var backgroundColor = colorWithAlpha('#FFFFFF', 1.0);
-  var normalBgColor;
   var highlightBgColor = colorWithAlpha('#c7c70000', 1.0);
-  var selectionBgColor = colorWithAlpha('#00c70000', 0.5);
   that.zOrder = ZORDER_MIDDLE;
 
   that.hitTest = function(point) {return existy(_frame) ? _frame.contains(point) : false;};
@@ -51,14 +49,13 @@ function Shape(frame) {
   that.onDragExit = function() {restoreSavedBgColor();};
   that.onDragEnd = function() {restoreSavedBgColor();};
   that.onSelectionChanged = function(selected){
-    if (notExisty(normalBgColor)) {normalBgColor = that.backgroundColor;}
     if (selected) {
-      that.backgroundColor = selectionBgColor;
       that.select();
+      that.borderColor = colorWithAlpha('#c7000000', 1.0);
     }
     else {
-      that.backgroundColor = normalBgColor;
       that.unselect();
+      that.clearBorderColor();
     }
   };
 
