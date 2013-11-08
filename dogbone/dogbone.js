@@ -1,7 +1,8 @@
-var kDogboneMainViewName  = 'Dogbone';
-var kDogboneMouseDown     = 'dogbone.mousedown';
-var kDogboneMouseMove     = 'dogbone.mousemove';
-var kDogboneMouseUp       = 'dogbone.mouseup';
+var kDogboneMainViewName      = 'Dogbone'; 
+var kDogboneMouseDown         = 'dogbone.mousedown'; 
+var kDogboneMouseMove         = 'dogbone.mousemove'; 
+var kDogboneMouseUp           = 'dogbone.mouseup'; 
+var kDogboneSelectionChanged  = 'dogbone.selection.changed';
 
 function Dogbone(canvas) {
   var that = PubSub.create();
@@ -84,7 +85,8 @@ function Dogbone(canvas) {
         }
       }
       else {
-        calculateSelectionFrame(event);
+        calculateSelectionFrame(event); 
+        notifyChildViewsOfSelection(); 
       }
     }
 
@@ -102,7 +104,9 @@ function Dogbone(canvas) {
     selectionFrame = Rectangle.Empty;
     target = null;
     that.dragdrop.endDrag(event);
-
+  
+    clearSelectedChildViewsSelection(); 
+      
     var payload = {
       "mousePoint":mousePoint, 
       "target":target, 
@@ -116,7 +120,20 @@ function Dogbone(canvas) {
       var size = Size.create(deltaX, deltaY);
 
       selectionFrame = Rectangle.createWithOriginAndSize(startPoint, size);
-  }
+  } 
+  
+  function notifyChildViewsOfSelection() { 
+    mainView.displayListMap(function(shape) { 
+      var isSelected = selectionFrame.intersect(shape.frame); 
+      shape.pubsub.publish(kDogboneSelectionChanged, selectionFrame.intersect(shape.frame)); 
+    }); 
+  } 
+  
+  function clearSelectedChildViewsSelection() { 
+    mainView.displayListMap(function(shape) { 
+      shape.pubsub.publish(kDogboneSelectionChanged, false); 
+    }); 
+  } 
 
   function frameContainsPoint(point, handler) {mainView.frameContainsPoint(point, handler);}
 

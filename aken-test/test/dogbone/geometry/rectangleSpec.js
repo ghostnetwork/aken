@@ -150,6 +150,22 @@ describe('Rectangle', function(){
       testRectangleFromJSON(rectangle, makeRectangleFromJSON);
     });
   });
+ 
+  describe('intersect', function(){
+    it('should return true if the other rectangle intersects the other rectangle', function(){
+      var rectA = Rectangle.create(10, 10, 30, 30);
+      var rectB = Rectangle.create(20, 20, 50, 50);
+      var result = rectA.intersect(rectB);
+      result.should.be.true;
+    });
+ 
+    it('should return true if the other rectangle intersects the other rectangle', function(){
+      var rectA = Rectangle.create(10, 10, 30, 30);
+      var rectC = Rectangle.create(70, 70, 90, 90);
+      var result = rectA.intersect(rectC);
+      result.should.be.false;
+    });
+  });
 
   function testRectangleFromJSON(sourceRect, rectMaker) {
     var rectJSON = sourceRect.jsonString();

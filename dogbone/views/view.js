@@ -45,6 +45,12 @@ function View(frame) {
       that.addChild(child);
     }
   }
+ 
+  that.displayListMap = function(action) {
+    displayList.forEach(function(shape) {
+      action(shape);
+    });
+  }
 
   that.containsChild = function(child) {return (existy(child)) ? displayList.indexOf(child) >= 0 : false;};
   that.doesNotContainChild = function(child) {return not(that.containsChild(child));};

@@ -15,11 +15,14 @@ function Shape(frame) {
     get frame(){return _frame;},
     get bounds(){return _frame.size;},
     get pubsub(){return _pubsub;},
-    get isDraggable(){return _draggable;}
+    get isDraggable(){return _draggable;},
+    get isSelected(){return _selected;}
   };
 
   var backgroundColor = colorWithAlpha('#FFFFFF', 1.0);
+  var normalBgColor;
   var highlightBgColor = colorWithAlpha('#c7c70000', 1.0);
+  var selectionBgColor = colorWithAlpha('#00c70000', 0.5);
   that.zOrder = ZORDER_MIDDLE;
 
   that.hitTest = function(point) {return existy(_frame) ? _frame.contains(point) : false;};
@@ -35,6 +38,9 @@ function Shape(frame) {
   
   that.willAcceptDrop = function(item) {return false;};
   that.acceptDrop = function(item) {};
+ 
+  that.select = function(){_selected = true;};
+  that.unselect = function(){_selected = false;};
 
   that.onTouch = function(){};
   that.onRender = function(graphics){};
@@ -44,6 +50,17 @@ function Shape(frame) {
   };
   that.onDragExit = function() {restoreSavedBgColor();};
   that.onDragEnd = function() {restoreSavedBgColor();};
+  that.onSelectionChanged = function(selected){
+    if (notExisty(normalBgColor)) {normalBgColor = that.backgroundColor;}
+    if (selected) {
+      that.backgroundColor = selectionBgColor;
+      that.select();
+    }
+    else {
+      that.backgroundColor = normalBgColor;
+      that.unselect();
+    }
+  };
 
   function clearBackground(graphics, frame) {graphics.clearRect(frame);}
   function restoreSavedBgColor() {
@@ -52,12 +69,20 @@ function Shape(frame) {
       origBgColor = null;
     }
   }
+ 
+  function configure(){
+    _pubsub.on(kDogboneSelectionChanged, function(selected) {
+      that.onSelectionChanged(selected);
+    });
+  }
 
   var origBgColor;
 
   var _frame = frame
     , _pubsub = PubSub.create()
     , _draggable = true;
+ 
+  configure();
 
   return that;
 }

@@ -13,7 +13,11 @@ function Rectangle(x, y, width, height) {
     get x(){return _origin.x;},
     get y(){return _origin.y;},
     get width(){return _size.width;},
-    get height(){return _size.height;},
+    get height(){return _size.height;}, 
+    get left(){return _origin.x;}, 
+    get top(){return _origin.y;}, 
+    get right(){return _origin.x + _size.width;}, 
+    get bottom(){return _origin.y + _size.height;},
     get center(){
       var cX = that.size.width / 2;
       var cY = that.size.height / 2;
@@ -28,7 +32,15 @@ function Rectangle(x, y, width, height) {
     var okX = (point.x >= _origin.x && point.x <= _origin.x + _size.width)
     var okY = (point.y >= that.y && point.y <= _origin.y + _size.height);
     return okX && okY;
-  }
+  } 
+  
+  that.intersect = function(rectangle) { 
+    result = !(rectangle.left > that.right ||  
+             rectangle.right < that.left ||  
+             rectangle.top > that.bottom || 
+             rectangle.bottom < that.top); 
+    return result; 
+  } 
 
   that.growBy = function(amount) {
     _origin.translate(-amount);
