@@ -19,14 +19,12 @@ function initialize() {
   configureViews(globals.cento, canvasSize);
 
   globals.cento.start();
-
-  // FunctionalTests.perform(globals.cento);
 }
 
 var kSideViewsAlpha     = 0.8;
-var kBrownViewBgColor   = '#633200'; //#c70000
-var kGreenViewBgColor   = '#008141'; //#00c700
-var kYellowViewBgColor  = '#FFCC66'; //#0000c7
+var kBrownViewBgColor   = '#633200';
+var kGreenViewBgColor   = '#008141';
+var kYellowViewBgColor  = '#FFCC66';
 
 function configureViews(cento, canvasSize) {
   console.log('canvasSize: ' + canvasSize.debugString());
@@ -37,8 +35,6 @@ function configureViews(cento, canvasSize) {
   configureDropTargets(canvasSize, cento.dogbone);
   configureFadeableView(canvasSize, cento.dogbone);
   configureImageView(canvasSize, cento.dogbone);
-
-  console.log('mainView.childCount: ' + cento.dogbone.childCount);
 }
 
 function configureSideViews(canvasSize, mainView) {
@@ -54,6 +50,7 @@ function configureBrownSideView(canvasSize, mainView) {
   view.name = "BrownView";
   view.zOrder = ZORDER_TOP - 1000000;
   view.makeUndraggable();
+  view.makeUnselectable();
   view.onTouch = function() {toggleToolViewOpenClose(view, canvasSize, 0, 0);}
   mainView.addChild(view);
 }
@@ -65,6 +62,7 @@ function configureGreenSideView(canvasSize, mainView) {
   view.name = "Green.Side.View";
   view.zOrder = ZORDER_TOP - 2000000;
   view.makeUndraggable();
+  view.makeUnselectable();
   view.onTouch = function() {toggleToolViewOpenClose(view, canvasSize, 0, 50);}
   mainView.addChild(view);
 }
@@ -77,6 +75,7 @@ function configureYellowSideView(canvasSize, mainView) {
   view.isOpened = false;
   view.zOrder = ZORDER_TOP - 3000000;
   view.makeUndraggable();
+  view.makeUnselectable();
   view.onTouch = function() {toggleToolViewOpenClose(view, canvasSize, 0, 100);}
   mainView.addChild(view);
 }
