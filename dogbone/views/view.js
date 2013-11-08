@@ -12,12 +12,12 @@ function View(frame) {
 
   that.render = function(graphics) {
     graphics.drawFilledRect(that.frame, that.backgroundColor);
-    if (existy(that.borderColor))
-      graphics.drawRect(that.frame, that.borderColor);
-    displayList.forEach(function(shape) {
-      shape.render(graphics);
-    });
+    that.renderBorder(graphics);
+    displayList.forEach(function(shape) {shape.render(graphics);});
   };
+
+  that.renderBorder = function(graphics) {
+    if (existy(that.borderColor)) {graphics.drawRect(that.frame, that.borderColor);}}
 
   that.addChild = function(child) {
     if (existy(child)) {

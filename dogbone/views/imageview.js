@@ -8,6 +8,7 @@ function ImageView(frame, source) {
 
   that.render = function(graphics) {
     if (canDisplay) {
+      that.renderBorder(graphics);
       graphics.drawImage(that.image, frame.origin.x, frame.origin.y, frame.size.width, frame.size.height);
     }
   }
