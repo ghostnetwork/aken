@@ -7,9 +7,7 @@ function Example002(mainView, canvasSize) {
 
   function configureViewFactoryView() {
     var frame = Rectangle.create(10, 10, 50, 50);
-    var view = ActionView.create(frame, function(actionView) {
-      makeView();
-    });
+    var view = ActionView.create(frame, function(actionView) {makeView();});
     view.name = 'Example002.ViewFactory.View';
     view.backgroundColor = colorWithAlpha('#FF8000', 0.7);
     view.makeUndraggable();
@@ -18,15 +16,35 @@ function Example002(mainView, canvasSize) {
 
   function makeView() {
     var name = "Example002.SquareView.Bottom." + (mainView.childCount - 1);
+    var origin = determineViewOrigin();
     var spec = {
         "name":name,
-        "origin":Point.create(100, 10),
+        "origin":origin,
         "width":50,
         "rgbColorString":'#FFFFFF',
         "alpha":1.0,
       };
-      mainView.addChild(ViewBuilder.SquareView.fromSpec(spec));
+      var view = ViewBuilder.SquareView.fromSpec(spec);
+      lastAddedViewFrame = view.frame;
+      mainView.addChild(view);
+
+      console.log('lastAddedViewFrame: ' + lastAddedViewFrame.debugString());
   }
+
+  function determineViewOrigin() {
+    var viewOrigin = Point.Empty;
+    if (existy(lastAddedViewFrame)) {
+      x = lastAddedViewFrame.origin.x;
+      y = lastAddedViewFrame.origin.y + lastAddedViewFrame.size.height + 10;
+    }
+    else {
+      x = 100;
+      y = 10;
+    }
+    return Point.create(x, y);
+  }
+
+  var lastAddedViewFrame;
 
   configure();
   return that;
