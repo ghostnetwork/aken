@@ -11,22 +11,26 @@ function Dogbone(canvas) {
     {get : function() {return _graphics;},enumerable : true});
   Object.defineProperty(that, 'gameLoop', 
     {get : function() {return _gameLoop;},enumerable : true});
+  Object.defineProperty(that, 'mainView', 
+    {get : function() {return _mainView;},enumerable : true});
   Object.defineProperty(that, 'childCount', 
-    {get : function() {return mainView.childCount;},enumerable : true});
+    {get : function() {return _mainView.childCount;},enumerable : true});
   Object.defineProperty(that, 'dragdrop', 
     {get : function() {return _dragdrop;},enumerable : true});
 
+  that.selectionFrameColor = colorWithAlpha('#333333', 1.0);
+  
   // Public API
   that.start = function() {_gameLoop.start();};
   that.stop = function() {_gameLoop.stop();};
 
   that.addChild = function(child) { 
-    mainView.addChild(child);
+    that.mainView.addChild(child);
     return that;
   };
 
   that.removeChild = function(child) {
-    mainView.removeChild(child);
+    that.mainView.removeChild(child);
     return that;
   }
 
@@ -36,13 +40,13 @@ function Dogbone(canvas) {
     render();
   }
 
-  function update() {mainView.update();}
+  function update() {that.mainView.update();}
 
   function render() {
     clearDisplay();
-    mainView.render(_graphics);
+    that.mainView.render(_graphics);
     if (selectionFrame.size.width > 0 && selectionFrame.size.height > 0) {
-      _graphics.drawRect(selectionFrame, selectionFrameColor);
+      _graphics.drawRect(selectionFrame, that.selectionFrameColor);
     }
   }
 
@@ -61,15 +65,15 @@ function Dogbone(canvas) {
   function onMouseDown(event) {
     startPoint = Point.createFromMouseEventWithPageCoords(event);
 
-    mainView.frameContainsPoint(startPoint, function(shape) {
+    that.mainView.frameContainsPoint(startPoint, function(shape) {
       mouseDownReceived = true;
-      if (shape !== mainView) {
+      if (shape !== that.mainView) {
         target = shape;
         that.dragdrop.beginDrag(target, startPoint);
       }
     });
 
-    if (target !== mainView) {
+    if (target !== that.mainView) {
       if (not(targetIsSelectedChildView(target)))
         clearSelectedChildViewsSelection();
     }
@@ -130,7 +134,7 @@ function Dogbone(canvas) {
   } 
   
   function notifyChildViewsOfSelection() { 
-    mainView.displayListMap(function(shape) { 
+    that.mainView.displayListMap(function(shape) { 
       var isSelected = selectionFrame.intersect(shape.frame); 
       shape.pubsub.publish(kDogboneSelectionChanged, selectionFrame.intersect(shape.frame)); 
     }); 
@@ -138,21 +142,21 @@ function Dogbone(canvas) {
 
   function selectedChildViewCount() {
     var numSelectedChildViews = 0;
-    mainView.displayListMap(function(shape) { 
+    that.mainView.displayListMap(function(shape) { 
       if (shape.isSelected) numSelectedChildViews++;
     });
     return numSelectedChildViews;
   }
 
   function clearSelectedChildViewsSelection() { 
-    mainView.displayListMap(function(shape) { 
+    that.mainView.displayListMap(function(shape) { 
       shape.pubsub.publish(kDogboneSelectionChanged, false); 
     }); 
   }
 
   function targetIsSelectedChildView() {
     var result = false;
-    mainView.displayListMap(function(shape) { 
+    that.mainView.displayListMap(function(shape) { 
       if (shape.isSelected && shape === target) {
         result = true;
       }
@@ -161,7 +165,7 @@ function Dogbone(canvas) {
   }
 
   function moveSelectedChildViews(dragOffset) {
-    mainView.displayListMap(function(shape) { 
+    that.mainView.displayListMap(function(shape) { 
       if (shape.isSelected && shape !== target) {
         shape.moveBy(dragOffset);
       }
@@ -169,18 +173,17 @@ function Dogbone(canvas) {
   }
 
   function configureMainView() {
-    mainView.backgroundColor = colorWithAlpha('#4682B4', 1.0);
-    mainView.highlightBgColor = mainView.backgroundColor;
-    mainView.name = kDogboneMainViewName;
-    mainView.zOrder = -1000;
+    that.mainView.backgroundColor = colorWithAlpha('#4682B4', 1.0);
+    that.mainView.highlightBgColor = that.mainView.backgroundColor;
+    that.mainView.name = kDogboneMainViewName;
+    that.mainView.zOrder = -1000;
 
-    that.dragdrop.registerDropTarget(mainView);
-    mainView.willAcceptDrop = acceptsDrop;
+    that.dragdrop.registerDropTarget(that.mainView);
+    that.mainView.willAcceptDrop = acceptsDrop;
   }
 
   var origFillStyle
-    , mainView = View.create(Rectangle.createWithCanvas(canvas))
-    , selectionFrameColor = colorWithAlpha('#333333', 1.0)
+    , _mainView = View.create(Rectangle.createWithCanvas(canvas))
     , mouseListenersConfigured = false
     , startPoint = Point.Empty
     , mouseDownReceived = false

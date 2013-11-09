@@ -21,15 +21,12 @@ function Shape(frame) {
     get isSelectable(){return _selectable;}
   };
 
-  var backgroundColor = colorWithAlpha('#FFFFFF', 1.0);
-  var highlightBgColor = colorWithAlpha('#c7c70000', 1.0);
+  that.backgroundColor = colorWithAlpha('#FFFFFF', 1.0);
+  that.highlightBgColor = colorWithAlpha('#c7c70000', 1.0);
   that.zOrder = ZORDER_MIDDLE;
+  that.label = '';
 
   that.hitTest = function(point) {return existy(_frame) ? _frame.contains(point) : false;};
-  that.renderShape = function(graphics){
-    clearBackground(graphics, that.frame);
-    that.onRender(graphics);
-  };
 
   that.resizeFrame = function(newFrame) {_frame = newFrame.clone();};
 

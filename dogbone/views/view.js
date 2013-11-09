@@ -11,13 +11,36 @@ function View(frame) {
   that.update = function() {sortDisplayListByZOrder();};
 
   that.render = function(graphics) {
-    graphics.drawFilledRect(that.frame, that.backgroundColor);
+    that.renderBackground(graphics);
     that.renderBorder(graphics);
-    displayList.forEach(function(shape) {shape.render(graphics);});
+    that.renderLabel(graphics);
+    that.renderChildren(graphics);
   };
 
+  that.renderBackground = function(graphics) {
+    graphics.drawFilledRect(that.frame, that.backgroundColor);
+  }
+
   that.renderBorder = function(graphics) {
-    if (existy(that.borderColor)) {graphics.drawRect(that.frame, that.borderColor);}}
+    if (existy(that.borderColor)) {graphics.drawRect(that.frame, that.borderColor);}
+  }
+
+  that.renderLabel = function(graphics) {
+    if (existy(that.label) && that.label.length > 0) {
+      var fontSize = 11;
+      var color = colorWithAlpha('#000000', 1.0);
+      var style = {"color":color, "font":"bold " + fontSize + "px sans-serif"};
+      var labelSize = graphics.measureText(that.label, style);
+      var x = that.frame.center.x - labelSize.width / 2;
+      var y = that.frame.origin.y + that.frame.size.height - 6;
+      var where = Point.create(x, y);
+      graphics.drawText(that.label, where, style);
+    }
+  }
+
+  that.renderChildren = function(graphics) {
+    displayList.forEach(function(shape) {shape.render(graphics);});
+  }
 
   that.addChild = function(child) {
     if (existy(child)) {

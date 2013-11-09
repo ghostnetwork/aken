@@ -16,6 +16,7 @@ function initialize() {
   globals.cento = new Cento(canvasElem);
 
   var canvasSize = Size.createWithCanvas(canvas);
+  // var example001 = Example001.create(globals.cento.dogbone, canvasSize);
   var example002 = Example002.create(globals.cento.dogbone, canvasSize);
 
   globals.cento.start();

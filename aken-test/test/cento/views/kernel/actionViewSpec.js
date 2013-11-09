@@ -11,6 +11,7 @@ describe('ActionView', function(){
   'use strict';
 
   var kActionName = "ActionViewSpec.Action.Name"
+    , kLabel = "ActionViewSpec.Action.Label"
     , kWorker = function(args) {actionWasCalled = true;}
     , kAction = Action.create(kActionName, kWorker)
     , kArgs = "ActionViewSpec.Args";
@@ -18,7 +19,7 @@ describe('ActionView', function(){
     , actionWasCalled;
 
   beforeEach(function() {
-    actionView = ActionView.create(GF.Frame, kAction);
+    actionView = ActionView.create(GF.Frame, kLabel, kAction);
     actionWasCalled = false;
   });
 

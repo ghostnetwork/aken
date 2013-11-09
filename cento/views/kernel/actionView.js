@@ -1,6 +1,6 @@
-function ActionView(frame, action) {
+function ActionView(frame, label, action) {
   var that = View.create(frame);
-
+  that.label = label;
   that.onTouch = function() {action(that);};
   
   Object.defineProperty(that, 'action', {get : function() {return _action;},enumerable : true});
@@ -8,7 +8,7 @@ function ActionView(frame, action) {
   return that;
 }
 
-ActionView.create = function(frame, action){return new ActionView(frame, action);};
+ActionView.create = function(frame, label, action){return new ActionView(frame, label, action);};
 
 if (typeof module !== 'undefined') {
   module.exports = ActionView;

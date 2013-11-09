@@ -30,6 +30,14 @@ function Graphics(context) {
     _context.fillText(what, where.x, where.y);
   }
 
+  that.measureText = function(text, style) {
+    if (existy(style)) {
+      if (existy(style.color)) {_context.fillStyle = style.color;};
+      if (existy(style.font)) {_context.font = style.font;};
+    }
+    return _context.measureText(text);
+  }
+
   that.drawImage = function(image, x, y, width, height) {
     _context.drawImage(image, x, y, width, height);
   }
@@ -100,6 +108,44 @@ alphaFromRGBA = function(rgbaColor) {
       return rgbaColor.substring(index + 1, end);
     }
   }
+}
+
+var prefix = 'rgba(';
+rgbColorStringFromRGBA = function(rgbaColor) {
+  var red = redValueFromRGBA(rgbaColor)
+    , green = greenValueFromRGBA(rgbaColor)
+    , blue = blueValueFromRGBA(rgbaColor);
+  var commaIndex = -1;
+  red = Number(red).toString(16);
+  green = Number(green).toString(16);
+  blue = Number(blue).toString(16);
+  return '#' + red.toString(16) + green.toString(16) + blue.toString(16);
+}
+
+function stripPrefixFromRGBA(rgbaColor) {
+  var index = rgbaColor.indexOf(prefix);
+  if (index >= 0) {
+    return rgbaColor.substring(prefix.length);
+  }
+  return rgbaColor;
+}
+
+function redValueFromRGBA(rgbaColor) {
+  var temp = stripPrefixFromRGBA(rgbaColor);
+  var parts = temp.split(',');
+  return parts[0];
+}
+
+function greenValueFromRGBA(rgbaColor) {
+  var temp = stripPrefixFromRGBA(rgbaColor);
+  var parts = temp.split(',');
+  return parts[1];
+}
+
+function blueValueFromRGBA(rgbaColor) {
+  var temp = stripPrefixFromRGBA(rgbaColor);
+  var parts = temp.split(',');
+  return parts[2];
 }
 
 if (typeof module !== 'undefined') {
