@@ -16,7 +16,7 @@ function initialize() {
   globals.cento = new Cento(canvasElem);
 
   var canvasSize = Size.createWithCanvas(canvas);
-  var example001 = Example001.create(globals.cento.dogbone, canvasSize);
+  var example002 = Example002.create(globals.cento.dogbone, canvasSize);
 
   globals.cento.start();
 }
@@ -27,7 +27,7 @@ if (typeof module !== 'undefined') {
   var util = require('util')
     , Dogbone = require('../dogbone/dogbone.js')
     , PubSub = require('../verdoux/pubsub.js')
-    , Example001 = require('../cento/examples/example001.js');
+    , Example002 = require('../cento/examples/example002.js');
 
   // Remove this; use sinon mock (stub or spy)  
   var MockCanvas = function() {

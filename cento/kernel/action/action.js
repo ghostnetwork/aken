@@ -4,7 +4,7 @@ function Action(name, worker) {
     get worker(){return _worker;}
   };
 
-  that.perform = function() {if (worker) {worker(that);}}
+  that.perform = function(args) {if (worker) {worker(that, args);}}
 
   var _name = name
     , _worker = worker;

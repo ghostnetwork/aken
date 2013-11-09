@@ -2,6 +2,7 @@ var assert = require('assert');
 var should = require('should');
 var sinon = require('sinon');
 var util = require('util');
+var GF = require('./geometryFixtures.js');
 var Rectangle = require('../../../../dogbone/geometry/rectangle.js');
 var Point = require('../../../../dogbone/geometry/point.js');
 var Size = require('../../../../dogbone/geometry/size.js');
@@ -10,31 +11,25 @@ require('../../../../verdoux/predicates.js');
 describe('Rectangle', function(){
   'use strict';
 
-  var kCoordX = 11
-    , kCoordY = 22 
-    , kWidth = 111
-    , kHeight = 222
-    , kOrigin = Point.create(kCoordX, kCoordY)
-    , kSize = Size.create(kWidth, kHeight);
   var rectangle;
 
-  beforeEach(function() {rectangle = Rectangle.create(kCoordX, kCoordY, kWidth, kHeight);});
+  beforeEach(function() {rectangle = Rectangle.create(GF.CoordX, GF.CoordY, GF.Width, GF.Height);});
 
   it('should be able to be created', function(){assert(existy(rectangle));});
 
   describe('create', function(){
     it('should adjust the origin if width is negative', function(){
-      var width = kWidth * -1;
-      var height = kHeight;
+      var width = GF.Width * -1;
+      var height = GF.Height;
     });
   });
   describe('createWithOriginAndSize', function(){
     it('should create a rectangle of the expected origin and size', function(){
-      var expectedOrigin = kOrigin;
+      var expectedOrigin = GF.Origin;
       rectangle.origin.x.should.equal(expectedOrigin.x);
       rectangle.origin.y.should.equal(expectedOrigin.y);
 
-      var expectedSize = kSize;
+      var expectedSize = GF.Size;
       rectangle.size.width.should.equal(expectedSize.width);
       rectangle.size.height.should.equal(expectedSize.height);
     });
@@ -42,7 +37,7 @@ describe('Rectangle', function(){
 
   describe('createWithSize', function(){
     it('should create a rectangle of the expected size', function(){
-      var expectedSize = kSize;
+      var expectedSize = GF.Size;
       rectangle.size.width.should.equal(expectedSize.width);
       rectangle.size.height.should.equal(expectedSize.height);
     });
@@ -58,22 +53,22 @@ describe('Rectangle', function(){
 
     it('should return false if the point is not inside the rectangle', function(){
       var pad = 30;
-      var point = Point.create(kCoordX - pad, kCoordY - pad);
+      var point = Point.create(GF.CoordX - pad, GF.CoordY - pad);
       var result = rectangle.contains(point);
       result.should.be.false;
 
-      point = Point.create(kWidth + pad, kHeight + pad);
+      point = Point.create(GF.Width + pad, GF.Height + pad);
       result = rectangle.contains(point);
       result.should.be.false;
     });
 
     it('should return true if the point is inside the rectangle', function(){
       var pad = 30;
-      var point = Point.create(kCoordX + pad, kCoordY + pad);
+      var point = Point.create(GF.CoordX + pad, GF.CoordY + pad);
       var result = rectangle.contains(point);
       result.should.be.true;
 
-      point = Point.create(kWidth - pad, kHeight - pad);
+      point = Point.create(GF.Width - pad, GF.Height - pad);
       result = rectangle.contains(point);
       result.should.be.true;
     });

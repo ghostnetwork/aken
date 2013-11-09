@@ -9,7 +9,8 @@ describe('Action', function(){
   'use strict';
 
   var kName = "ActionSpec.name"
-    , kWorker = workerDrone;
+    , kWorker = workerDrone
+    , kArgs = "ActionSpec.args";
   var action
     , workerDroneWasCalled;
 
@@ -27,13 +28,14 @@ describe('Action', function(){
     });
 
     it('should call the worker drone when triggered', function(){
-      action.perform();
+      action.perform(kArgs);
       workerDroneWasCalled.should.be.true;
     });
   });
 
-  function workerDrone(theAction) {
+  function workerDrone(theAction, theArgs) {
     workerDroneWasCalled = true;
-    action.should.equal(theAction);
+    theAction.should.equal(action);
+    theArgs.should.equal(kArgs);
   }
 });
