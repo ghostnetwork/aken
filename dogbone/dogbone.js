@@ -99,13 +99,15 @@ function Dogbone(canvas) {
   }
 
   function onMouseUp(event) {
+    console.log(that.name + '.selectedChildViewCount(): ' + selectedChildViewCount());
+    if (selectedChildViewCount() > 0 && notExisty(target)) {
+      clearSelectedChildViewsSelection();
+    }
     var mousePoint = Point.createFromMouseEventWithPageCoords(event);
     mouseDownReceived = false;
     selectionFrame = Rectangle.Empty;
     target = null;
     that.dragdrop.endDrag(event);
-  
-    clearSelectedChildViewsSelection(); 
       
     var payload = {
       "mousePoint":mousePoint, 
@@ -127,8 +129,16 @@ function Dogbone(canvas) {
       var isSelected = selectionFrame.intersect(shape.frame); 
       shape.pubsub.publish(kDogboneSelectionChanged, selectionFrame.intersect(shape.frame)); 
     }); 
-  } 
-  
+  }
+
+  function selectedChildViewCount() {
+    var numSelectedChildViews = 0;
+    mainView.displayListMap(function(shape) { 
+      numSelectedChildViews++;
+    });
+    return selectedChildViewCount;
+  }
+
   function clearSelectedChildViewsSelection() { 
     mainView.displayListMap(function(shape) { 
       shape.pubsub.publish(kDogboneSelectionChanged, false); 
