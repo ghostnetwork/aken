@@ -89,7 +89,8 @@ function Dogbone(canvas) {
     if (mouseDownReceived) { 
       if (existy(target)) {
         if (that.dragdrop.isDragging) {
-          that.dragdrop.moveDrag(event);
+          var dragOffset = that.dragdrop.moveDrag(event);
+          moveSelectedChildViews(dragOffset);
         }
       }
       else {
@@ -157,6 +158,14 @@ function Dogbone(canvas) {
       }
     });
     return result;
+  }
+
+  function moveSelectedChildViews(dragOffset) {
+    mainView.displayListMap(function(shape) { 
+      if (shape.isSelected && shape !== target) {
+        shape.moveBy(dragOffset);
+      }
+    }); 
   }
 
   function configureMainView() {

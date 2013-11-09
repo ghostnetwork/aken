@@ -17,8 +17,9 @@ function Example002(mainView, canvasSize) {
   }
 
   function makeView() {
+    var name = "Example002.SquareView.Bottom." + (mainView.childCount - 1);
     var spec = {
-        "name":"Example002.SquareView.Bottom",
+        "name":name,
         "origin":Point.create(100, 10),
         "width":50,
         "rgbColorString":'#FFFFFF',
@@ -26,7 +27,7 @@ function Example002(mainView, canvasSize) {
       };
       mainView.addChild(ViewBuilder.SquareView.fromSpec(spec));
   }
-  
+
   configure();
   return that;
 }

@@ -40,6 +40,8 @@ function DragDrop() {
     dragStartPoint.moveTo(event.clientX, event.clientY);
 
     checkForDraggedItemOverDropTarget(Point.createFromMouseEventWithClientCoords(event));
+
+    return dragOffset;
   }
 
   that.endDrag = function(event) {

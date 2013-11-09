@@ -2,6 +2,7 @@ var assert = require('assert');
 var should = require('should');
 var sinon = require('sinon');
 var util = require('util');
+var GF = require('../geometry/geometryFixtures.js');
 var View = require('../../../../dogbone/views/view.js');
 var Point = require('../../../../dogbone/geometry/point.js');
 var Size = require('../../../../dogbone/geometry/size.js');
@@ -20,7 +21,7 @@ describe('View', function(){
     , kFrame = Rectangle.createWithOriginAndSize(kOrigin, kSize);
   var view;
 
-  beforeEach(function() {view = View.create();});
+  beforeEach(function() {view = View.create(GF.Frame);});
 
   it('should be able to be created', function(){assert(existy(view));});
 
@@ -87,7 +88,7 @@ describe('View', function(){
         var point;
         var handler;
         view.hitTest(point, handler);
-      }).should.not.throw();
+      }).should.throw();
     });
 
     it('should not throw error if point or handler is notExisty, non-empty list', function(){
@@ -100,7 +101,7 @@ describe('View', function(){
         var handler;
         view.hitTest(point, handler);
 
-      }).should.not.throw();
+      }).should.throw();
     });
 
     it('should not call handler if point is not within view', function(){
@@ -127,6 +128,15 @@ describe('View', function(){
       var handlerWasCalled = false;
       view.frameContainsPoint(point, function(shape) {handlerWasCalled = true;});
       handlerWasCalled.should.be.true;
+    });
+  });
+
+  describe('moveTo', function(){
+    it('should move the view to the specified point', function(){
+      var destinationPoint = Point.create(222, 333);
+      view.moveTo(destinationPoint.x, destinationPoint.y);
+      view.frame.origin.x.should.equal(destinationPoint.x);
+      view.frame.origin.y.should.equal(destinationPoint.y);
     });
   });
 });

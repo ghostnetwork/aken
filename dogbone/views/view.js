@@ -120,9 +120,13 @@ function View(frame) {
     that.onMoved(delta);
   }
 
-  that.onMoved = function(delta) {
-    moveChildren(delta);
+  that.moveBy = function(delta) {
+    var x = that.frame.origin.x + delta.x;
+    var y = that.frame.origin.y + delta.y;
+    that.moveTo(x, y);
   }
+
+  that.onMoved = function(delta) {moveChildren(delta);}
 
   function moveChildren(delta) {
     displayList.forEach(function(child) {
@@ -149,5 +153,6 @@ if (typeof module !== 'undefined') {
   var Graphics = require('../graphics.js')
     , Shape = require('../shapes/shape.js')
     , Box = require('../shapes/box.js')
-    , DragDrop = require('../dragdrop.js');
+    , DragDrop = require('../dragdrop.js')
+    , Point = require('../geometry/point.js');
 }
