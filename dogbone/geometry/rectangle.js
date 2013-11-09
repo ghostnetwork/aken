@@ -1,4 +1,3 @@
-
 if (typeof module !== 'undefined') {
   var util = require('util');
   var Point = require('./point.js')

@@ -1,4 +1,3 @@
-
 function ProgramView(frame) {
   var that = View.create(frame);
   

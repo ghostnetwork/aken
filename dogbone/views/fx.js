@@ -1,4 +1,3 @@
-
 function FX(worker) {
   var that = PubSub.create();
 

@@ -1,14 +1,15 @@
 if (typeof module !== 'undefined') {
   module.exports = Shape;
   var Graphics = require('../graphics.js')
-    , PubSub = require('../../verdoux/pubsub.js');
+    , PubSub = require('../../verdoux/pubsub.js')
+    , Dogbone = require('../../dogbone/dogbone.js');
 }
 
-var kShapeMoved       = "shape.moved";
+kShapeMoved       = "shape.moved";
 
-var ZORDER_TOP        = Number.MAX_VALUE;
-var ZORDER_MIDDLE     = 0;
-var ZORDER_BOTTOM     = Number.MIN_VALUE;
+ZORDER_TOP        = Number.MAX_VALUE;
+ZORDER_MIDDLE     = 0;
+ZORDER_BOTTOM     = Number.MIN_VALUE;
 
 function Shape(frame) {
   var that = {

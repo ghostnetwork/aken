@@ -1,4 +1,3 @@
-
 function Program(name, worker) {
   var that = Action.create(name, worker);
 

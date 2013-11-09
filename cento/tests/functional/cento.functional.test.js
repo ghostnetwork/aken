@@ -1,4 +1,3 @@
-
 function FunctionalTests() {
   var that = {};
 

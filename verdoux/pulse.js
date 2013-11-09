@@ -1,4 +1,4 @@
-var kPulseEvent = 'pulse';
+kPulseEvent = 'pulse';
 
 function Pulse() {
   var that = PubSub.create();

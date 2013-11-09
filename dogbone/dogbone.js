@@ -1,8 +1,8 @@
-var kDogboneMainViewName      = 'Dogbone'; 
-var kDogboneMouseDown         = 'dogbone.mousedown'; 
-var kDogboneMouseMove         = 'dogbone.mousemove'; 
-var kDogboneMouseUp           = 'dogbone.mouseup'; 
-var kDogboneSelectionChanged  = 'dogbone.selection.changed';
+kDogboneMainViewName      = 'Dogbone'; 
+kDogboneMouseDown         = 'dogbone.mousedown'; 
+kDogboneMouseMove         = 'dogbone.mousemove'; 
+kDogboneMouseUp           = 'dogbone.mouseup'; 
+kDogboneSelectionChanged  = 'dogbone.selection.changed';
 
 function Dogbone(canvas) {
   var that = PubSub.create();

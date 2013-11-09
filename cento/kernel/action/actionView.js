@@ -1,4 +1,3 @@
-
 function ActionView(frame) {
   var that = View.create(frame);
   
