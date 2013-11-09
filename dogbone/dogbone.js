@@ -61,13 +61,21 @@ function Dogbone(canvas) {
   function onMouseDown(event) {
     startPoint = Point.createFromMouseEventWithPageCoords(event);
 
-    frameContainsPoint(startPoint, function(shape) {
+    mainView.frameContainsPoint(startPoint, function(shape) {
       mouseDownReceived = true;
       if (shape !== mainView) {
         target = shape;
         that.dragdrop.beginDrag(target, startPoint);
       }
     });
+
+    if (target !== mainView) {
+      if (not(targetIsSelectedChildView(target)))
+        clearSelectedChildViewsSelection();
+    }
+    else {
+      clearSelectedChildViewsSelection();
+    }
 
     var payload = {
       "mousePoint":startPoint, 
@@ -99,10 +107,6 @@ function Dogbone(canvas) {
   }
 
   function onMouseUp(event) {
-    console.log(that.name + '.selectedChildViewCount(): ' + selectedChildViewCount());
-    if (selectedChildViewCount() > 0 && notExisty(target)) {
-      clearSelectedChildViewsSelection();
-    }
     var mousePoint = Point.createFromMouseEventWithPageCoords(event);
     mouseDownReceived = false;
     selectionFrame = Rectangle.Empty;
@@ -134,18 +138,26 @@ function Dogbone(canvas) {
   function selectedChildViewCount() {
     var numSelectedChildViews = 0;
     mainView.displayListMap(function(shape) { 
-      numSelectedChildViews++;
+      if (shape.isSelected) numSelectedChildViews++;
     });
-    return selectedChildViewCount;
+    return numSelectedChildViews;
   }
 
   function clearSelectedChildViewsSelection() { 
     mainView.displayListMap(function(shape) { 
       shape.pubsub.publish(kDogboneSelectionChanged, false); 
     }); 
-  } 
+  }
 
-  function frameContainsPoint(point, handler) {mainView.frameContainsPoint(point, handler);}
+  function targetIsSelectedChildView() {
+    var result = false;
+    mainView.displayListMap(function(shape) { 
+      if (shape.isSelected && shape === target) {
+        result = true;
+      }
+    });
+    return result;
+  }
 
   function configureMainView() {
     mainView.backgroundColor = colorWithAlpha('#4682B4', 1.0);

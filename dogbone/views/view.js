@@ -59,7 +59,8 @@ function View(frame) {
 
   that.frameContainsPoint = function(point, handler) {
     var didHit = false;
-    displayListReverseOrder(function(shape) {
+
+    var touchedShape = displayListReverseOrder(function(shape) {
       if (not(didHit)) {
         didHit = shape.hitTest(point);
         if (didHit) {
