@@ -23,3 +23,11 @@ var doWhen = function(predicate, condition, action) {
 
 isEven = function (n) { return (n % 2) === 0; };
 isOdd = makeOppositeOf(isEven);
+
+supportsLocalStorage = function() {
+  try {
+    return 'localStorage' in window && window['localStorage'] !== null;
+  } catch (e) {
+    return false;
+  }
+}
