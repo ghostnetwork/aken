@@ -3,6 +3,7 @@ function Example002(dogbone, canvasSize) {
   
   function configure() {
     dogbone.mainView.backgroundColor = colorWithAlpha('#1D1E1A', 1.0);
+    dogbone.mainView.highlightBgColor = dogbone.mainView.backgroundColor;
     dogbone.selectionFrameColor = colorWithAlpha('#ffffff', 1.0);
     configureViewFactoryView();
   }

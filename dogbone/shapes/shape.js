@@ -48,7 +48,9 @@ function Shape(frame) {
   that.onTouch = function(){};
   that.onRender = function(graphics){};
   that.onDragEnter = function() {
-    if (notExisty(origBgColor)) {origBgColor = that.backgroundColor;}
+    if (notExisty(origBgColor)) {
+      origBgColor = that.backgroundColor;
+    }
     that.backgroundColor = that.highlightBgColor;
   };
   that.onDragExit = function() {restoreSavedBgColor();};
