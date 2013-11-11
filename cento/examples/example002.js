@@ -13,6 +13,7 @@ function Example002(dogbone, canvasSize) {
     var view = ActionView.create(frame, 'Action', function(actionView) {makeView();});
     view.name = 'Example002.ViewFactory.View';
     view.backgroundColor = colorWithAlpha('#FF8000', 0.7);
+    view.makeUnselectable();
     view.makeUndraggable();
     dogbone.addChild(view);
   }

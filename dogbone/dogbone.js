@@ -69,6 +69,7 @@ function Dogbone(canvas) {
       mouseDownReceived = true;
       if (shape !== that.mainView) {
         target = shape;
+        shape.pubsub.publish(kDogboneSelectionChanged, true);
         that.dragdrop.beginDrag(target, startPoint);
       }
     });
