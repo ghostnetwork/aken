@@ -22,7 +22,7 @@ function Example002(dogbone, canvasSize) {
     var name = "Example002.SquareView.Bottom." + (dogbone.childCount - 1);
     var label = "Action " + (dogbone.childCount - 1);
     var spec = {
-        "name":name,
+        "name":label,
         "origin":determineViewOrigin(),
         "width":50,
         "rgbColorString":determineViewBgColor(),

@@ -38,7 +38,6 @@ function Shape(frame) {
 
   that.makeSelectable = function(){
     _selectable = true;
-    console.log(that.frame.debugString() + '.isSelectable: ' + that.isSelectable);
   };
   that.makeUnselectable = function(){_selectable = false;};
   

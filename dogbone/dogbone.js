@@ -3,6 +3,7 @@ kDogboneMouseDown         = 'dogbone.mousedown';
 kDogboneMouseMove         = 'dogbone.mousemove'; 
 kDogboneMouseUp           = 'dogbone.mouseup'; 
 kDogboneSelectionChanged  = 'dogbone.selection.changed';
+kDeleteKey                = 46;
 
 function Dogbone(canvas) {
   var that = PubSub.create();
@@ -60,6 +61,8 @@ function Dogbone(canvas) {
     canvas.addEventListener('mousedown', function(event) {onMouseDown(event);});
     canvas.addEventListener('mousemove', function(event) {onMouseMove(event);});
     canvas.addEventListener('mouseup', function(event) {onMouseUp(event);});
+
+    window.addEventListener('keyup', function(event) {onKeyUp(event);});
   }
 
   function onMouseDown(event) {
@@ -126,6 +129,13 @@ function Dogbone(canvas) {
     that.publish(kDogboneMouseUp, JSON.stringify(payload));
   }
 
+  function onKeyUp(event) {
+    switch (event.keyCode) {
+      case kDeleteKey: removeSelectedChildViews(); break;
+      default: break;
+    }
+  }
+
   function calculateSelectionFrame(event) {
       var deltaX = event.pageX - startPoint.x;
       var deltaY = event.pageY - startPoint.y;
@@ -171,6 +181,20 @@ function Dogbone(canvas) {
         shape.moveBy(dragOffset);
       }
     }); 
+  }
+
+  function removeSelectedChildViews() {
+    var shapesToRemove = [];
+
+    that.mainView.displayListMap(function(shape) {
+      if (shape.isSelected) {
+        shapesToRemove.push(shape);
+      }
+    });
+
+    shapesToRemove.forEach(function(shape) {
+      that.removeChild(shape);
+    })
   }
 
   function configureMainView() {
