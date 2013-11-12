@@ -58,7 +58,7 @@ function Shape(frame) {
     if (that.isSelectable) {
       if (selected) {
         that.select();
-        that.borderColor = colorWithAlpha('#c7000000', 1.0);
+        that.borderColor = colorWithAlpha('#ffffff', 1.0);
       }
       else {
         that.unselect();
