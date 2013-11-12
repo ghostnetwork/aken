@@ -67,21 +67,28 @@ function Dogbone(canvas) {
 
   function onMouseDown(event) {
     startPoint = Point.createFromMouseEventWithPageCoords(event);
-    that.mainView.frameContainsPoint(startPoint, handleTargetSelection);
-    maybeClearSelection();
+    that.mainView.frameContainsPoint(startPoint, frameContainsPointCallback);
+    maybeClearSelection(event);
     publishDogboneMouseDownEvent();
     publishTargetSelectionChangedEvent();
   }
 
-  function handleTargetSelection(shape) {
+  function frameContainsPointCallback(shape) {
       mouseDownReceived = true;
       if (shape !== that.mainView) {
         target = shape;
-        that.dragdrop.beginDrag(target, startPoint);
+        if (event.shiftKey) {
+          // we'll extend selection to the newly selected item below, in maybeClearSelection()
+          // TODO: begin line-drawing mode
+        }
+        else {
+          that.dragdrop.beginDrag(target, startPoint);
+        }
       }
   }
 
-  function maybeClearSelection() {
+  function maybeClearSelection(event) {
+    if (event.shiftKey || event.metaKey) return;
     if (existy(target) && target !== that.mainView) {
       if (not(targetIsSelectedChildView(target)))
         clearSelectedChildViewsSelection();
