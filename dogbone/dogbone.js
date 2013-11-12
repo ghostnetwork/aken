@@ -72,12 +72,11 @@ function Dogbone(canvas) {
       mouseDownReceived = true;
       if (shape !== that.mainView) {
         target = shape;
-        shape.pubsub.publish(kDogboneSelectionChanged, true);
         that.dragdrop.beginDrag(target, startPoint);
       }
     });
 
-    if (target !== that.mainView) {
+    if (existy(target) && target !== that.mainView) {
       if (not(targetIsSelectedChildView(target)))
         clearSelectedChildViewsSelection();
     }
@@ -90,6 +89,10 @@ function Dogbone(canvas) {
       "target":target, 
       "dragging":that.dragdrop.isDragging};
     that.publish(kDogboneMouseDown, JSON.stringify(payload));
+
+    if (existy(target)) {
+        target.pubsub.publish(kDogboneSelectionChanged, true);
+    }
   }
 
   function onMouseMove(event) {
