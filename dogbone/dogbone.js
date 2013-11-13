@@ -62,7 +62,8 @@ function Dogbone(canvas) {
     canvas.addEventListener('mousemove', function(event) {onMouseMove(event);});
     canvas.addEventListener('mouseup', function(event) {onMouseUp(event);});
 
-    window.addEventListener('keyup', function(event) {onKeyUp(event);});
+    if (typeof window !== 'undefined')
+      window.addEventListener('keyup', function(event) {onKeyUp(event);});
   }
 
   function onMouseDown(event) {
@@ -253,7 +254,8 @@ Dogbone.viewItNotChild = function(view) {return not(Dogbone.viewIsChild(view))};
 
 if (typeof module !== 'undefined') {
   module.exports = Dogbone;
-  var PubSub = require('../verdoux/pubsub.js')
+  var _ = require('underscore')
+    , PubSub = require('../verdoux/pubsub.js')
     , Graphics = require('../dogbone/graphics.js')
     , DragDrop = require('../dogbone/dragdrop.js')
     , Point = require('../dogbone/geometry/point.js')

@@ -15,6 +15,7 @@ function View(frame) {
     that.renderBorder(graphics);
     that.renderLabel(graphics);
     that.renderChildren(graphics);
+    that.onRender(graphics);
   };
 
   that.renderBackground = function(graphics) {
@@ -41,6 +42,8 @@ function View(frame) {
   that.renderChildren = function(graphics) {
     displayList.forEach(function(shape) {shape.render(graphics);});
   }
+  
+  that.onRender = function(graphics){};
 
   that.addChild = function(child) {
     if (existy(child)) {

@@ -10,7 +10,7 @@ function Example002(dogbone, canvasSize) {
 
   function configureViewFactoryView() {
     var frame = Rectangle.create(10, 10, 50, 50);
-    var view = ActionView.create(frame, 'Action', function(actionView) {makeView();});
+    var view = ActionView.createWithNoPorts(frame, 'Action', function(actionView) {makeView();});
     view.name = 'Example002.ViewFactory.View';
     view.backgroundColor = colorWithAlpha('#FF8000', 0.7);
     view.makeUnselectable();
@@ -19,37 +19,15 @@ function Example002(dogbone, canvasSize) {
   }
 
   function makeView() {
-    var name = "Example002.SquareView.Bottom." + (dogbone.childCount - 1);
-    var label = "Action " + (dogbone.childCount - 1);
-    var spec = {
-        "name":label,
-        "origin":determineViewOrigin(),
-        "width":50,
-        "rgbColorString":determineViewBgColor(),
-        "alpha":determineViewBgAlpha(),
-      };
-      var view = ViewBuilder.SquareView.fromSpec(spec);
-      view.label = label;
-      lastAddedView = view;
-      dogbone.addChild(view);
-  }
-
-  function determineViewBgColor() {
-    if (existy(lastAddedView)) {
-      return rgbColorStringFromRGBA(lastAddedView.backgroundColor);
-    }
-    else {
-      return '#FF8000';
-    }
-  }
-
-  function determineViewBgAlpha() {
-    if (existy(lastAddedView)) {
-      return alphaFromRGBA(lastAddedView.backgroundColor);
-    }
-    else {
-      return 0.7;
-    }
+    var origin = determineViewOrigin();
+    var size = Size.create(50, 50);
+    var frame = Rectangle.createWithOriginAndSize(origin, size);
+    var view = ActionView.create(frame, 'Action');
+    view.name = "Example002.ActionView." + (dogbone.childCount - 1);
+    view.label = "Action " + (dogbone.childCount - 1);
+    view.backgroundColor = colorWithAlpha('#FF8000', 0.7);
+    lastAddedView = view;
+    dogbone.addChild(view);
   }
 
   function determineViewOrigin() {
