@@ -4,8 +4,10 @@ function ActionView(frame, label, action, wantsPorts) {
   that.label = label;
 
   that.addInputPort = function(inputPort) { 
-    if (existy(inputPort))
+    if (existy(inputPort)) {
+      attachInputPortToView(inputPort);
       _inputPorts.push(inputPort);
+    }
   };
 
   that.addInputPorts = function(ports) {
@@ -21,14 +23,16 @@ function ActionView(frame, label, action, wantsPorts) {
       action(that);
   };
 
-  that.onRender = function(graphics) {
-    renderInputPorts(graphics);
-  }
-
-  function renderInputPorts(graphics) {
-    _inputPorts.forEach(function(port) {
-      console.log('port.name: ' + port.name);
-    });
+  function attachInputPortToView(inputPort) {
+    var w = 10;
+    var pad = w / 2;
+    var h = w + pad;
+    var x = frame.origin.x - w;
+    var y = frame.origin.y + (_inputPorts.length * h) + pad;
+    var inputPortFrame = Rectangle.create(x, y, w, h - pad);
+    var portView = View.create(inputPortFrame);
+    portView.name = inputPort.name;
+    that.addChild(portView);
   }
 
   function configure() {
