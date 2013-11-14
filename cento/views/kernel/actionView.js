@@ -37,9 +37,12 @@ function ActionView(frame, label, action, wantsPorts) {
 
   function configure() {
     if (wantsPorts) {
-      var firstPort = InputPort.create('Port.0');
-      var secondPort = InputPort.create('Port.1');
-      that.addInputPorts([firstPort, secondPort]);
+      var thePorts = [];
+      for (var i = 0; i < 3; i++) {
+        var portName = 'Port.' + i;
+        thePorts.push(InputPort.create(portName));
+      }
+      that.addInputPorts(thePorts);
     }
   }
   
