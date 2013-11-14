@@ -59,7 +59,6 @@ function Dogbone(canvas) {
       else {
         _graphics.drawRect(selectionFrame, that.selectionFrameColor);
       }
-
     }
   }
 
@@ -143,8 +142,9 @@ function Dogbone(canvas) {
         }
       }
       else {
-        calculateSelectionFrame(event); 
-        notifyChildViewsOfSelection(); 
+        calculateSelectionFrame(event);
+        if (not(shouldDrawLine))
+          notifyChildViewsOfSelection(); 
       }
     }
 
