@@ -66,7 +66,6 @@ function Shape(frame) {
     }
   };
 
-  function clearBackground(graphics, frame) {graphics.clearRect(frame);}
   function restoreSavedBgColor() {
     if (existy(origBgColor)) {
       that.backgroundColor = origBgColor;

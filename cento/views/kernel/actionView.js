@@ -30,8 +30,14 @@ function ActionView(frame, label, action, wantsPorts) {
     var x = frame.origin.x - w;
     var y = frame.origin.y + (_inputPorts.length * h) + pad;
     var inputPortFrame = Rectangle.create(x, y, w, h - pad);
+    
     var portView = View.create(inputPortFrame);
     portView.name = inputPort.name;
+    portView.makeUndraggable();
+
+    portView.onTouch = function() {
+      console.log(portView.name + '.onTouch()');
+    }
     that.addChild(portView);
   }
 

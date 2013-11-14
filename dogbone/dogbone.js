@@ -20,6 +20,7 @@ function Dogbone(canvas) {
     {get : function() {return _dragdrop;},enumerable : true});
 
   that.selectionFrameColor = colorWithAlpha('#333333', 1.0);
+  that.lineColor = colorWithAlpha('#ff0000', 1.0);
   
   // Public API
   that.start = function() {_gameLoop.start();};
@@ -46,8 +47,19 @@ function Dogbone(canvas) {
   function render() {
     clearDisplay();
     that.mainView.render(_graphics);
-    if (selectionFrame.size.width > 0 && selectionFrame.size.height > 0) {
-      _graphics.drawRect(selectionFrame, that.selectionFrameColor);
+
+    if (Math.abs(selectionFrame.size.width) > 0 && Math.abs(selectionFrame.size.height) > 0) {
+      if (shouldDrawLine) {
+        _graphics.drawLine(selectionFrame.origin.x, 
+                           selectionFrame.origin.y, 
+                           selectionFrame.origin.x + selectionFrame.size.width,
+                           selectionFrame.origin.y + selectionFrame.size.height,
+                           that.lineColor);
+      }
+      else {
+        _graphics.drawRect(selectionFrame, that.selectionFrameColor);
+      }
+
     }
   }
 
@@ -67,8 +79,10 @@ function Dogbone(canvas) {
   }
 
   function onMouseDown(event) {
+    shouldDrawLine = false;
     startPoint = Point.createFromMouseEventWithPageCoords(event);
     that.mainView.frameContainsPoint(startPoint, frameContainsPointCallback);
+
     maybeClearSelection(event);
     publishDogboneMouseDownEvent();
     publishTargetSelectionChangedEvent();
@@ -76,14 +90,20 @@ function Dogbone(canvas) {
 
   function frameContainsPointCallback(shape) {
       mouseDownReceived = true;
+
       if (shape !== that.mainView) {
-        target = shape;
-        if (event.shiftKey) {
-          // we'll extend selection to the newly selected item below, in maybeClearSelection()
-          // TODO: begin line-drawing mode
+        if (shape.isDraggable) {
+          target = shape;
+          if (event.shiftKey) {
+            // we'll extend selection to the newly selected item below, in maybeClearSelection()
+            // TODO: begin line-drawing mode
+          }
+          else {
+            that.dragdrop.beginDrag(target, startPoint);
+          }
         }
         else {
-          that.dragdrop.beginDrag(target, startPoint);
+          shouldDrawLine = true;
         }
       }
   }
@@ -201,7 +221,7 @@ function Dogbone(canvas) {
       if (shape.isSelected && shape !== target) {
         shape.moveBy(dragOffset);
       }
-    }); 
+    });
   }
 
   function removeSelectedChildViews() {
@@ -235,7 +255,8 @@ function Dogbone(canvas) {
     , mouseDownReceived = false
     , target = null
     , selectionFrame = Rectangle.Empty
-    , canvasFrame = Rectangle.createWithSize(Size.createWithCanvas(canvas));
+    , canvasFrame = Rectangle.createWithSize(Size.createWithCanvas(canvas)
+    , shouldDrawLine = false);
 
   var _graphics = Graphics.create(canvas.getContext('2d'))
     , _gameLoop = GameLoop.create(updateAndRender)

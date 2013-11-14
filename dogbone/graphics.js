@@ -14,8 +14,9 @@ function Graphics(context) {
   };
 
   that.drawRect = function(rect, color) {
-    _context.strokeStyle = color;
+    pushStrokeStyle(color);
     _context.strokeRect(rect.x, rect.y, rect.width, rect.height);
+    popStrokeStyle();
   }
 
   that.strokeRect = function(rect) {
@@ -23,11 +24,15 @@ function Graphics(context) {
   };
 
   that.drawText = function(what, where, style) {
+    pushFillStyle(style.color);
+
     if (existy(style)) {
       if (existy(style.color)) {_context.fillStyle = style.color;};
       if (existy(style.font)) {_context.font = style.font;};
     }
     _context.fillText(what, where.x, where.y);
+
+    popFillStyle();
   }
 
   that.measureText = function(text, style) {
@@ -42,14 +47,32 @@ function Graphics(context) {
     _context.drawImage(image, x, y, width, height);
   }
 
+  that.drawLine = function(startX, startY, endX, endY, color) {
+    pushStrokeStyle(color);
+
+    _context.beginPath();
+    _context.moveTo(startX, startY);
+    _context.lineTo(endX, endY);
+    _context.closePath();
+    _context.stroke();
+
+    popStrokeStyle();
+  }
+
   function pushFillStyle(fillStyle) {
     origFillStyle = _context.fillStyle;
     _context.fillStyle = fillStyle;
   }
+  function popFillStyle() {_context.fillStyle = origFillStyle;}
 
-  function popFillStyle(fillStyle) {
-    _context.fillStyle = origFillStyle;
+  function pushStrokeStyle(strokeStyle) {
+    origStrokeStyle = strokeStyle;
+    _context.strokeStyle = strokeStyle;
   }
+  function popStrokeStyle() {_context.strokeStyle = origStrokeStyle;}
+
+  var origFillStyle
+    , origStrokeStyle;
 
   var _context = context;
   return that;

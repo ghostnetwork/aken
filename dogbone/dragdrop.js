@@ -57,7 +57,8 @@ function DragDrop() {
       if (target !== draggedItem && target.doesNotContainChild(draggedItem)) {
         if (target.frame.contains(Point.createFromMouseEventWithClientCoords(event))) {
           target.onDragEnd();
-          target.pubsub.publish(kDropTargetItemDropped, draggedItem);
+          if (draggedItem.isDraggable)
+            target.pubsub.publish(kDropTargetItemDropped, draggedItem);
           break;
         }
       }
@@ -115,10 +116,10 @@ function DragDrop() {
   }
 
   var draggedItem 
-      , dragStartPoint
-      , offsetFromDraggedItemCenter
-      , origZOrder
-      , dropTargets = [];
+    , dragStartPoint
+    , offsetFromDraggedItemCenter
+    , origZOrder
+    , dropTargets = [];
 
   var _isDragging = false;
 

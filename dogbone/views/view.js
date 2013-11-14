@@ -19,6 +19,7 @@ function View(frame) {
   };
 
   that.renderBackground = function(graphics) {
+    graphics.clearRect(that.frame);
     graphics.drawFilledRect(that.frame, that.backgroundColor);
   }
 
@@ -86,13 +87,16 @@ function View(frame) {
   that.frameContainsPoint = function(point, handler) {
     var didHit = false;
 
-    var touchedShape = displayListReverseOrder(function(shape) {
+    displayListReverseOrder(function(shape) {
       if (not(didHit)) {
         didHit = shape.hitTest(point);
         if (didHit) {
           handler(shape);
           shape.onTouch();
+          return;
         }
+        // Recursively check to see if shape's children are hit
+        shape.frameContainsPoint(point, handler);
       }
     });
 
