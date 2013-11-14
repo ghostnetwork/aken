@@ -12,29 +12,6 @@ function ActionView(frame, label, action, hasPorts) {
       action(that);
   };
 
-  that.onMouseMove = function(event) {
-    var mousePoint = Point.createFromMouseEventWithPageCoords(event);
-    if (hasPorts) {
-      that.displayListMap(function(childView) {
-        if (childView.hitTest(mousePoint)) {childView.backgroundColor = kPortAvailableColor;}
-        else {childView.backgroundColor = kPortDefaultColor;}
-      });
-    }
-  }
-
-  that.onMouseUp = function(event) {
-    var mousePoint = Point.createFromMouseEventWithPageCoords(event);
-    if (hasPorts) {
-      that.displayListMap(function(childView) {
-        childView.frameContainsPoint(mousePoint, function(hitView) {
-          // mouse up was over one of the ports
-          console.log('-->' + hitView.name);
-          hitView.backgroundColor = kPortDefaultColor;
-        });
-      });
-    }
-  }
-
   function addInputPort(inputPort) { 
     if (existy(inputPort)) {
       _inputPorts.push(inputPort);
@@ -75,6 +52,19 @@ function ActionView(frame, label, action, hasPorts) {
     portView.makeUndraggable();
 
     portView.onTouch = function() {}
+
+    PubSub.global.on(kDogboneMouseMove, function(payload) {
+      if (portView.hitTest(payload.mousePoint)) {portView.backgroundColor = kPortAvailableColor;}
+      else {portView.backgroundColor = kPortDefaultColor;}
+    });
+
+    PubSub.global.on(kDogboneMouseUp, function(payload) {
+      portView.frameContainsPoint(payload.mousePoint, function(hitView) {
+        // mouse up was over one of the ports
+        console.log('-->' + hitView.name);
+        hitView.backgroundColor = kPortDefaultColor;
+      });
+    });
 
     that.addChild(portView);
     return portView;

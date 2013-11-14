@@ -40,5 +40,6 @@ function PubSub() {
 }
 
 PubSub.create = function(){return new PubSub();};
+PubSub.global = PubSub.create();
 
 if (typeof module !== 'undefined') {module.exports = PubSub;}

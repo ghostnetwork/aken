@@ -123,7 +123,7 @@ function Dogbone(canvas) {
       "mousePoint":startPoint, 
       "target":target, 
       "dragging":that.dragdrop.isDragging};
-    that.publish(kDogboneMouseDown, JSON.stringify(payload));
+    PubSub.global.publish(kDogboneMouseDown, payload);
   }
 
   function publishTargetSelectionChangedEvent() {
@@ -159,7 +159,7 @@ function Dogbone(canvas) {
       "target":target, 
       "dragging":that.dragdrop.isDragging,
       "selectionFrame":selectionFrame};
-    that.publish(kDogboneMouseMove, JSON.stringify(payload));
+    PubSub.global.publish(kDogboneMouseMove, payload);
   }
 
   function onMouseUp(event) {
@@ -180,7 +180,7 @@ function Dogbone(canvas) {
       "mousePoint":mousePoint, 
       "target":target, 
       "selectionFrame":selectionFrame};
-    that.publish(kDogboneMouseUp, JSON.stringify(payload));
+    PubSub.global.publish(kDogboneMouseUp, payload);
   }
 
   function onKeyUp(event) {
