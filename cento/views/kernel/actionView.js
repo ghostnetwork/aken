@@ -1,7 +1,39 @@
-function ActionView(frame, label, action, wantsPorts) {
+
+function ActionView(frame, label, action, hasPorts) {
   var that = View.create(frame);
+  
+  var kPortAvailableColor = colorWithAlpha('#00ff00', 1.0);
+  var kPortDefaultColor = colorWithAlpha('#ffffff', 1.0);
 
   that.label = label;
+
+  that.onTouch = function() {
+    if (existy(action))
+      action(that);
+  };
+
+  that.onMouseMove = function(event) {
+    var mousePoint = Point.createFromMouseEventWithPageCoords(event);
+    if (hasPorts) {
+      that.displayListMap(function(childView) {
+        if (childView.hitTest(mousePoint)) {childView.backgroundColor = kPortAvailableColor;}
+        else {childView.backgroundColor = kPortDefaultColor;}
+      });
+    }
+  }
+
+  that.onMouseUp = function(event) {
+    var mousePoint = Point.createFromMouseEventWithPageCoords(event);
+    if (hasPorts) {
+      that.displayListMap(function(childView) {
+        childView.frameContainsPoint(mousePoint, function(hitView) {
+          // mouse up was over one of the ports
+          console.log('-->' + hitView.name);
+          hitView.backgroundColor = kPortDefaultColor;
+        });
+      });
+    }
+  }
 
   function addInputPort(inputPort) { 
     if (existy(inputPort)) {
@@ -17,22 +49,6 @@ function ActionView(frame, label, action, wantsPorts) {
     }
   }
 
-  that.onTouch = function() {
-    if (existy(action))
-      action(that);
-  };
-
-  function createAndAddPortView(portFrame, name) {
-    var portView = View.create(portFrame);
-    portView.name = name;
-    portView.makeUndraggable();
-
-    portView.onTouch = function() {}
-
-    that.addChild(portView);
-    return portView;
-  }
-
   function attachInputPortToView(inputPort) {
     var frameCenter = frame.center;
     var w = 10;
@@ -40,7 +56,7 @@ function ActionView(frame, label, action, wantsPorts) {
     var x = frame.origin.x - w;
     var y = frameCenter.y - (h / 2);
     var inputPortFrame = Rectangle.create(x, y, w, h);
-    createAndAddPortView(inputPortFrame, inputPort.name);
+    createAndAddPortView(inputPortFrame, inputPort);
   }
 
   function attachOutputPortToView(outputPort) {
@@ -50,21 +66,34 @@ function ActionView(frame, label, action, wantsPorts) {
     var x = frame.right;
     var y = frameCenter.y - (h / 2);
     var outputPortFrame = Rectangle.create(x, y, w, h);
-    createAndAddPortView(outputPortFrame, outputPort.name);
+    createAndAddPortView(outputPortFrame, outputPort);
+  }
+
+  function createAndAddPortView(portFrame, port) {
+    var portView = View.create(portFrame);
+    portView.name = port.name;
+    portView.makeUndraggable();
+
+    portView.onTouch = function() {}
+
+    that.addChild(portView);
+    return portView;
   }
 
   function configure() {
-    if (wantsPorts) {
+    if (hasPorts) {
       // For now, just one InputPort & OutputPort
       _inputPort = InputPort.create(0);
       attachInputPortToView(_inputPort);
 
       _outputPort = OutputPort.create(0);
-      attachOutputPortToView(_inputPort);
+      attachOutputPortToView(_outputPort);
     }
   }
   
   Object.defineProperty(that, 'action', {get : function() {return _action;},enumerable : true});
+  Object.defineProperty(that, 'inputPort', {get : function() {return _inputPort;},enumerable : true});
+  Object.defineProperty(that, 'outputPort', {get : function() {return _outputPort;},enumerable : true});
 
   var _action = action
     , _inputPort

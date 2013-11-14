@@ -45,6 +45,8 @@ function Shape(frame) {
   that.acceptDrop = function(item) {};
 
   that.onTouch = function(){};
+  that.onMouseMove = function(event){};
+  that.onMouseUp = function(event){};
   that.onDragEnter = function() {
     if (notExisty(origBgColor)) {
       origBgColor = that.backgroundColor;

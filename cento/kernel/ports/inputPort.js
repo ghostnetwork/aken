@@ -3,7 +3,6 @@ function InputPort(number) {
   var that = Port.create(number);
   
   Object.defineProperty(that, 'type', {get : function() {return 'Input';},enumerable : true});
-
   return that;
 }
 

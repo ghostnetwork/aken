@@ -143,8 +143,14 @@ function Dogbone(canvas) {
       }
       else {
         calculateSelectionFrame(event);
-        if (not(shouldDrawLine))
+        if (shouldDrawLine) {
+          that.mainView.displayListMap(function(childView) { 
+            childView.onMouseMove(event);
+          });
+        }
+        else {
           notifyChildViewsOfSelection(); 
+        }
       }
     }
 
@@ -158,6 +164,13 @@ function Dogbone(canvas) {
 
   function onMouseUp(event) {
     var mousePoint = Point.createFromMouseEventWithPageCoords(event);
+
+    if (shouldDrawLine) {
+      that.mainView.displayListMap(function(childView) { 
+        childView.onMouseUp(event);
+      });
+    }
+
     mouseDownReceived = false;
     selectionFrame = Rectangle.Empty;
     target = null;

@@ -3,7 +3,7 @@ function Port(number) {
   var that = PubSub.create();
 
   Object.defineProperty(that, 'number', {get : function() {return _number;},enumerable : true});
-  Object.defineProperty(that, 'name', {get : function() {return 'Port.' + that.number;},enumerable : true});
+  Object.defineProperty(that, 'name', {get : function() {return that.type +  'Port.' + that.number;},enumerable : true});
   
   var _number = number;
 
