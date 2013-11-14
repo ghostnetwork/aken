@@ -13,13 +13,6 @@ function DragDrop() {
   };
 
   that.beginDrag = function(dragTarget, startPoint) {
-    // Is this feature necessary?
-    // - when a child view has been selected, we'll drag the parent around instead of the child
-    // if (existy(dragTarget.parent)) {
-    //   if (Dogbone.viewItNotChild(dragTarget)) {
-    //     draggedItem = dragTarget.parent;
-    //   }
-    // }
     if (notExisty(draggedItem)) {
       draggedItem = dragTarget;
     }
