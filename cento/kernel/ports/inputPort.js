@@ -1,14 +1,16 @@
 
-function InputPort(name) {
+function InputPort(number) {
   var that = PubSub.create();
 
-  Object.defineProperty(that, 'name', {get : function() {return _name;},enumerable : true});
-  var _name = name;
+  Object.defineProperty(that, 'number', {get : function() {return _number;},enumerable : true});
+  Object.defineProperty(that, 'name', {get : function() {return 'Input.Port.' + that.number;},enumerable : true});
+  
+  var _number = number;
 
   return that;
 }
 
-InputPort.create = function(name){return new InputPort(name);};
+InputPort.create = function(number){return new InputPort(number);};
 
 if (typeof module !== 'undefined') {
   module.exports = InputPort;

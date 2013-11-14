@@ -24,12 +24,12 @@ function ActionView(frame, label, action, wantsPorts) {
   };
 
   function attachInputPortToView(inputPort) {
+    var frameCenter = frame.center;
     var w = 10;
-    var pad = w / 2;
-    var h = w + pad;
+    var h = 10;
     var x = frame.origin.x - w;
-    var y = frame.origin.y + (_inputPorts.length * h) + pad;
-    var inputPortFrame = Rectangle.create(x, y, w, h - pad);
+    var y = frameCenter.y - (h / 2);
+    var inputPortFrame = Rectangle.create(x, y, w, h);
     
     var portView = View.create(inputPortFrame);
     portView.name = inputPort.name;
@@ -43,12 +43,7 @@ function ActionView(frame, label, action, wantsPorts) {
 
   function configure() {
     if (wantsPorts) {
-      var thePorts = [];
-      for (var i = 0; i < 3; i++) {
-        var portName = 'Port.' + i;
-        thePorts.push(InputPort.create(portName));
-      }
-      that.addInputPorts(thePorts);
+      that.addInputPort(InputPort.create(0));
     }
   }
   
