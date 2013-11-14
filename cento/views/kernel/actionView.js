@@ -1,9 +1,6 @@
 
 function ActionView(frame, label, action, hasPorts) {
   var that = View.create(frame);
-  
-  var kPortAvailableColor = colorWithAlpha('#00ff00', 1.0);
-  var kPortDefaultColor = colorWithAlpha('#ffffff', 1.0);
 
   that.label = label;
 
@@ -47,24 +44,11 @@ function ActionView(frame, label, action, hasPorts) {
   }
 
   function createAndAddPortView(portFrame, port) {
-    var portView = View.create(portFrame);
+    var portView = PortView.create(portFrame, port);
     portView.name = port.name;
     portView.makeUndraggable();
 
     portView.onTouch = function() {}
-
-    PubSub.global.on(kDogboneMouseMove, function(payload) {
-      if (portView.hitTest(payload.mousePoint)) {portView.backgroundColor = kPortAvailableColor;}
-      else {portView.backgroundColor = kPortDefaultColor;}
-    });
-
-    PubSub.global.on(kDogboneMouseUp, function(payload) {
-      portView.frameContainsPoint(payload.mousePoint, function(hitView) {
-        // mouse up was over one of the ports
-        console.log('-->' + hitView.name);
-        hitView.backgroundColor = kPortDefaultColor;
-      });
-    });
 
     that.addChild(portView);
     return portView;
@@ -102,5 +86,6 @@ if (typeof module !== 'undefined') {
     , View = require('../../../dogbone/views/view.js')
     , Rectangle = require('../../../dogbone/geometry/rectangle.js')
     , InputPort = require('../../../cento/kernel/ports/inputPort.js')
-    , OutputPort = require('../../../cento/kernel/ports/outputPort.js');
+    , OutputPort = require('../../../cento/kernel/ports/outputPort.js')
+    , PortView = require('../../../cento/views/kernel/portView.js');
 }

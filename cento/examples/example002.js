@@ -6,6 +6,10 @@ function Example002(dogbone, canvasSize) {
     dogbone.mainView.highlightBgColor = dogbone.mainView.backgroundColor;
     dogbone.selectionFrameColor = colorWithAlpha('#ffffff', 1.0);
     configureViewFactoryView();
+
+    PortConnect.global.on(kPortConnectMadeConnection, function(connector) {
+      console.log('Example002.on(' + kPortConnectMadeConnection + ').connector: ' + connector.debugString());
+    })
   }
 
   function configureViewFactoryView() {
@@ -59,6 +63,8 @@ if (typeof module !== 'undefined') {
     , Point = require('../../dogbone/geometry/point.js')
     , Rectangle = require('../../dogbone/geometry/rectangle.js')
     , Dogbone = require('../../dogbone/dogbone.js')
-    , ActionView = require('../../cento/views/kernel/actionView.js');
+    , ActionView = require('../../cento/views/kernel/actionView.js')
+    , PortConnect = require('../../cento/kernel/ports/portConnect.js')
+    , PubSub = require('../../verdoux/pubsub.js');
 
 }
