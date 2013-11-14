@@ -15,8 +15,9 @@ describe('InputPort', function(){
 
   it('should be able to be created', function(){assert(existy(inputPort));});
   
-  it('should retain the name given at creation', function(){
-    var name = inputPort.name;
-    name.should.not.be.null;
+  it('should have a type of Output', function(){
+    var actual = inputPort.type;
+    existy(actual).should.be.true;
+    actual.should.equal('Input');
   });
 });

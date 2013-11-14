@@ -42,26 +42,4 @@ describe('ActionView', function(){
       anActionView.onTouch();
     });
   });
-
-  describe('addInputPort', function(){
-    it('should ignore if given inputPort is notExisty', function(){
-      var fake;
-      actionView.addInputPort(fake);
-      actionView.inputPortsCount.should.equal(0);
-    });
-
-    it('should add the given inputPort', function(){
-      var port = InputPort.create("Port");
-      actionView.addInputPort(port);
-      actionView.inputPortsCount.should.equal(1);
-    });
-  });
-
-  describe('addInputPorts', function(){
-    it('should ignore if given input is notExisty', function(){
-      var ports;
-      actionView.addInputPorts(ports);
-      actionView.inputPortsCount.should.equal(0);
-    });
-  });
 });

@@ -3,14 +3,13 @@ function ActionView(frame, label, action, wantsPorts) {
 
   that.label = label;
 
-  that.addInputPort = function(inputPort) { 
+  function addInputPort(inputPort) { 
     if (existy(inputPort)) {
-      attachInputPortToView(inputPort);
       _inputPorts.push(inputPort);
     }
   };
 
-  that.addInputPorts = function(ports) {
+  function addInputPorts(ports) {
     if (existy(ports)) {
       ports.forEach(function(port) {
         that.addInputPort(port);
@@ -23,6 +22,17 @@ function ActionView(frame, label, action, wantsPorts) {
       action(that);
   };
 
+  function createAndAddPortView(portFrame, name) {
+    var portView = View.create(portFrame);
+    portView.name = name;
+    portView.makeUndraggable();
+
+    portView.onTouch = function() {}
+
+    that.addChild(portView);
+    return portView;
+  }
+
   function attachInputPortToView(inputPort) {
     var frameCenter = frame.center;
     var w = 10;
@@ -30,28 +40,34 @@ function ActionView(frame, label, action, wantsPorts) {
     var x = frame.origin.x - w;
     var y = frameCenter.y - (h / 2);
     var inputPortFrame = Rectangle.create(x, y, w, h);
-    
-    var portView = View.create(inputPortFrame);
-    portView.name = inputPort.name;
-    portView.makeUndraggable();
+    createAndAddPortView(inputPortFrame, inputPort.name);
+  }
 
-    portView.onTouch = function() {
-      console.log(portView.name + '.onTouch()');
-    }
-    that.addChild(portView);
+  function attachOutputPortToView(outputPort) {
+    var frameCenter = frame.center;
+    var w = 10;
+    var h = 10;
+    var x = frame.right;
+    var y = frameCenter.y - (h / 2);
+    var outputPortFrame = Rectangle.create(x, y, w, h);
+    createAndAddPortView(outputPortFrame, outputPort.name);
   }
 
   function configure() {
     if (wantsPorts) {
-      that.addInputPort(InputPort.create(0));
+      // For now, just one InputPort & OutputPort
+      _inputPort = InputPort.create(0);
+      attachInputPortToView(_inputPort);
+
+      _outputPort = OutputPort.create(0);
+      attachOutputPortToView(_inputPort);
     }
   }
   
   Object.defineProperty(that, 'action', {get : function() {return _action;},enumerable : true});
-  Object.defineProperty(that, 'inputPortsCount', {get : function() {return _inputPorts.length;},enumerable : true});
 
   var _action = action
-    , _inputPorts = []
+    , _inputPort
     , _outputPort;
 
   configure();
@@ -64,5 +80,8 @@ ActionView.createWithNoPorts = function(frame, label, action){return new ActionV
 if (typeof module !== 'undefined') {
   module.exports = ActionView;
   var util = require('util')
-    , View = require('../../../dogbone/views/view.js');
+    , View = require('../../../dogbone/views/view.js')
+    , Rectangle = require('../../../dogbone/geometry/rectangle.js')
+    , InputPort = require('../../../cento/kernel/ports/inputPort.js')
+    , OutputPort = require('../../../cento/kernel/ports/outputPort.js');
 }
