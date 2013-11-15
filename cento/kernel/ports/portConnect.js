@@ -22,6 +22,9 @@ function PortConnect() {
     _endPort = port;
     _endFrame = frame;
 
+    that.startPort.makeConnected();
+    that.endPort.makeConnected();
+
     var connectorSpec = {
       "startPort":that.startPort,
       "endPort":that.endPort

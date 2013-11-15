@@ -19,4 +19,8 @@ function Segment(spec) {
 
 Segment.create = function(spec){return new Segment(spec);};
 
-if (typeof module !== 'undefined') {module.exports = Segment;}
+if (typeof module !== 'undefined') {
+  module.exports = Segment;
+  var util = require('util')
+    , Point = require('../../../dogbone/geometry/point.js');
+}

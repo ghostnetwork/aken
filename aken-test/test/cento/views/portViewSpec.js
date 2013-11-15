@@ -13,5 +13,4 @@ describe('PortView', function(){
   beforeEach(function() {portView = PortView.create();});
 
   it('should be able to be created', function(){assert(existy(portView));});
-  
 });

@@ -24,4 +24,23 @@ describe('Port', function(){
     var name = port.name;
     existy(name).should.be.true;
   });
+
+  describe('connected', function(){
+    it('should return false by default', function(){
+      port.isConnected.should.be.false;
+    });
+
+    it('should return true after makeConnected', function(){
+      port.makeConnected();
+      port.isConnected.should.be.true;
+    });
+
+    it('should return false after makeConnected', function(){
+      port.makeConnected();
+      port.isConnected.should.be.true;
+      
+      port.makeDisconnected();
+      port.isConnected.should.be.false;
+    });
+  });
 });

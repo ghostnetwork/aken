@@ -33,20 +33,24 @@ function SegmentView(segment, connector) {
 
   PubSub.global.on(kPortViewMoved, function(spec) {
     if (spec.port.name === connector.startPort.name) {
-      // var x = segment.startPoint.x + spec.delta.x;
-      // var y = segment.startPoint.y + spec.delta.y;
-      // segment.startPoint.moveTo(x, y);
+      if (spec.port.isConnected) {
+        var x = segment.startPoint.x + spec.delta.x;
+        var y = segment.startPoint.y + spec.delta.y;
+        segment.startPoint.moveTo(x, y);
+      }
     }
     else if (spec.port.name === connector.endPort.name) {
-      var x = segment.endPoint.x + spec.delta.x;
-      var y = segment.endPoint.y + spec.delta.y;
-      segment.endPoint.moveTo(x, y);
+      if (spec.port.isConnected) {
+        var x = segment.endPoint.x + spec.delta.x;
+        var y = segment.endPoint.y + spec.delta.y;
+        segment.endPoint.moveTo(x, y);
+      }
     }
   });
 
   Object.defineProperty(that, 'segment', {get : function() {return _segment;},enumerable : true});
   Object.defineProperty(that, 'connector', {get : function() {return _connector;},enumerable : true});
-  
+
   var _segment = segment
     , _connector = connector;
 
