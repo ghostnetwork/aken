@@ -19,7 +19,6 @@ function View(frame) {
   };
 
   that.renderBackground = function(graphics) {
-    graphics.clearRect(that.frame);
     graphics.drawFilledRect(that.frame, that.backgroundColor);
   }
 
