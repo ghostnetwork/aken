@@ -9,7 +9,7 @@ function Example002(dogbone, canvasSize) {
 
     PortConnect.global.on(kPortConnectMadeConnection, function(connector) {
       console.log('Example002.on(' + kPortConnectMadeConnection + ').connector: ' + connector.debugString());
-    })
+    });
   }
 
   function configureViewFactoryView() {
@@ -64,6 +64,8 @@ if (typeof module !== 'undefined') {
     , Rectangle = require('../../dogbone/geometry/rectangle.js')
     , Dogbone = require('../../dogbone/dogbone.js')
     , ActionView = require('../../cento/views/actionView.js')
+    , SegmentView = require('../../cento/views/segmentView.js')
+    , Segment = require('../../cento/kernel/geometry/segment.js')
     , PortConnect = require('../../cento/kernel/ports/portConnect.js')
     , PubSub = require('../../verdoux/pubsub.js');
 

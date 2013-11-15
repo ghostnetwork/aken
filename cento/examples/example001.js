@@ -15,6 +15,7 @@ function Example001(mainView, canvasSize) {
     configureDropTargets();
     configureFadeableView();
     configureImageView();
+    configureSegmentView();
   }
 
   function configureSideViews() {
@@ -164,6 +165,16 @@ function Example001(mainView, canvasSize) {
     var imageView = ImageView.create(frame, 'resources/images/darth-vader.png');
     imageView.name = 'Cento.image.view';
     mainView.addChild(imageView);
+  }
+
+  function configureSegmentView() {
+    var spec = {
+      "startPoint":Point.create(100, 100),
+      "endPoint":Point.create(300, 300)
+    };
+    var segment = Segment.create(spec);
+    var segmentView = SegmentView.create(segment);
+    mainView.addChild(segmentView);
   }
 
   function toggleToolViewOpenClose(view, canvasSize, startX, startY) {
