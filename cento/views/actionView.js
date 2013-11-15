@@ -83,9 +83,9 @@ ActionView.createWithNoPorts = function(frame, label, action){return new ActionV
 if (typeof module !== 'undefined') {
   module.exports = ActionView;
   var util = require('util')
-    , View = require('../../../dogbone/views/view.js')
-    , Rectangle = require('../../../dogbone/geometry/rectangle.js')
-    , InputPort = require('../../../cento/kernel/ports/inputPort.js')
-    , OutputPort = require('../../../cento/kernel/ports/outputPort.js')
-    , PortView = require('../../../cento/views/kernel/portView.js');
+    , View = require('../../dogbone/views/view.js')
+    , Rectangle = require('../../dogbone/geometry/rectangle.js')
+    , InputPort = require('../../cento/kernel/ports/inputPort.js')
+    , OutputPort = require('../../cento/kernel/ports/outputPort.js')
+    , PortView = require('../../cento/views/portView.js');
 }

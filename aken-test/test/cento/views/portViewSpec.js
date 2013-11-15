@@ -2,8 +2,8 @@ var assert = require('assert');
 var should = require('should');
 var sinon = require('sinon');
 var util = require('util');
-var PortView = require('../../../../../cento/views/kernel/portView.js');
-require('../../../../../verdoux/predicates.js');
+var PortView = require('../../../../cento/views/portView.js');
+require('../../../../verdoux/predicates.js');
 
 describe('PortView', function(){
   'use strict';

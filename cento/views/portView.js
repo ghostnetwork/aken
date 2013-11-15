@@ -41,6 +41,6 @@ PortView.create = function(frame, port){return new PortView(frame, port);};
 if (typeof module !== 'undefined') {
   module.exports = PortView;
   var util = require('util')
-    , View = require('../../../dogbone/views/view.js')
-    , PubSub = require('../../../verdoux/pubsub.js');
+    , View = require('../../dogbone/views/view.js')
+    , PubSub = require('../../verdoux/pubsub.js');
 }

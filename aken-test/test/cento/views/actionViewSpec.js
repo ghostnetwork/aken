@@ -2,11 +2,11 @@ var assert = require('assert');
 var should = require('should');
 var sinon = require('sinon');
 var util = require('util');
-var GF = require('../../../dogbone/geometry/geometryFixtures.js');
-var Action = require('../../../../../cento/kernel/action/action.js');
-var InputPort = require('../../../../../cento/kernel/ports/inputPort.js');
-var ActionView = require('../../../../../cento/views/kernel/actionView.js');
-require('../../../../../verdoux/predicates.js');
+var GF = require('../../dogbone/geometry/geometryFixtures.js');
+var Action = require('../../../../cento/kernel/action/action.js');
+var InputPort = require('../../../../cento/kernel/ports/inputPort.js');
+var ActionView = require('../../../../cento/views/actionView.js');
+require('../../../../verdoux/predicates.js');
 
 describe('ActionView', function(){
   'use strict';

@@ -63,7 +63,7 @@ if (typeof module !== 'undefined') {
     , Point = require('../../dogbone/geometry/point.js')
     , Rectangle = require('../../dogbone/geometry/rectangle.js')
     , Dogbone = require('../../dogbone/dogbone.js')
-    , ActionView = require('../../cento/views/kernel/actionView.js')
+    , ActionView = require('../../cento/views/actionView.js')
     , PortConnect = require('../../cento/kernel/ports/portConnect.js')
     , PubSub = require('../../verdoux/pubsub.js');
 

@@ -1,5 +1,11 @@
 kPortConnectMadeConnection  = 'PortConnect.made.connection'; 
 
+if (typeof module !== 'undefined') {
+  module.exports = PortConnect;
+  var util = require('util')
+    , PubSub = require('../../../verdoux/pubsub.js');
+}
+
 function PortConnect() {
   var that = PubSub.create();
   
@@ -41,9 +47,3 @@ function PortConnect() {
 
 PortConnect.create = function(){return new PortConnect();};
 PortConnect.global = PortConnect.create();
-
-if (typeof module !== 'undefined') {
-  module.exports = PortConnect;
-  var util = require('util')
-    , PubSub = require('../../../verdoux/pubsub.js');
-}
