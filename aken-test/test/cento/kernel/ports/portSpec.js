@@ -4,6 +4,7 @@ var sinon = require('sinon');
 var util = require('util');
 var Port = require('../../../../../cento/kernel/ports/port.js');
 require('../../../../../verdoux/predicates.js');
+require('../../../../../verdoux/guid.js');
 
 describe('Port', function(){
   'use strict';
@@ -41,6 +42,14 @@ describe('Port', function(){
       
       port.makeDisconnected();
       port.isConnected.should.be.false;
+    });
+  });
+
+  describe('guid', function(){
+    it('should return a semi-unique value', function(){
+      var otherPort = Port.create(54321);
+      existy(otherPort.guid).should.be.true;
+      otherPort.guid.should.not.equal(port.guid);
     });
   });
 });

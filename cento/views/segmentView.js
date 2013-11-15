@@ -13,16 +13,6 @@ function SegmentView(segment, connector) {
       , kSegmentColor);
   };
 
-  that.onMoved = function(delta) {
-    var x = segment.startPoint.x + delta.x;
-    var y = segment.startPoint.y + delta.y;
-    segment.startPoint.moveTo(x, y);
-
-    x = segment.endPoint.x + delta.x;
-    y = segment.endPoint.y + delta.y;
-    segment.endPoint.moveTo(x, y);
-  }
-
   function frameForSegment(segment) {
     var origin = segment.startPoint
       , width = segment.endPoint.x - origin.x
@@ -32,7 +22,7 @@ function SegmentView(segment, connector) {
   }
 
   PubSub.global.on(kPortViewMoved, function(spec) {
-    if (spec.port.name === connector.startPort.name) {
+    if (spec.port.guid === connector.startPort.guid) {
       if (spec.port.isConnected) {
         var x = segment.startPoint.x + spec.delta.x;
         var y = segment.startPoint.y + spec.delta.y;
@@ -40,10 +30,12 @@ function SegmentView(segment, connector) {
       }
     }
     else if (spec.port.name === connector.endPort.name) {
-      if (spec.port.isConnected) {
-        var x = segment.endPoint.x + spec.delta.x;
-        var y = segment.endPoint.y + spec.delta.y;
-        segment.endPoint.moveTo(x, y);
+      if (spec.port.guid === connector.endPort.guid) {
+        if (spec.port.isConnected) {
+          var x = segment.endPoint.x + spec.delta.x;
+          var y = segment.endPoint.y + spec.delta.y;
+          segment.endPoint.moveTo(x, y);
+        }
       }
     }
   });
@@ -67,6 +59,7 @@ if (typeof module !== 'undefined') {
     , View = require('../../dogbone/views/view.js')
     , Segment = require('../../cento/kernel/geometry/segment.js')
     , Rectangle = require('../../dogbone/geometry/rectangle.js')
+    , Size = require('../../dogbone/geometry/size.js')
     , PortConnect = require('../../cento/kernel/ports/portConnect.js')
     , PubSub = require('../../verdoux/pubsub.js');
 }
