@@ -24,8 +24,8 @@ function PortConnect() {
       "startPort":that.startPort,
       "endPort":that.endPort
     }
-    var segment = Segment.create(spec);
-    that.publish(kPortConnectMadeConnection, segment);
+    var connector = Connector.create(spec);
+    that.publish(kPortConnectMadeConnection, connector);
   };
 
   Object.defineProperty(that, 'isConnecting', {get : function() {
