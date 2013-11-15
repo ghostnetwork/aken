@@ -5,8 +5,7 @@ function PortView(frame, port) {
   function configureSubscribers() {
     PubSub.global.on(kDogboneMouseDown, function(payload) {
       if (that.hitTest(payload.mousePoint)) {
-        console.log('mouseDown --> ' + that.port.name);
-        PortConnect.global.beginConnecting(that.port);
+        PortConnect.global.beginConnecting(that.port, that.frame);
       }
     });
 
@@ -17,8 +16,7 @@ function PortView(frame, port) {
 
     PubSub.global.on(kDogboneMouseUp, function(payload) {
       if (that.hitTest(payload.mousePoint)) {
-        console.log('mouseUp --> ' + that.port.name);
-        PortConnect.global.endConnecting(that.port);
+        PortConnect.global.endConnecting(that.port, that.frame);
       }
     });
   }

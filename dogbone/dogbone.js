@@ -143,12 +143,7 @@ function Dogbone(canvas) {
       }
       else {
         calculateSelectionFrame(event);
-        if (shouldDrawLine) {
-          that.mainView.displayListMap(function(childView) { 
-            childView.onMouseMove(event);
-          });
-        }
-        else {
+        if (not(shouldDrawLine)) {
           notifyChildViewsOfSelection(); 
         }
       }

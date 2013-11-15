@@ -147,6 +147,7 @@ function View(frame) {
     var delta = Point.create(x - that.frame.origin.x, y - that.frame.origin.y);
     that.frame.origin.moveTo(x, y);
     that.onMoved(delta);
+    moveChildren(delta);
   }
 
   that.moveBy = function(delta) {
@@ -155,7 +156,7 @@ function View(frame) {
     that.moveTo(x, y);
   }
 
-  that.onMoved = function(delta) {moveChildren(delta);}
+  that.onMoved = function(delta) {} //console.log(that.name + '.View.onMoved: ' + delta.debugString());
 
   function moveChildren(delta) {
     displayList.forEach(function(child) {

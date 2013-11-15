@@ -9,23 +9,34 @@ if (typeof module !== 'undefined') {
 function PortConnect() {
   var that = PubSub.create();
   
-  that.beginConnecting = function(port) {
+  that.beginConnecting = function(port, frame) {
     if (not(that.isConnecting)) {
       _isConnecting = true;
       _startPort = port;
+      _startFrame = frame;
     }
   };
 
-  that.endConnecting = function(port) {
+  that.endConnecting = function(port, frame) {
     _isConnecting = false; 
     _endPort = port;
+    _endFrame = frame;
 
-    var spec = {
+    var connectorSpec = {
       "startPort":that.startPort,
       "endPort":that.endPort
-    }
-    var connector = Connector.create(spec);
-    that.publish(kPortConnectMadeConnection, connector);
+    };
+
+    var segmentSpec = {
+      "startPoint":that.startFrame.center,
+      "endPoint":that.endFrame.center
+    };
+    
+    var spec = {
+      "connector":Connector.create(connectorSpec),
+      "segment":Segment.create(segmentSpec)
+    };
+    that.publish(kPortConnectMadeConnection, JSON.stringify(spec));
   };
 
   Object.defineProperty(that, 'isConnecting', {get : function() {
@@ -37,10 +48,18 @@ function PortConnect() {
   Object.defineProperty(that, 'endPort', {get : function() {
     return _endPort;},enumerable : true
   });
+  Object.defineProperty(that, 'startFrame', {get : function() {
+    return _startFrame;},enumerable : true
+  });
+  Object.defineProperty(that, 'endFrame', {get : function() {
+    return _endFrame;},enumerable : true
+  });
 
   var _isConnecting = false
-    , startPort
-    , endPort;
+    , _startPort
+    , _endPort
+    , _startFrame
+    , _endFrame;
 
   return that;
 }

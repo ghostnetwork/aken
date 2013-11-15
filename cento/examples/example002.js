@@ -7,8 +7,10 @@ function Example002(dogbone, canvasSize) {
     dogbone.selectionFrameColor = colorWithAlpha('#ffffff', 1.0);
     configureViewFactoryView();
 
-    PortConnect.global.on(kPortConnectMadeConnection, function(connector) {
-      console.log('Example002.on(' + kPortConnectMadeConnection + ').connector: ' + connector.debugString());
+    PortConnect.global.on(kPortConnectMadeConnection, function(specJSON) {
+      var spec = JSON.parse(specJSON);
+      var segmentView = SegmentView.create(spec.segment);
+      dogbone.mainView.addChild(segmentView);
     });
   }
 

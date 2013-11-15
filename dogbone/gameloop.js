@@ -2,7 +2,6 @@ function GameLoop(callback) {
   var that = PubSub.create();
 
   that.start = function() {
-    console.log('GameLoop.start');
     pulse.addObserver(_callback);
     pulse.start(20);
   }

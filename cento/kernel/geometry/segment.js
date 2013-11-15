@@ -4,6 +4,13 @@ function Segment(spec) {
     get startPoint(){return _startPoint;},
     get endPoint(){return _endPoint;},
   };
+
+  that.debugString = function() {
+    var result = '';
+    result += ('\n  startPoint: ' + that.startPoint.name);
+    result += ('\n    endPoint: ' + that.endPoint.name);
+    return result;
+  }
   
   var _startPoint = spec.startPoint
     , _endPoint = spec.endPoint;
