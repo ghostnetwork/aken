@@ -1,5 +1,5 @@
 
-function SegmentView(segment) {
+function SegmentView(segment, connector) {
   var that = View.create(frameForSegment(segment));
   
   var kSegmentColor = colorWithAlpha('#ff0000', 1.0);
@@ -14,7 +14,13 @@ function SegmentView(segment) {
   };
 
   that.onMoved = function(delta) {
-    console.log(that.name + '.SegmentView.onMoved: ' + delta.debugString());
+    var x = segment.startPoint.x + delta.x;
+    var y = segment.startPoint.y + delta.y;
+    segment.startPoint.moveTo(x, y);
+
+    x = segment.endPoint.x + delta.x;
+    y = segment.endPoint.y + delta.y;
+    segment.endPoint.moveTo(x, y);
   }
 
   function frameForSegment(segment) {
@@ -25,13 +31,31 @@ function SegmentView(segment) {
     return Rectangle.createWithOriginAndSize(origin, size);
   }
 
+  PubSub.global.on(kPortViewMoved, function(spec) {
+    if (spec.port.name === connector.startPort.name) {
+      // var x = segment.startPoint.x + spec.delta.x;
+      // var y = segment.startPoint.y + spec.delta.y;
+      // segment.startPoint.moveTo(x, y);
+    }
+    else if (spec.port.name === connector.endPort.name) {
+      var x = segment.endPoint.x + spec.delta.x;
+      var y = segment.endPoint.y + spec.delta.y;
+      segment.endPoint.moveTo(x, y);
+    }
+  });
+
   Object.defineProperty(that, 'segment', {get : function() {return _segment;},enumerable : true});
+  Object.defineProperty(that, 'connector', {get : function() {return _connector;},enumerable : true});
   
-  var _segment = segment;
+  var _segment = segment
+    , _connector = connector;
+
   return that;
 }
 
-SegmentView.create = function(segment){return new SegmentView(segment);};
+SegmentView.create = function(segment, connector){
+  return new SegmentView(segment, connector);
+};
 
 if (typeof module !== 'undefined') {
   module.exports = SegmentView;

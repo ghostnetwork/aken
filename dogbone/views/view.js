@@ -156,7 +156,7 @@ function View(frame) {
     that.moveTo(x, y);
   }
 
-  that.onMoved = function(delta) {} //console.log(that.name + '.View.onMoved: ' + delta.debugString());
+  that.onMoved = function(delta) {}
 
   function moveChildren(delta) {
     displayList.forEach(function(child) {

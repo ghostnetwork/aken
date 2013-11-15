@@ -9,7 +9,9 @@ function Example002(dogbone, canvasSize) {
 
     PortConnect.global.on(kPortConnectMadeConnection, function(specJSON) {
       var spec = JSON.parse(specJSON);
-      var segmentView = SegmentView.create(spec.segment);
+      var segment = Segment.create(spec.segment);
+      var connector = Connector.create(spec.connector);
+      var segmentView = SegmentView.create(segment, connector);
       dogbone.mainView.addChild(segmentView);
     });
   }

@@ -12,8 +12,8 @@ function Segment(spec) {
     return result;
   }
   
-  var _startPoint = spec.startPoint
-    , _endPoint = spec.endPoint;
+  var _startPoint = Point.createFromSpec(spec.startPoint)
+    , _endPoint = Point.createFromSpec(spec.endPoint);
   return that;
 }
 

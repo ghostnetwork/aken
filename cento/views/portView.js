@@ -1,6 +1,17 @@
+kPortViewMoved  = 'PortView.Moved';
 
 function PortView(frame, port) {
   var that = View.create(frame);
+
+  that.connectedTo = undefined;
+
+  that.onMoved = function(delta) {
+    var payload = {
+      "delta":delta,
+      "port":port
+    }
+    PubSub.global.publish(kPortViewMoved, payload);
+  }
 
   function configureSubscribers() {
     PubSub.global.on(kDogboneMouseDown, function(payload) {
