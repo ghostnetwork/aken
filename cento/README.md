@@ -3,10 +3,6 @@ cento
 
 To Do:
   * Program:
-    - ProgramStart : Action
-      * ActionView:
-        * When adding first ActionView, auto configure connection between ProgramStart and new ActionView
-    
     * ProgramEnd : Action
     
     * Program : Action
@@ -19,4 +15,5 @@ To Do:
       * ProgramStartView : ActionView
       * ProgramEndView : ActionView
 
-  * 
+  * SegmentView:
+    * Needs to have its zOrder be less than that of the View's (so the lines are drawn below the view)

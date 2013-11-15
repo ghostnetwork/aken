@@ -35,7 +35,7 @@ function ActionView(frame, label, action, hasPorts) {
     var x = frame.origin.x - w;
     var y = frameCenter.y - (h / 2);
     var inputPortFrame = Rectangle.create(x, y, w, h);
-    createAndAddPortView(inputPortFrame, inputPort);
+    _inputPortView = createAndAddPortView(inputPortFrame, inputPort);
   }
 
   function attachOutputPortToView(outputPort) {
@@ -45,7 +45,7 @@ function ActionView(frame, label, action, hasPorts) {
     var x = frame.right;
     var y = frameCenter.y - (h / 2);
     var outputPortFrame = Rectangle.create(x, y, w, h);
-    createAndAddPortView(outputPortFrame, outputPort);
+    _outputPortView = createAndAddPortView(outputPortFrame, outputPort);
   }
 
   function createAndAddPortView(portFrame, port) {
@@ -72,11 +72,15 @@ function ActionView(frame, label, action, hasPorts) {
   
   Object.defineProperty(that, 'action', {get : function() {return _action;},enumerable : true});
   Object.defineProperty(that, 'inputPort', {get : function() {return _inputPort;},enumerable : true});
+  Object.defineProperty(that, 'inputPortView', {get : function() {return _inputPortView;},enumerable : true});
   Object.defineProperty(that, 'outputPort', {get : function() {return _outputPort;},enumerable : true});
+  Object.defineProperty(that, 'outputPortView', {get : function() {return _outputPortView;},enumerable : true});
 
   var _action = action
     , _inputPort
-    , _outputPort;
+    , _inputPortView
+    , _outputPort
+    , _outputPortView;
 
   configure();
   return that;

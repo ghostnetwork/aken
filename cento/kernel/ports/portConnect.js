@@ -42,6 +42,11 @@ function PortConnect() {
     that.publish(kPortConnectMadeConnection, JSON.stringify(spec));
   };
 
+  that.autoConnect = function(sourceView, destView) {
+    that.beginConnecting(sourceView.outputPort, sourceView.outputPortView.frame);
+    that.endConnecting(destView.inputPort, destView.inputPortView.frame);
+  }
+
   Object.defineProperty(that, 'isConnecting', {get : function() {
     return _isConnecting;},enumerable : true
   });

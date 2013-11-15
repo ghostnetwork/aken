@@ -47,6 +47,12 @@ function Example002(dogbone, canvasSize) {
     view.backgroundColor = colorWithAlpha('#FF8000', 0.7);
     lastAddedView = view;
     dogbone.addChild(view);
+
+    if (numActionViews === 0) {
+      PortConnect.global.autoConnect(startProgramView, view);
+    }
+    
+    numActionViews++;
   }
 
   function determineViewOrigin() {
@@ -74,7 +80,8 @@ function Example002(dogbone, canvasSize) {
 
   var lastAddedView
     , startProgramView
-    , actionView;
+    , actionView
+    , numActionViews = 0;
 
   configure();
   return that;
