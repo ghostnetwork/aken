@@ -5,25 +5,36 @@ function Example002(dogbone, canvasSize) {
     dogbone.mainView.backgroundColor = colorWithAlpha('#1D1E1A', 1.0);
     dogbone.mainView.highlightBgColor = dogbone.mainView.backgroundColor;
     dogbone.selectionFrameColor = colorWithAlpha('#ffffff', 1.0);
-    configureViewFactoryView();
 
-    PortConnect.global.on(kPortConnectMadeConnection, function(specJSON) {
-      var spec = JSON.parse(specJSON);
-      var segment = Segment.create(spec.segment);
-      var connector = Connector.create(spec.connector);
-      var segmentView = SegmentView.create(segment, connector);
-      dogbone.mainView.addChild(segmentView);
-    });
+    configureProgramStartView();
+    configureActionFactoryView();
+    configurePortConnectionMadeHandler();
   }
 
-  function configureViewFactoryView() {
-    var frame = Rectangle.create(10, 10, 50, 50);
+  function configureProgramStartView() {
+    var frame = Rectangle.create(100, 10, 50, 50);
+    var view = StartProgramView.create(frame, 'Start', function(aView) {startProgram();});
+    view.name = 'Example002.Program.Start.View';
+    view.backgroundColor = colorWithAlpha('#00c700', 0.7);
+    view.makeUnselectable();
+    view.makeUndraggable();
+    dogbone.addChild(view);
+    startProgramView = view;
+  }
+
+  function startProgram() {
+    console.log('startProgram');
+  }
+
+  function configureActionFactoryView() {
+    var frame = Rectangle.create(10, 60, 50, 50);
     var view = ActionView.createWithNoPorts(frame, 'Action', function(actionView) {makeView();});
-    view.name = 'Example002.ViewFactory.View';
+    view.name = 'Example002.Action.Factory.View';
     view.backgroundColor = colorWithAlpha('#FF8000', 0.7);
     view.makeUnselectable();
     view.makeUndraggable();
     dogbone.addChild(view);
+    actionView = view;
   }
 
   function makeView() {
@@ -45,13 +56,25 @@ function Example002(dogbone, canvasSize) {
       y = lastAddedView.frame.origin.y + lastAddedView.frame.size.height + 10;
     }
     else {
-      x = 100;
-      y = 10;
+      x = startProgramView.frame.right + 40;
+      y = startProgramView.frame.origin.y;
     }
     return Point.create(x, y);
   }
 
-  var lastAddedView;
+  function configurePortConnectionMadeHandler() {
+    PortConnect.global.on(kPortConnectMadeConnection, function(specJSON) {
+      var spec = JSON.parse(specJSON);
+      var segment = Segment.create(spec.segment);
+      var connector = Connector.create(spec.connector);
+      var segmentView = SegmentView.create(segment, connector);
+      dogbone.mainView.addChild(segmentView);
+    });
+  }
+
+  var lastAddedView
+    , startProgramView
+    , actionView;
 
   configure();
   return that;
@@ -68,6 +91,7 @@ if (typeof module !== 'undefined') {
     , Rectangle = require('../../dogbone/geometry/rectangle.js')
     , Dogbone = require('../../dogbone/dogbone.js')
     , ActionView = require('../../cento/views/actionView.js')
+    , StartProgramView = require('../../cento/views/startProgramView.js')
     , SegmentView = require('../../cento/views/segmentView.js')
     , Segment = require('../../cento/kernel/geometry/segment.js')
     , PortConnect = require('../../cento/kernel/ports/portConnect.js')

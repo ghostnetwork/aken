@@ -4,6 +4,11 @@ function ActionView(frame, label, action, hasPorts) {
 
   that.label = label;
 
+  that.enableOutputPort = function() {
+    _outputPort = OutputPort.create(0);
+    attachOutputPortToView(_outputPort);
+  }
+  
   that.onTouch = function() {
     if (existy(action))
       action(that);
