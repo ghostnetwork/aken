@@ -62,23 +62,27 @@ function Example002(dogbone, canvasSize) {
     var origin = determineViewOrigin();
     var size = Size.create(50, 50);
     var frame = Rectangle.createWithOriginAndSize(origin, size);
-    var name = "Example002.Action." + numActionViews;
+    var name = "Example002.Action." + numViews;
     var action = Action.create(name, function() {
       console.log(action.name + ' action being performed');
     });
     var view = ActionView.create(frame, 'Action', action);
-    view.name = "Example002.ActionView." + numActionViews;
-    view.label = "Action " + numActionViews;
+    view.name = "Example002.ActionView." + numViews;
+    view.label = "Action " + numViews;
     view.backgroundColor = colorWithAlpha('#FF8000', 0.7);
     dogbone.addChild(view);
 
-    if (numActionViews++ === 0) {
+    autoConnect(view);
+    lastAddedView = view;
+  }
+
+  function autoConnect(view) {
+    if (numViews++ === 0) {
       PortConnect.global.autoConnect(startProgramView, view);
     }
     else {
       PortConnect.global.autoConnect(lastAddedView, view);
     }
-    lastAddedView = view;
   }
 
   function determineViewOrigin() {
@@ -122,12 +126,14 @@ function Example002(dogbone, canvasSize) {
     var origin = viewOriginVerticalLayout();
     var size = Size.create(50, 50);
     var frame = Rectangle.createWithOriginAndSize(origin, size);
-    var name = "Example002.Value." + numActionViews;
-    var value = Value.create();
+    var name = "Example002.Value." + numViews;
+    var value = Value.create(0);
     var view = ValueView.create(frame, value.toString(), value);
-    view.name = "Example002.ActionView." + numActionViews;
+    view.name = "Example002.ValueView." + numViews;
     view.backgroundColor = colorWithAlpha('#c700c7', 0.7);
     dogbone.addChild(view);
+
+    autoConnect(view);
     lastAddedView = view;
   }
 
@@ -145,7 +151,7 @@ function Example002(dogbone, canvasSize) {
     , startProgramView
     , endProgramView
     , actionView
-    , numActionViews = 0;
+    , numViews = 0;
 
   configure();
   return that;

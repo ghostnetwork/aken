@@ -1,6 +1,6 @@
 
 function ValueView(frame, label, value) {
-  var that = ActionView.create(frame, label);
+  var that = ActionView.create(frame, label, value);
 
   that.enableOutputPort();
 

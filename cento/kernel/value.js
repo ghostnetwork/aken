@@ -1,6 +1,6 @@
 
 function Value(value) {
-  var that = Action.create(normalize(value).toString());
+  var that = Action.create(normalize(value).toString(), actionWorker);
 
   that.toString = function() {return that.name;};
 
@@ -9,6 +9,8 @@ function Value(value) {
       x = 0;
     return x;
   }
+
+  function actionWorker() {console.log('Value.actionWorker: '+that.value); return that.value;};
 
   Object.defineProperty(that, 'value', {get : function() {return _value;},enumerable : true});
   
