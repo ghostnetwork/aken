@@ -3,8 +3,6 @@ cento
 
 To Do:
   * Program:
-    * ProgramEnd : Action
-    
     * Program : Action
       * Contains: ProgramStart, ProgramEnd
       * Will need to provide means of traversing the program

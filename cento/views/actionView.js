@@ -4,6 +4,11 @@ function ActionView(frame, label, action, hasPorts) {
 
   that.label = label;
 
+  that.enableInputPort = function() {
+    _inputPort = InputPort.create(0);
+    attachInputPortToView(_inputPort);
+  }
+
   that.enableOutputPort = function() {
     _outputPort = OutputPort.create(0);
     attachOutputPortToView(_outputPort);

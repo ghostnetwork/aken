@@ -7,6 +7,7 @@ function Example002(dogbone, canvasSize) {
     dogbone.selectionFrameColor = colorWithAlpha('#ffffff', 1.0);
 
     configureProgramStartView();
+    configureProgramEndView();
     configureActionFactoryView();
     configurePortConnectionMadeHandler();
   }
@@ -17,14 +18,24 @@ function Example002(dogbone, canvasSize) {
     view.name = 'Example002.Program.Start.View';
     view.backgroundColor = colorWithAlpha('#00c700', 0.7);
     view.makeUnselectable();
-    view.makeUndraggable();
     dogbone.addChild(view);
     startProgramView = view;
   }
 
-  function startProgram() {
-    console.log('startProgram');
+  function configureProgramEndView() {
+    var x = canvasSize.width - 60;
+    var y = startProgramView.frame.origin.y;
+    var frame = Rectangle.create(x, y, 50, 50);
+    var view = EndProgramView.create(frame, 'End', function(aView) {endProgram();});
+    view.name = 'Example002.Program.End.View';
+    view.backgroundColor = colorWithAlpha('#c70000', 0.7);
+    view.makeUnselectable();
+    dogbone.addChild(view);
+    endProgramView = view;
   }
+
+  function startProgram() {console.log('startProgram');}
+  function endProgram() {console.log('endProgram');}
 
   function configureActionFactoryView() {
     var frame = Rectangle.create(10, 60, 50, 50);
@@ -80,6 +91,7 @@ function Example002(dogbone, canvasSize) {
 
   var lastAddedView
     , startProgramView
+    , endProgramView
     , actionView
     , numActionViews = 0;
 
