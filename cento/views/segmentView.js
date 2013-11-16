@@ -2,6 +2,7 @@
 function SegmentView(segment, connector) {
   var that = View.create(frameForSegment(segment));
   
+  that.zOrder = -1000;
   var kSegmentColor = colorWithAlpha('#ff0000', 1.0);
 
   that.render = function(graphics) {

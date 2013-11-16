@@ -63,9 +63,7 @@ function Example002(dogbone, canvasSize) {
     var size = Size.create(50, 50);
     var frame = Rectangle.createWithOriginAndSize(origin, size);
     var name = "Example002.Action." + numViews;
-    var action = Action.create(name, function() {
-      console.log(action.name + ' action being performed');
-    });
+    var action = Action.create(name, function() {});
     var view = ActionView.create(frame, 'Action', action);
     view.name = "Example002.ActionView." + numViews;
     view.label = "Action " + numViews;
