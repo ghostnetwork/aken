@@ -40,7 +40,6 @@ function Example002(dogbone, canvasSize) {
     console.log('startProgram');
     var program = Program.create('My Program');
     var firstAction = startProgramView.action.nextAction;
-    console.log('firstAction: ' + firstAction.name);
     program.actionsMap(firstAction, function(anAction) {
       console.log('  ' + anAction.name);
     });
@@ -82,6 +81,19 @@ function Example002(dogbone, canvasSize) {
   }
 
   function determineViewOrigin() {
+    var viewOrigin = Point.Empty;
+    if (existy(lastAddedView)) {
+      x = lastAddedView.frame.origin.x + lastAddedView.frame.size.width + 40;
+      y = lastAddedView.frame.origin.y;
+    }
+    else {
+      x = startProgramView.frame.right + 40;
+      y = startProgramView.frame.origin.y;
+    }
+    return Point.create(x, y);
+  }
+
+  function viewOriginVerticalLayout() {
     var viewOrigin = Point.Empty;
     if (existy(lastAddedView)) {
       x = lastAddedView.frame.origin.x;
