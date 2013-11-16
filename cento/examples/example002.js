@@ -9,6 +9,7 @@ function Example002(dogbone, canvasSize) {
     configureProgramStartView();
     configureProgramEndView();
     configureActionFactoryView();
+    configureValueFactoryView();
     configurePortConnectionMadeHandler();
   }
 
@@ -48,7 +49,7 @@ function Example002(dogbone, canvasSize) {
 
   function configureActionFactoryView() {
     var frame = Rectangle.create(10, 60, 50, 50);
-    var view = ActionView.createWithNoPorts(frame, 'Action', function() {makeView();});
+    var view = ActionView.createWithNoPorts(frame, 'Action', function() {makeActionView();});
     view.name = 'Example002.Action.Factory.View';
     view.backgroundColor = colorWithAlpha('#FF8000', 0.7);
     view.makeUnselectable();
@@ -57,7 +58,7 @@ function Example002(dogbone, canvasSize) {
     actionView = view;
   }
 
-  function makeView() {
+  function makeActionView() {
     var origin = determineViewOrigin();
     var size = Size.create(50, 50);
     var frame = Rectangle.createWithOriginAndSize(origin, size);
@@ -104,6 +105,30 @@ function Example002(dogbone, canvasSize) {
       y = startProgramView.frame.origin.y;
     }
     return Point.create(x, y);
+  }
+
+  function configureValueFactoryView() {
+    var frame = Rectangle.create(10, 10, 50, 50);
+    var view = ActionView.createWithNoPorts(frame, 'Value', function() {makeValueView();});
+    view.name = 'Example002.Action.Factory.View';
+    view.backgroundColor = colorWithAlpha('#c700c7', 0.7);
+    view.makeUnselectable();
+    view.makeUndraggable();
+    dogbone.addChild(view);
+    actionView = view;
+  }
+
+  function makeValueView() {
+    var origin = viewOriginVerticalLayout();
+    var size = Size.create(50, 50);
+    var frame = Rectangle.createWithOriginAndSize(origin, size);
+    var name = "Example002.Value." + numActionViews;
+    var value = Value.create();
+    var view = ValueView.create(frame, value.toString(), value);
+    view.name = "Example002.ActionView." + numActionViews;
+    view.backgroundColor = colorWithAlpha('#c700c7', 0.7);
+    dogbone.addChild(view);
+    lastAddedView = view;
   }
 
   function configurePortConnectionMadeHandler() {
