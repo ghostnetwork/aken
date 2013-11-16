@@ -15,8 +15,9 @@ function ActionView(frame, label, action, hasPorts) {
   }
   
   that.onTouch = function() {
-    if (existy(action))
-      action(that);
+    if (existy(action)) {
+      invokeAction(action, that);
+    }
   };
 
   function addInputPort(inputPort) { 
@@ -54,7 +55,7 @@ function ActionView(frame, label, action, hasPorts) {
   }
 
   function createAndAddPortView(portFrame, port) {
-    var portView = PortView.create(portFrame, port);
+    var portView = PortView.create(portFrame, port, that);
     portView.name = port.name;
     portView.makeUndraggable();
 

@@ -14,7 +14,9 @@ function Example002(dogbone, canvasSize) {
 
   function configureProgramStartView() {
     var frame = Rectangle.create(100, 60, 50, 50);
-    var view = StartProgramView.create(frame, 'Start', function(aView) {startProgram();});
+    var label = 'Start';
+    var action = Action.create(label, startProgram);
+    var view = StartProgramView.create(frame, label, action);
     view.name = 'Example002.Program.Start.View';
     view.backgroundColor = colorWithAlpha('#00c700', 0.7);
     view.makeUnselectable();
@@ -26,7 +28,7 @@ function Example002(dogbone, canvasSize) {
     var x = canvasSize.width - 60;
     var y = startProgramView.frame.origin.y;
     var frame = Rectangle.create(x, y, 50, 50);
-    var view = EndProgramView.create(frame, 'End', function(aView) {endProgram();});
+    var view = EndProgramView.create(frame, 'End', function() {endProgram();});
     view.name = 'Example002.Program.End.View';
     view.backgroundColor = colorWithAlpha('#c70000', 0.7);
     view.makeUnselectable();
@@ -34,12 +36,20 @@ function Example002(dogbone, canvasSize) {
     endProgramView = view;
   }
 
-  function startProgram() {console.log('startProgram');}
+  function startProgram() {
+    console.log('startProgram');
+    var program = Program.create('My Program');
+    var firstAction = startProgramView.action.nextAction;
+    console.log('firstAction: ' + firstAction.name);
+    program.actionsMap(firstAction, function(anAction) {
+      console.log('  ' + anAction.name);
+    });
+  }
   function endProgram() {console.log('endProgram');}
 
   function configureActionFactoryView() {
     var frame = Rectangle.create(10, 60, 50, 50);
-    var view = ActionView.createWithNoPorts(frame, 'Action', function(actionView) {makeView();});
+    var view = ActionView.createWithNoPorts(frame, 'Action', function() {makeView();});
     view.name = 'Example002.Action.Factory.View';
     view.backgroundColor = colorWithAlpha('#FF8000', 0.7);
     view.makeUnselectable();
@@ -52,18 +62,20 @@ function Example002(dogbone, canvasSize) {
     var origin = determineViewOrigin();
     var size = Size.create(50, 50);
     var frame = Rectangle.createWithOriginAndSize(origin, size);
-    var view = ActionView.create(frame, 'Action');
-    view.name = "Example002.ActionView." + (dogbone.childCount - 1);
-    view.label = "Action " + (dogbone.childCount - 1);
+    var name = "Example002.Action." + numActionViews;
+    var action = Action.create(name, function() {
+      console.log(action.name + ' action being performed');
+    });
+    var view = ActionView.create(frame, 'Action', action);
+    view.name = "Example002.ActionView." + numActionViews++;
+    view.label = "Action " + numActionViews;
     view.backgroundColor = colorWithAlpha('#FF8000', 0.7);
     lastAddedView = view;
     dogbone.addChild(view);
 
-    if (numActionViews === 0) {
+    if (numActionViews === 1) {
       PortConnect.global.autoConnect(startProgramView, view);
     }
-    
-    numActionViews++;
   }
 
   function determineViewOrigin() {
@@ -110,6 +122,7 @@ if (typeof module !== 'undefined') {
     , Rectangle = require('../../dogbone/geometry/rectangle.js')
     , Dogbone = require('../../dogbone/dogbone.js')
     , ActionView = require('../../cento/views/actionView.js')
+    , Action = require('../../cento/kernel/action.js')
     , StartProgramView = require('../../cento/views/startProgramView.js')
     , SegmentView = require('../../cento/views/segmentView.js')
     , Segment = require('../../cento/kernel/geometry/segment.js')

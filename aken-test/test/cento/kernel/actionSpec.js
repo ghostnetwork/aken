@@ -15,7 +15,7 @@ describe('Action', function(){
     , workerDroneWasCalled;
 
   beforeEach(function() {
-    action = Action.create(kName, kWorker);
+    action = Action.create(kName, workerDrone);
     workerDroneWasCalled = false;
   });
 
@@ -33,9 +33,20 @@ describe('Action', function(){
     });
   });
 
+  describe('connectWith', function(){
+    it('should retain the action given', function(){
+      var actionA = Action.create('Action.A');
+      var actionB = Action.create('Action.B');
+      actionA.connectWith(actionB);
+
+      existy(actionA.nextAction).should.be.true;
+      actionA.nextAction.should.equal(actionB);
+    });
+  });
+
   function workerDrone(theAction, theArgs) {
     workerDroneWasCalled = true;
-    theAction.should.equal(action);
+    theAction.should.equal(action.worker);
     theArgs.should.equal(kArgs);
   }
 });

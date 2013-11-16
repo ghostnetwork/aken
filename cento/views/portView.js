@@ -1,6 +1,6 @@
 kPortViewMoved  = 'PortView.Moved';
 
-function PortView(frame, port) {
+function PortView(frame, port, actionView) {
   var that = View.create(frame);
 
   that.connectedTo = undefined;
@@ -16,7 +16,7 @@ function PortView(frame, port) {
   function configureSubscribers() {
     PubSub.global.on(kDogboneMouseDown, function(payload) {
       if (that.hitTest(payload.mousePoint)) {
-        PortConnect.global.beginConnecting(that.port, that.frame);
+        PortConnect.global.beginConnecting(that.port, that.frame, that.actionView.action);
       }
     });
 
@@ -27,7 +27,7 @@ function PortView(frame, port) {
 
     PubSub.global.on(kDogboneMouseUp, function(payload) {
       if (that.hitTest(payload.mousePoint)) {
-        PortConnect.global.endConnecting(that.port, that.frame);
+        PortConnect.global.endConnecting(that.port, that.frame, that.actionView.action);
       }
     });
   }
@@ -39,13 +39,15 @@ function PortView(frame, port) {
   var kPortDefaultColor = colorWithAlpha('#ffffff', 1.0);
 
   Object.defineProperty(that, 'port', {get : function() {return _port;},enumerable : true});
+  Object.defineProperty(that, 'actionView', {get : function() {return _actionView;},enumerable : true});
   
-  var _port = port;
+  var _port = port
+    , _actionView = actionView;
 
   return that;
 }
 
-PortView.create = function(frame, port){return new PortView(frame, port);};
+PortView.create = function(frame, port, actionView){return new PortView(frame, port, actionView);};
 
 if (typeof module !== 'undefined') {
   module.exports = PortView;

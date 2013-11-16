@@ -9,7 +9,8 @@ require('../../../../verdoux/predicates.js');
 describe('Program', function(){
   'use strict';
 
-  var kName = "ProgramSpec"
+  var kName = "ProgramSpec";
+  var kAction = Action.create("ProgramSpec.Action");
   var program;
 
   beforeEach(function() {
@@ -24,12 +25,12 @@ describe('Program', function(){
     });
 
     it('should be true when the program has been started', function(){
-      program.start();
+      program.start(kAction);
       program.isRunning.should.be.true;
     });
 
     it('should be false when the program has been ended', function(){
-      program.start();
+      program.start(kAction);
       program.end();
       program.isRunning.should.be.false;
     });
@@ -37,9 +38,60 @@ describe('Program', function(){
 
   describe('start', function(){
     it('should retain the given firstAction', function(){
-      var action = Action.create("ProgramSpec.Action");
-      program.start(action);
+      program.start(kAction);
       existy(program.firstAction).should.be.true;
+    });
+  });
+
+  describe('actionsMap', function(){
+    var visitedActions = [];
+    it('should visit all actions', function(){
+      var actionA = Action.create("Action.A", function(action) {
+        existy(action).should.be.true;
+        action.should.equal(actionA.worker);
+        visitedActions.push(action);
+      });
+      var actionB = Action.create("Action.B", function(action) {
+        existy(action).should.be.true;
+        action.should.equal(actionB.worker);
+        visitedActions.push(action);
+      });
+      var actionC = Action.create("Action.C", function(action) {
+        existy(action).should.be.true;
+        action.should.equal(actionC.worker);
+        visitedActions.push(action);
+      });
+      actionA.connectWith(actionB);
+      actionB.connectWith(actionC);
+      program.actionsMap(actionA, function(action) {
+        action.perform(action);
+      });
+      visitedActions.length.should.equal(3);
+    });
+  });
+
+  describe('start', function(){
+    var visitedActions = [];
+    it('should visit all actions', function(){
+      var actionA = Action.create("Action.A", function(action) {
+        existy(action).should.be.true;
+        action.should.equal(actionA.worker);
+        visitedActions.push(action);
+      });
+      var actionB = Action.create("Action.B", function(action) {
+        existy(action).should.be.true;
+        action.should.equal(actionB.worker);
+        visitedActions.push(action);
+      });
+      var actionC = Action.create("Action.C", function(action) {
+        existy(action).should.be.true;
+        action.should.equal(actionC.worker);
+        visitedActions.push(action);
+      });
+      actionA.connectWith(actionB);
+      actionB.connectWith(actionC);
+      program.start(actionA);
+      visitedActions.length.should.equal(3);
     });
   });
 });

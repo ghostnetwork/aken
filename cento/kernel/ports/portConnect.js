@@ -9,18 +9,23 @@ if (typeof module !== 'undefined') {
 function PortConnect() {
   var that = PubSub.create();
   
-  that.beginConnecting = function(port, frame) {
+  that.beginConnecting = function(port, frame, action) {
     if (not(that.isConnecting)) {
       _isConnecting = true;
       _startPort = port;
       _startFrame = frame;
+      _startAction = action;
     }
   };
 
-  that.endConnecting = function(port, frame) {
+  that.endConnecting = function(port, frame, action) {
     _isConnecting = false; 
     _endPort = port;
     _endFrame = frame;
+    _endAction = action;
+
+    if (_.isFunction(that.startAction.connectWith))
+      that.startAction.connectWith(_endAction);
 
     that.startPort.makeConnected();
     that.endPort.makeConnected();
@@ -39,12 +44,25 @@ function PortConnect() {
       "connector":Connector.create(connectorSpec),
       "segment":Segment.create(segmentSpec)
     };
+
     that.publish(kPortConnectMadeConnection, JSON.stringify(spec));
+
+    reset()
   };
 
   that.autoConnect = function(sourceView, destView) {
-    that.beginConnecting(sourceView.outputPort, sourceView.outputPortView.frame);
-    that.endConnecting(destView.inputPort, destView.inputPortView.frame);
+    that.beginConnecting(sourceView.outputPort, sourceView.outputPortView.frame, sourceView.action);
+    that.endConnecting(destView.inputPort, destView.inputPortView.frame, destView.action);
+  }
+
+  function reset() {
+    _isConnecting = false;
+    _startPort = undefined;
+    _endPort = undefined;
+    _startFrame = undefined;
+    _endFrame = undefined;
+    _startAction = undefined;
+    _endAction = undefined;
   }
 
   Object.defineProperty(that, 'isConnecting', {get : function() {
@@ -62,12 +80,20 @@ function PortConnect() {
   Object.defineProperty(that, 'endFrame', {get : function() {
     return _endFrame;},enumerable : true
   });
+  Object.defineProperty(that, 'startAction', {get : function() {
+    return _startAction;},enumerable : true
+  });
+  Object.defineProperty(that, 'endAction', {get : function() {
+    return _endAction;},enumerable : true
+  });
 
   var _isConnecting = false
     , _startPort
     , _endPort
     , _startFrame
-    , _endFrame;
+    , _endFrame
+    , _startAction
+    , _endAction;
 
   return that;
 }
