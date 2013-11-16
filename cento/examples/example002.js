@@ -13,7 +13,7 @@ function Example002(dogbone, canvasSize) {
   }
 
   function configureProgramStartView() {
-    var frame = Rectangle.create(100, 10, 50, 50);
+    var frame = Rectangle.create(100, 60, 50, 50);
     var view = StartProgramView.create(frame, 'Start', function(aView) {startProgram();});
     view.name = 'Example002.Program.Start.View';
     view.backgroundColor = colorWithAlpha('#00c700', 0.7);
