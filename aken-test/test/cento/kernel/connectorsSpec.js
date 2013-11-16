@@ -2,10 +2,10 @@ var assert = require('assert');
 var should = require('should');
 var sinon = require('sinon');
 var util = require('util');
-var Connector = require('../../../../../cento/kernel/connectors/connector.js');
-var InputPort = require('../../../../../cento/kernel/ports/inputPort.js');
-var OutputPort = require('../../../../../cento/kernel/ports/outputPort.js');
-require('../../../../../verdoux/predicates.js');
+var Connector = require('../../../../cento/kernel/connector.js');
+var InputPort = require('../../../../cento/kernel/ports/inputPort.js');
+var OutputPort = require('../../../../cento/kernel/ports/outputPort.js');
+require('../../../../verdoux/predicates.js');
 
 describe('Connector', function(){
   'use strict';

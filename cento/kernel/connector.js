@@ -23,5 +23,5 @@ Connector.create = function(spec){return new Connector(spec);};
 if (typeof module !== 'undefined') {
   module.exports = Connector;
   var util = require('util')
-    , PubSub = require('../../../verdoux/pubsub.js');
+    , PubSub = require('../../verdoux/pubsub.js');
 }

@@ -2,8 +2,8 @@ var assert = require('assert');
 var should = require('should');
 var sinon = require('sinon');
 var util = require('util');
-var Action = require('../../../../../cento/kernel/action/action.js');
-require('../../../../../verdoux/predicates.js');
+var Action = require('../../../../cento/kernel/action.js');
+require('../../../../verdoux/predicates.js');
 
 describe('Action', function(){
   'use strict';
