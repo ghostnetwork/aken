@@ -42,7 +42,7 @@ function Example002(dogbone, canvasSize) {
     var program = Program.create('My Program');
     var firstAction = startProgramView.action.nextAction;
     program.actionsMap(firstAction, function(anAction) {
-      console.log('  ' + anAction.name);
+      console.log('  ' + anAction.description);
     });
   }
   function endProgram() {console.log('endProgram');}
@@ -52,6 +52,17 @@ function Example002(dogbone, canvasSize) {
     var view = ActionView.createWithNoPorts(frame, 'Action', function() {makeActionView();});
     view.name = 'Example002.Action.Factory.View';
     view.backgroundColor = colorWithAlpha('#FF8000', 0.7);
+    view.makeUnselectable();
+    view.makeUndraggable();
+    dogbone.addChild(view);
+    actionView = view;
+  }
+
+  function configureValueFactoryView() {
+    var frame = Rectangle.create(10, 10, 50, 50);
+    var view = ActionView.createWithNoPorts(frame, 'Value', function() {makeValueView();});
+    view.name = 'Example002.Action.Factory.View';
+    view.backgroundColor = colorWithAlpha('#c700c7', 0.7);
     view.makeUnselectable();
     view.makeUndraggable();
     dogbone.addChild(view);
@@ -68,6 +79,22 @@ function Example002(dogbone, canvasSize) {
     view.name = "Example002.ActionView." + numViews;
     view.label = "Action " + numViews;
     view.backgroundColor = colorWithAlpha('#FF8000', 0.7);
+    dogbone.addChild(view);
+
+    autoConnect(view);
+    lastAddedView = view;
+  }
+
+  function makeValueView() {
+    var origin = viewOriginVerticalLayout();
+    var size = Size.create(50, 50);
+    var frame = Rectangle.createWithOriginAndSize(origin, size);
+    var name = "Example002.Value." + numViews;
+    var value = Value.create(0);
+    value.description = "Example002.ValueView." + numViews;
+    var view = ValueView.create(frame, value.toString(), value);
+    view.name = "Example002.ValueView." + numViews;
+    view.backgroundColor = colorWithAlpha('#c700c7', 0.7);
     dogbone.addChild(view);
 
     autoConnect(view);
@@ -107,32 +134,6 @@ function Example002(dogbone, canvasSize) {
       y = startProgramView.frame.origin.y;
     }
     return Point.create(x, y);
-  }
-
-  function configureValueFactoryView() {
-    var frame = Rectangle.create(10, 10, 50, 50);
-    var view = ActionView.createWithNoPorts(frame, 'Value', function() {makeValueView();});
-    view.name = 'Example002.Action.Factory.View';
-    view.backgroundColor = colorWithAlpha('#c700c7', 0.7);
-    view.makeUnselectable();
-    view.makeUndraggable();
-    dogbone.addChild(view);
-    actionView = view;
-  }
-
-  function makeValueView() {
-    var origin = viewOriginVerticalLayout();
-    var size = Size.create(50, 50);
-    var frame = Rectangle.createWithOriginAndSize(origin, size);
-    var name = "Example002.Value." + numViews;
-    var value = Value.create(0);
-    var view = ValueView.create(frame, value.toString(), value);
-    view.name = "Example002.ValueView." + numViews;
-    view.backgroundColor = colorWithAlpha('#c700c7', 0.7);
-    dogbone.addChild(view);
-
-    autoConnect(view);
-    lastAddedView = view;
   }
 
   function configurePortConnectionMadeHandler() {

@@ -1,6 +1,7 @@
 function Action(name, worker) {
   var that = PubSub.create();
 
+  that.description = name;
   that.connectWith = function(action) {_nextAction = action;};
   that.perform = function(args) {
     if (worker) {
