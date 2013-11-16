@@ -67,15 +67,18 @@ function Example002(dogbone, canvasSize) {
       console.log(action.name + ' action being performed');
     });
     var view = ActionView.create(frame, 'Action', action);
-    view.name = "Example002.ActionView." + numActionViews++;
+    view.name = "Example002.ActionView." + numActionViews;
     view.label = "Action " + numActionViews;
     view.backgroundColor = colorWithAlpha('#FF8000', 0.7);
-    lastAddedView = view;
     dogbone.addChild(view);
 
-    if (numActionViews === 1) {
+    if (numActionViews++ === 0) {
       PortConnect.global.autoConnect(startProgramView, view);
     }
+    else {
+      PortConnect.global.autoConnect(lastAddedView, view);
+    }
+    lastAddedView = view;
   }
 
   function determineViewOrigin() {
