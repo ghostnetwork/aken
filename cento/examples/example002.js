@@ -29,7 +29,9 @@ function Example002(dogbone, canvasSize) {
     var x = canvasSize.width - 60;
     var y = startProgramView.frame.origin.y;
     var frame = Rectangle.create(x, y, 50, 50);
-    var view = EndProgramView.create(frame, 'End', function() {endProgram();});
+    var label = 'End';
+    var action = Action.create(label, endProgram);
+    var view = EndProgramView.create(frame, label, action);
     view.name = 'Example002.Program.End.View';
     view.backgroundColor = colorWithAlpha('#c70000', 0.7);
     view.makeUnselectable();

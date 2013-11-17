@@ -23,4 +23,10 @@ describe('StartProgramView', function(){
 
   it('should be able to be created', function(){assert(existy(startProgramView));});
 
+  describe('isConnectable', function(){
+    it('should return true', function(){
+      startProgramView.isConnectable().should.be.true;
+    });
+  });
+
 });

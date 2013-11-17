@@ -22,5 +22,11 @@ describe('EndProgramView', function(){
   });
 
   it('should be able to be created', function(){assert(existy(endProgramView));});
+
+  describe('isConnectable', function(){
+    it('should return true', function(){
+      endProgramView.isConnectable().should.be.true;
+    });
+  });
   
 });

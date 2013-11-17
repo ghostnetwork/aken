@@ -3,9 +3,13 @@ var should = require('should');
 var sinon = require('sinon');
 var util = require('util');
 var GF = require('../../../dogbone/geometry/geometryFixtures.js');
+var CGF = require('../geometry/centoGeometryFixtures.js');
 var PF = require('./portFixtures.js');
 var PortConnect = require('../../../../../cento/kernel/ports/portConnect.js');
 var Action = require('../../../../../cento/kernel/action.js');
+var CentoView = require('../../../../../cento/views/centoView.js');
+var ActionView = require('../../../../../cento/views/actionView.js');
+var SegmentView = require('../../../../../cento/views/segmentView.js');
 require('../../../../../verdoux/predicates.js');
 
 describe('PortConnect', function(){
@@ -85,5 +89,18 @@ describe('PortConnect', function(){
       existy(kStartAction.nextAction).should.be.true;
       kStartAction.nextAction.should.equal(kEndAction);
     });
+  });
+  
+  describe('disconnect', function(){
+    it('should ignore views that are un-connectable', function(){
+      (function(){
+        var unConnectableView = SegmentView.create(CGF.Segment, CGF.Connector);
+        portConnect.disconnect(unConnectableView);
+      }).should.not.throw();
+    });
+    // it('should disconnect the action from its next action', function(){
+    //   portConnect.beginConnecting(PF.OutputPort, GF.Frame, kStartAction);
+    //   portConnect.endConnecting(PF.InputPort, GF.Frame, kEndAction);
+    // });
   });
 });

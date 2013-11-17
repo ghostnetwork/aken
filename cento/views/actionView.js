@@ -1,17 +1,26 @@
 
 function ActionView(frame, label, action, hasPorts) {
-  var that = View.create(frame);
+  var _action = action
+    , _inputPortView
+    , _outputPortView;
+
+  var that = CentoView.create(frame);
 
   that.label = label;
+  that.isConnectable = function(){return true;};
 
   that.enableInputPort = function() {
-    _inputPort = InputPort.create(0);
-    attachInputPortToView(_inputPort);
+    if (_.isFunction(_action.enableInputPort)) {
+      _action.enableInputPort(0);
+      attachInputPortToView(_action.inputPort);
+    }
   }
 
   that.enableOutputPort = function() {
-    _outputPort = OutputPort.create(0);
-    attachOutputPortToView(_outputPort);
+    if (_.isFunction(_action.enableOutputPort)) {
+      _action.enableOutputPort(0);
+      attachOutputPortToView(_action.outputPort);
+    }
   }
   
   that.onTouch = function() {
@@ -19,20 +28,6 @@ function ActionView(frame, label, action, hasPorts) {
       invokeAction(action, that);
     }
   };
-
-  function addInputPort(inputPort) { 
-    if (existy(inputPort)) {
-      _inputPorts.push(inputPort);
-    }
-  };
-
-  function addInputPorts(ports) {
-    if (existy(ports)) {
-      ports.forEach(function(port) {
-        that.addInputPort(port);
-      });
-    }
-  }
 
   function attachInputPortToView(inputPort) {
     var frameCenter = frame.center;
@@ -64,30 +59,18 @@ function ActionView(frame, label, action, hasPorts) {
     that.addChild(portView);
     return portView;
   }
+  
+  Object.defineProperty(that, 'action', {get : function() {return _action;},enumerable : true});
+  Object.defineProperty(that, 'inputPortView', {get : function() {return _inputPortView;},enumerable : true});
+  Object.defineProperty(that, 'outputPortView', {get : function() {return _outputPortView;},enumerable : true});
+
 
   function configure() {
     if (hasPorts) {
-      // For now, just one InputPort & OutputPort
-      _inputPort = InputPort.create(0);
-      attachInputPortToView(_inputPort);
-
-      _outputPort = OutputPort.create(0);
-      attachOutputPortToView(_outputPort);
+      that.enableInputPort();
+      that.enableOutputPort();
     }
   }
-  
-  Object.defineProperty(that, 'action', {get : function() {return _action;},enumerable : true});
-  Object.defineProperty(that, 'inputPort', {get : function() {return _inputPort;},enumerable : true});
-  Object.defineProperty(that, 'inputPortView', {get : function() {return _inputPortView;},enumerable : true});
-  Object.defineProperty(that, 'outputPort', {get : function() {return _outputPort;},enumerable : true});
-  Object.defineProperty(that, 'outputPortView', {get : function() {return _outputPortView;},enumerable : true});
-
-  var _action = action
-    , _inputPort
-    , _inputPortView
-    , _outputPort
-    , _outputPortView;
-
   configure();
   return that;
 }
@@ -98,9 +81,16 @@ ActionView.createWithNoPorts = function(frame, label, action){return new ActionV
 if (typeof module !== 'undefined') {
   module.exports = ActionView;
   var util = require('util')
+    , _ = require('underscore')
     , View = require('../../dogbone/views/view.js')
     , Rectangle = require('../../dogbone/geometry/rectangle.js')
+    , InputPort = require('../kernel/ports/inputPort.js')
+    , OutputPort = require('../kernel/ports/outputPort.js')
+    , PortView = require('./portView.js')
+    , CentoView = require('./centoView.js');
+}
+/*
     , InputPort = require('../../cento/kernel/ports/inputPort.js')
     , OutputPort = require('../../cento/kernel/ports/outputPort.js')
     , PortView = require('../../cento/views/portView.js');
-}
+*/

@@ -25,6 +25,12 @@ describe('ActionView', function(){
   });
 
   it('should be able to be created', function(){assert(existy(actionView));});
+
+  describe('isConnectable', function(){
+    it('should return true', function(){
+      actionView.isConnectable().should.be.true;
+    });
+  });
   
   describe('action', function(){
     it('should correctly save the given action', function(){
@@ -37,9 +43,11 @@ describe('ActionView', function(){
       actionWasCalled.should.be.true;
     });
 
-    it('should not throw error if action is notExisty', function(){
-      var anActionView = ActionView.create(GF.Frame, kLabel);
-      anActionView.onTouch();
+    it('should throw error if action is notExisty', function(){
+      (function(){
+        var anActionView = ActionView.create(GF.Frame, kLabel);
+        anActionView.onTouch();
+      }).should.throw();
     });
   });
 });

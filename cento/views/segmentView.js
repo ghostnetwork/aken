@@ -1,6 +1,6 @@
 
 function SegmentView(segment, connector) {
-  var that = View.create(frameForSegment(segment));
+  var that = CentoView.create(frameForSegment(segment));
   
   that.zOrder = -1000;
   var kSegmentColor = colorWithAlpha('#ff0000', 1.0);
@@ -62,5 +62,6 @@ if (typeof module !== 'undefined') {
     , Rectangle = require('../../dogbone/geometry/rectangle.js')
     , Size = require('../../dogbone/geometry/size.js')
     , PortConnect = require('../../cento/kernel/ports/portConnect.js')
-    , PubSub = require('../../verdoux/pubsub.js');
+    , PubSub = require('../../verdoux/pubsub.js')
+    , CentoView = require('./centoView.js');
 }

@@ -3,6 +3,7 @@ kDogboneMouseDown         = 'dogbone.mousedown';
 kDogboneMouseMove         = 'dogbone.mousemove'; 
 kDogboneMouseUp           = 'dogbone.mouseup'; 
 kDogboneSelectionChanged  = 'dogbone.selection.changed';
+kDogboneRemovedChild      = 'dogbone.removed.child';
 kDeleteKey                = 46;
 
 function Dogbone(canvas) {
@@ -32,6 +33,7 @@ function Dogbone(canvas) {
   };
 
   that.removeChild = function(child) {
+    PubSub.global.publish(kDogboneRemovedChild, child);
     that.mainView.removeChild(child);
     return that;
   }
@@ -95,7 +97,6 @@ function Dogbone(canvas) {
           target = shape;
           if (event.shiftKey) {
             // we'll extend selection to the newly selected item below, in maybeClearSelection()
-            // TODO: begin line-drawing mode
           }
           else {
             that.dragdrop.beginDrag(target, startPoint);

@@ -14,5 +14,11 @@ describe('ValueView', function(){
   beforeEach(function() {valueView = ValueView.create(GF.Frame);});
 
   it('should be able to be created', function(){assert(existy(valueView));});
+
+  describe('isConnectable', function(){
+    it('should return true', function(){
+      valueView.isConnectable().should.be.true;
+    });
+  });
   
 });

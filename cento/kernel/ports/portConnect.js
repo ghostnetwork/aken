@@ -6,6 +6,7 @@ if (typeof module !== 'undefined') {
     , _ = require('underscore')
     , Connector = require('../connector.js')
     , Segment = require('../geometry/segment.js')
+    , Dogbone = require('../../../dogbone/dogbone.js')
     , PubSub = require('../../../verdoux/pubsub.js');
 }
 
@@ -53,12 +54,20 @@ function PortConnect() {
   };
 
   that.autoConnect = function(sourceView, destView) {
-    that.beginConnecting(sourceView.outputPort, sourceView.outputPortView.frame, sourceView.action);
-    that.endConnecting(destView.inputPort, destView.inputPortView.frame, destView.action);
+    that.beginConnecting(sourceView.action.outputPort, sourceView.outputPortView.frame, sourceView.action);
+    that.endConnecting(destView.action.inputPort, destView.inputPortView.frame, destView.action);
   }
 
-  that.disconnect = function(actionView) {
+  that.disconnect = function(centoView) {
+    if (centoView.isConnectable()) {
+      centoView.action.disconnect();
+      centoView.action.nextAction.disconnect();
 
+      centoView.outputPort.makeDisconnected();
+
+    }
+    // outputPort.makeDisconnected
+    // nextOutputPort.makeDisconnected
   }
 
   function reset() {
@@ -100,6 +109,18 @@ function PortConnect() {
     , _endFrame
     , _startAction
     , _endAction;
+
+  // Keep this down here at the bottom of the file.
+  // On Chrome (OS X), experienced issue where this auto-executing function 
+  // seems to be capturing any 'that.foo = function(){};' declaration that 
+  // happens to be directly above it. Appears to be alright if this is here 
+  // at the bottom of the file.
+  (function(that){
+    PubSub.global.on(kDogboneRemovedChild, function(actionView) {
+      console.log('PortConnect.on DogboneRemovedChild: ' + actionView.name);
+      // TODO: auto-disconnect actionView from nextActionView?
+    });
+  }(that));
 
   return that;
 }

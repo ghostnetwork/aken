@@ -15,5 +15,11 @@ describe('SegmentView', function(){
   beforeEach(function() {segmentView = SegmentView.create(CGF.Segment);});
 
   it('should be able to be created', function(){assert(existy(segmentView));});
-  
+
+  describe('isConnectable', function(){
+    it('should return true', function(){
+      segmentView.isConnectable().should.be.false;
+    });
+  });
+
 });

@@ -1,7 +1,7 @@
 kPortViewMoved  = 'PortView.Moved';
 
 function PortView(frame, port, actionView) {
-  var that = View.create(frame);
+  var that = CentoView.create(frame);
 
   that.connectedTo = undefined;
 
@@ -53,5 +53,6 @@ if (typeof module !== 'undefined') {
   module.exports = PortView;
   var util = require('util')
     , View = require('../../dogbone/views/view.js')
-    , PubSub = require('../../verdoux/pubsub.js');
+    , PubSub = require('../../verdoux/pubsub.js')
+    , CentoView = require('./centoView.js');
 }
