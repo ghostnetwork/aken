@@ -15,5 +15,5 @@ ValueView.create = function(frame, label, value){return new ValueView(frame, lab
 if (typeof module !== 'undefined') {
   module.exports = ValueView;
   var util = require('util')
-    , ActionView = require('../../dogbone/views/actionView.js')
+    , ActionView = require('../../cento/views/actionView.js')
 }

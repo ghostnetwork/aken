@@ -9,7 +9,8 @@ cento
     * Relies on ability to remove connection
     * Draw dashed line to EndProgramView?
   
-  * After deleting a view, need to auto-connect views that were on either side of deleted view
+  * Repair connections after deleting items
+    * Need to auto-connect views that were on either side of deleted item
 
   * Sequence
     * Sequence object
@@ -25,5 +26,6 @@ cento
       * Auto-connect its ports to nearby views
       
 * To Fix:
-
+  * Newly minted view objects should be placed to the right of the rightmost item
+  
 

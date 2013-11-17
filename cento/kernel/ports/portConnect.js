@@ -3,6 +3,9 @@ kPortConnectMadeConnection  = 'PortConnect.made.connection';
 if (typeof module !== 'undefined') {
   module.exports = PortConnect;
   var util = require('util')
+    , _ = require('underscore')
+    , Connector = require('../connector.js')
+    , Segment = require('../geometry/segment.js')
     , PubSub = require('../../../verdoux/pubsub.js');
 }
 
@@ -11,6 +14,7 @@ function PortConnect() {
   
   that.beginConnecting = function(port, frame, action) {
     if (not(that.isConnecting)) {
+      reset();
       _isConnecting = true;
       _startPort = port;
       _startFrame = frame;
@@ -46,13 +50,15 @@ function PortConnect() {
     };
 
     that.publish(kPortConnectMadeConnection, JSON.stringify(spec));
-
-    reset()
   };
 
   that.autoConnect = function(sourceView, destView) {
     that.beginConnecting(sourceView.outputPort, sourceView.outputPortView.frame, sourceView.action);
     that.endConnecting(destView.inputPort, destView.inputPortView.frame, destView.action);
+  }
+
+  that.disconnect = function(actionView) {
+
   }
 
   function reset() {
