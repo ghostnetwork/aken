@@ -79,6 +79,20 @@ function ActionView(frame, label, action, hasPorts) {
     if (hasPorts) {
       that.enableInputPort();
       that.enableOutputPort();
+
+      PubSub.global.on(kDogboneWillRemoveChild, function(actionView) {
+        if (actionView.isConnectable() && actionView.name === that.name) {
+          console.log(actionView.name + ' - will be removed');
+          if (typeof actionView.inputPortSegmentView !== 'undefined' && existy(actionView.inputPortSegmentView)) {
+            actionView.inputPortSegmentView.markForDeletion();
+            console.log(' actionView.inputPortSegmentView: ' + actionView.inputPortSegmentView.isToBeDeleted);
+          }
+          if (typeof actionView.outputPortSegmentView !== 'undefined' && existy(actionView.outputPortSegmentView)) {
+            actionView.outputPortSegmentView.markForDeletion();
+            console.log('actionView.outputPortSegmentView: ' + actionView.outputPortSegmentView.isToBeDeleted);
+          }
+        }
+      });
     }
   }
   configure();

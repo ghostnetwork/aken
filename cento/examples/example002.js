@@ -10,6 +10,8 @@ function Example002(dogbone, canvasSize) {
     configureProgramEndView();
     configureActionFactoryView();
     configureValueFactoryView();
+
+    configurePubSubSubscribers();
     configurePortConnectionMadeHandlers();
   }
 
@@ -18,7 +20,7 @@ function Example002(dogbone, canvasSize) {
     var label = 'Start';
     var action = Action.create(label, startProgram);
     var view = StartProgramView.create(frame, label, action);
-    view.name = 'Example002.Program.Start.View';
+    view.name = 'Program.Start.View';
     view.backgroundColor = colorWithAlpha('#00c700', 0.7);
     view.makeUnselectable();
     dogbone.addChild(view);
@@ -32,7 +34,7 @@ function Example002(dogbone, canvasSize) {
     var label = 'End';
     var action = Action.create(label, endProgram);
     var view = EndProgramView.create(frame, label, action);
-    view.name = 'Example002.Program.End.View';
+    view.name = 'Program.End.View';
     view.backgroundColor = colorWithAlpha('#c70000', 0.7);
     view.makeUnselectable();
     dogbone.addChild(view);
@@ -52,7 +54,7 @@ function Example002(dogbone, canvasSize) {
   function configureActionFactoryView() {
     var frame = Rectangle.create(10, 60, 50, 50);
     var view = ActionView.createWithNoPorts(frame, 'Action', function() {makeActionView();});
-    view.name = 'Example002.Action.Factory.View';
+    view.name = 'Action.Factory.View';
     view.backgroundColor = colorWithAlpha('#FF8000', 0.7);
     view.makeUnselectable();
     view.makeUndraggable();
@@ -63,7 +65,7 @@ function Example002(dogbone, canvasSize) {
   function configureValueFactoryView() {
     var frame = Rectangle.create(10, 10, 50, 50);
     var view = ActionView.createWithNoPorts(frame, 'Value', function() {makeValueView();});
-    view.name = 'Example002.Action.Factory.View';
+    view.name = 'Value.Factory.View';
     view.backgroundColor = colorWithAlpha('#c700c7', 0.7);
     view.makeUnselectable();
     view.makeUndraggable();
@@ -75,10 +77,10 @@ function Example002(dogbone, canvasSize) {
     var origin = determineViewOrigin();
     var size = Size.create(50, 50);
     var frame = Rectangle.createWithOriginAndSize(origin, size);
-    var name = "Example002.Action." + numViews;
+    var name = "Action." + numViews;
     var action = Action.create(name, function() {});
     var view = ActionView.create(frame, 'Action', action);
-    view.name = "Example002.ActionView." + numViews;
+    view.name = "ActionView." + numViews;
     view.label = "Action " + numViews;
     view.backgroundColor = colorWithAlpha('#FF8000', 0.7);
     dogbone.addChild(view);
@@ -91,11 +93,11 @@ function Example002(dogbone, canvasSize) {
     var origin = viewOriginVerticalLayout();
     var size = Size.create(50, 50);
     var frame = Rectangle.createWithOriginAndSize(origin, size);
-    var name = "Example002.Value." + numViews;
+    var name = "Value." + numViews;
     var value = Value.create(0);
-    value.description = "Example002.ValueView." + numViews;
+    value.description = "ValueView." + numViews;
     var view = ValueView.create(frame, value.toString(), value);
-    view.name = "Example002.ValueView." + numViews;
+    view.name = "ValueView." + numViews;
     view.backgroundColor = colorWithAlpha('#c700c7', 0.7);
     dogbone.addChild(view);
 
@@ -138,6 +140,17 @@ function Example002(dogbone, canvasSize) {
     return Point.create(x, y);
   }
 
+  function configurePubSubSubscribers() {
+    PubSub.global.on(kDogboneDidRemoveChildren, function() {
+      console.log('\n==============');
+      console.log(kDogboneDidRemoveChildren);
+      currentGridMap(startProgramView, function(actionView, inputPortSegmentView, outputPortSegmentView) {
+        console.log('actionView: ' + actionView.name + ' (' + actionView.nextActionView.name + ')');
+        logConnection(actionView, inputPortSegmentView, outputPortSegmentView);
+      });
+    });
+  }
+
   function configurePortConnectionMadeHandlers() {
     PortConnect.global.on(kPortConnectMadeConnection, function(specJSON) {
       var spec = JSON.parse(specJSON);
@@ -173,8 +186,10 @@ function Example002(dogbone, canvasSize) {
       var destName = actionView.hasNextActionView()
                           ? actionView.nextActionView.name
                           : 'End';
+      var marked = existy(segmentView) ? segmentView.isToBeDeleted : undefined;
       console.log('segmentView: from: ' + actionView.name 
-                + ' to: ' + destName);
+                + ' to: ' + destName
+                + ' (marked: ' + marked + ')');
     }
   }
 
@@ -182,9 +197,16 @@ function Example002(dogbone, canvasSize) {
     gridMap(startProgramView, function(actionView) {
       if (actionViewInputPortMatchesSegmentViewEndPort(actionView, segmentView)) {
         actionView.inputPortSegmentView = segmentView;
+        var prevActionView = actionViewBefore(actionView);
+        if (existy(prevActionView)) {
+          prevActionView.outputPortSegmentView = segmentView;
+        }
       }
       if (actionViewOutputPortMatchesSegmentViewStartPort(actionView, segmentView)) {
         actionView.outputPortSegmentView = segmentView;
+        if (actionView.hasNextActionView()) {
+          actionView.nextActionView.inputPortSegmentView = segmentView;
+        }
       }
     });
   }
@@ -207,6 +229,18 @@ function Example002(dogbone, canvasSize) {
                   ? segmentView.connector.startPort
                   : null;
     return (existy(outputPort) && existy(startPort) && (outputPort.name === startPort.name));
+  }
+
+  function actionViewBefore(actionView) {
+    var prevActionView = null;
+    currentGridMap(startProgramView, function(childView, inputPortSegmentView, outputPortSegmentView) {
+      if (childView.isConnectable() && childView.hasNextActionView()) {
+        if (childView.nextActionView.name === actionView.name) {
+          prevActionView = childView;
+        }
+      }
+    });
+    return prevActionView;
   }
 
   function currentGridMap(startView, worker) {

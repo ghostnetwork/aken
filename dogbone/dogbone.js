@@ -3,7 +3,8 @@ kDogboneMouseDown         = 'dogbone.mousedown';
 kDogboneMouseMove         = 'dogbone.mousemove'; 
 kDogboneMouseUp           = 'dogbone.mouseup'; 
 kDogboneSelectionChanged  = 'dogbone.selection.changed';
-kDogboneRemovedChild      = 'dogbone.removed.child';
+kDogboneWillRemoveChild   = 'dogbone.will.remove.child';
+kDogboneDidRemoveChildren = 'dogbone.did.remove.children';
 kDeleteKey                = 46;
 
 function Dogbone(canvas) {
@@ -33,7 +34,7 @@ function Dogbone(canvas) {
   };
 
   that.removeChild = function(child) {
-    PubSub.global.publish(kDogboneRemovedChild, child);
+    PubSub.global.publish(kDogboneWillRemoveChild, child);
     that.mainView.removeChild(child);
     return that;
   }
@@ -244,7 +245,9 @@ function Dogbone(canvas) {
 
     shapesToRemove.forEach(function(shape) {
       that.removeChild(shape);
-    })
+    });
+
+    PubSub.global.publish(kDogboneDidRemoveChildren);
   }
 
   function configureMainView() {
