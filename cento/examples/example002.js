@@ -142,8 +142,21 @@ function Example002(dogbone, canvasSize) {
 
   function configurePubSubSubscribers() {
     PubSub.global.on(kDogboneDidRemoveChildren, function() {
-      console.log('\n==============');
-      console.log(kDogboneDidRemoveChildren);
+      console.log('\n' + kDogboneDidRemoveChildren + ' ==============');
+      currentGridMap(startProgramView, function(childView, inputPortSegmentView, outputPortSegmentView) {
+        console.log('childView: ' + childView.name + ' (' + childView.nextActionView.name + ')');
+        logConnection(childView, inputPortSegmentView, outputPortSegmentView);
+
+        if (existy(inputPortSegmentView) && inputPortSegmentView.isToBeDeleted) {
+          dogbone.removeChild(inputPortSegmentView);
+        }
+
+        if (existy(outputPortSegmentView) && outputPortSegmentView.isToBeDeleted) {
+          dogbone.removeChild(outputPortSegmentView);
+        }
+      });
+
+      console.log('\ndone removing segment(s) ==============');
       currentGridMap(startProgramView, function(actionView, inputPortSegmentView, outputPortSegmentView) {
         console.log('actionView: ' + actionView.name + ' (' + actionView.nextActionView.name + ')');
         logConnection(actionView, inputPortSegmentView, outputPortSegmentView);

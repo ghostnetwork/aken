@@ -27,7 +27,9 @@ function ActionView(frame, label, action, hasPorts) {
     }
   };
 
-  that.connectWith = function(otherActionView) {_nextActionView = otherActionView;};
+  that.connectWith = function(otherActionView) {
+    _nextActionView = otherActionView;
+  };
   that.disconnect = function() {_nextActionView = undefined;};
 
   that.hasNextActionView = function() {
