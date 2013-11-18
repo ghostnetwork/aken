@@ -15,7 +15,7 @@ function Action(name, worker) {
     _inputPort = InputPort.create(portNumber);
   };
   that.enableOutputPort = function(portNumber) {
-    _outputPort = InputPort.create(portNumber);
+    _outputPort = OutputPort.create(portNumber);
   };
 
 

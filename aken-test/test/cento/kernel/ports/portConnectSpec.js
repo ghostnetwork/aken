@@ -90,17 +90,4 @@ describe('PortConnect', function(){
       kStartAction.nextAction.should.equal(kEndAction);
     });
   });
-  
-  describe('disconnect', function(){
-    it('should ignore views that are un-connectable', function(){
-      (function(){
-        var unConnectableView = SegmentView.create(CGF.Segment, CGF.Connector);
-        portConnect.disconnect(unConnectableView);
-      }).should.not.throw();
-    });
-    // it('should disconnect the action from its next action', function(){
-    //   portConnect.beginConnecting(PF.OutputPort, GF.Frame, kStartAction);
-    //   portConnect.endConnecting(PF.InputPort, GF.Frame, kEndAction);
-    // });
-  });
 });

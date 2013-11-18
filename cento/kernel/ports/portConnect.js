@@ -1,4 +1,5 @@
 kPortConnectMadeConnection  = 'PortConnect.made.connection'; 
+kPortConnectDidAutoConnect  = 'PortConnect.did.autoconnect'; 
 
 if (typeof module !== 'undefined') {
   module.exports = PortConnect;
@@ -56,6 +57,11 @@ function PortConnect() {
   that.autoConnect = function(sourceView, destView) {
     that.beginConnecting(sourceView.action.outputPort, sourceView.outputPortView.frame, sourceView.action);
     that.endConnecting(destView.action.inputPort, destView.inputPortView.frame, destView.action);
+
+    sourceView.connectWith(destView);
+    
+    var spec = {"sourceView":sourceView, "destView":destView};
+    that.publish(kPortConnectDidAutoConnect, spec);
   }
 
   // that.disconnect = function(centoView) {

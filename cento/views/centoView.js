@@ -18,3 +18,4 @@ if (typeof module !== 'undefined') {
 }
 
 CentoView.global = CentoView.create(Rectangle.Empty);
+CentoView.Empty = CentoView.create(Rectangle.Empty);

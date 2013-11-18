@@ -14,6 +14,14 @@ function SegmentView(segment, connector) {
       , kSegmentColor);
   };
 
+  that.debugString = function() {
+    return 'start: [' 
+          + that.segment.startPoint.debugString() + '] ('
+          + that.connector.startPort.name + ') end: ['
+          + that.segment.endPoint.debugString() + '] ('
+          + that.connector.endPort.name + ')';
+  }
+
   function frameForSegment(segment) {
     var origin = segment.startPoint
       , width = segment.endPoint.x - origin.x

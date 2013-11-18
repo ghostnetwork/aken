@@ -1,13 +1,11 @@
 
 function ActionView(frame, label, action, hasPorts) {
-  var _action = action
-    , _inputPortView
-    , _outputPortView;
-
   var that = CentoView.create(frame);
 
   that.label = label;
   that.isConnectable = function(){return true;};
+  that.inputPortSegmentView = null;
+  that.outputPortSegmentView = null;
 
   that.enableInputPort = function() {
     if (_.isFunction(_action.enableInputPort)) {
@@ -28,6 +26,13 @@ function ActionView(frame, label, action, hasPorts) {
       invokeAction(action, that);
     }
   };
+
+  that.connectWith = function(otherActionView) {_nextActionView = otherActionView;};
+  that.disconnect = function() {_nextActionView = undefined;};
+
+  that.hasNextActionView = function() {
+    return typeof that.nextActionView !== 'undefined'&& that.nextActionView !== ActionView.Empty;
+  }
 
   function attachInputPortToView(inputPort) {
     var frameCenter = frame.center;
@@ -59,11 +64,16 @@ function ActionView(frame, label, action, hasPorts) {
     that.addChild(portView);
     return portView;
   }
+
+  var _action = action
+    , _inputPortView
+    , _outputPortView
+    , _nextActionView = ActionView.Empty;
   
   Object.defineProperty(that, 'action', {get : function() {return _action;},enumerable : true});
   Object.defineProperty(that, 'inputPortView', {get : function() {return _inputPortView;},enumerable : true});
   Object.defineProperty(that, 'outputPortView', {get : function() {return _outputPortView;},enumerable : true});
-
+  Object.defineProperty(that, 'nextActionView', {get : function() {return _nextActionView;},enumerable : true});
 
   function configure() {
     if (hasPorts) {
@@ -78,19 +88,17 @@ function ActionView(frame, label, action, hasPorts) {
 ActionView.create = function(frame, label, action){return new ActionView(frame, label, action, true);};
 ActionView.createWithNoPorts = function(frame, label, action){return new ActionView(frame, label, action, false);};
 
+
 if (typeof module !== 'undefined') {
   module.exports = ActionView;
   var util = require('util')
     , _ = require('underscore')
     , View = require('../../dogbone/views/view.js')
     , Rectangle = require('../../dogbone/geometry/rectangle.js')
+    , Action = require('../kernel/action.js')
     , InputPort = require('../kernel/ports/inputPort.js')
     , OutputPort = require('../kernel/ports/outputPort.js')
     , PortView = require('./portView.js')
     , CentoView = require('./centoView.js');
 }
-/*
-    , InputPort = require('../../cento/kernel/ports/inputPort.js')
-    , OutputPort = require('../../cento/kernel/ports/outputPort.js')
-    , PortView = require('../../cento/views/portView.js');
-*/
+ActionView.Empty = ActionView.create(Rectangle.Empty, 'ActionView.Empty', Action.None);
