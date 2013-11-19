@@ -56,7 +56,6 @@ function PortConnect() {
 
   that.autoConnect = function(sourceView, destView) {
     that.beginConnecting(sourceView.action.outputPort, sourceView.outputPortView.frame, sourceView.action);
-    sourceView.connectWith(destView);
     that.endConnecting(destView.action.inputPort, destView.inputPortView.frame, destView.action);
 
     

@@ -4,8 +4,6 @@ function ActionView(frame, label, action, hasPorts) {
 
   that.label = label;
   that.isConnectable = function(){return true;};
-  that.inputPortSegmentView = null;
-  that.outputPortSegmentView = null;
 
   that.enableInputPort = function() {
     if (_.isFunction(_action.enableInputPort)) {
@@ -25,24 +23,6 @@ function ActionView(frame, label, action, hasPorts) {
     if (existy(action)) {
       invokeAction(action, that);
     }
-  };
-
-  that.connectWith = function(otherActionView) {_nextActionView = otherActionView;};
-  that.disconnect = function() {_nextActionView = undefined;};
-
-  that.hasNextActionView = function() {
-    return typeof that.nextActionView !== 'undefined'
-        && that.nextActionView !== ActionView.Empty;
-  };
-
-  that.hasInputPortSegmentView = function() {
-    return typeof that.inputPortSegmentView != 'undefined' 
-        && existy(that.inputPortSegmentView);
-  };
-
-  that.hasOutputPortSegmentView = function() {
-    return typeof that.outputPortSegmentView != 'undefined' 
-        && existy(that.outputPortSegmentView);
   };
 
   function attachInputPortToView(inputPort) {
@@ -78,30 +58,16 @@ function ActionView(frame, label, action, hasPorts) {
 
   var _action = action
     , _inputPortView
-    , _outputPortView
-    , _nextActionView = ActionView.Empty;
+    , _outputPortView;
   
   Object.defineProperty(that, 'action', {get : function() {return _action;},enumerable : true});
   Object.defineProperty(that, 'inputPortView', {get : function() {return _inputPortView;},enumerable : true});
   Object.defineProperty(that, 'outputPortView', {get : function() {return _outputPortView;},enumerable : true});
-  Object.defineProperty(that, 'nextActionView', {get : function() {return _nextActionView;},enumerable : true});
 
   function configure() {
     if (hasPorts) {
       that.enableInputPort();
       that.enableOutputPort();
-
-      PubSub.global.on(kDogboneWillRemoveChild, function(actionView) {
-        if (actionView.isConnectable() && actionView.name === that.name) {
-          console.log(actionView.name + ' - will be removed');
-          if (actionView.hasInputPortSegmentView()) {
-            actionView.inputPortSegmentView.markForDeletion();
-          }
-          if (actionView.hasOutputPortSegmentView()) {
-            actionView.outputPortSegmentView.markForDeletion();
-          }
-        }
-      });
     }
   }
   configure();

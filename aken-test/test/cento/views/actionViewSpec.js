@@ -50,30 +50,4 @@ describe('ActionView', function(){
       }).should.throw();
     });
   });
-
-  describe('hasNextActionView', function(){
-    it('should return false by default', function(){
-      actionView.hasNextActionView().should.be.false;
-    });
-
-    it('should return false if given nextAction was notExisty', function(){
-      var nextAction;
-      actionView.connectWith(nextAction);
-      actionView.hasNextActionView().should.be.false;
-    });
-
-    it('should return false if given nextAction was ActionView.Empty', function(){
-      var nextAction = ActionView.Empty;
-      actionView.connectWith(nextAction);
-      actionView.hasNextActionView().should.be.false;
-    });
-
-    it('should return true if given nextAction was existy', function(){
-      var action = Action.create('ActionViewSpec.Action');
-      var nextAction = ActionView.create(
-        GF.Frame, 'ActionViewSpec.nextAction', action);
-      actionView.connectWith(nextAction);
-      actionView.hasNextActionView().should.be.true;
-    });
-  });
 });
