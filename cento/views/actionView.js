@@ -27,14 +27,23 @@ function ActionView(frame, label, action, hasPorts) {
     }
   };
 
-  that.connectWith = function(otherActionView) {
-    _nextActionView = otherActionView;
-  };
+  that.connectWith = function(otherActionView) {_nextActionView = otherActionView;};
   that.disconnect = function() {_nextActionView = undefined;};
 
   that.hasNextActionView = function() {
-    return typeof that.nextActionView !== 'undefined'&& that.nextActionView !== ActionView.Empty;
-  }
+    return typeof that.nextActionView !== 'undefined'
+        && that.nextActionView !== ActionView.Empty;
+  };
+
+  that.hasInputPortSegmentView = function() {
+    return typeof that.inputPortSegmentView != 'undefined' 
+        && existy(that.inputPortSegmentView);
+  };
+
+  that.hasOutputPortSegmentView = function() {
+    return typeof that.outputPortSegmentView != 'undefined' 
+        && existy(that.outputPortSegmentView);
+  };
 
   function attachInputPortToView(inputPort) {
     var frameCenter = frame.center;
@@ -85,13 +94,11 @@ function ActionView(frame, label, action, hasPorts) {
       PubSub.global.on(kDogboneWillRemoveChild, function(actionView) {
         if (actionView.isConnectable() && actionView.name === that.name) {
           console.log(actionView.name + ' - will be removed');
-          if (typeof actionView.inputPortSegmentView !== 'undefined' && existy(actionView.inputPortSegmentView)) {
+          if (actionView.hasInputPortSegmentView()) {
             actionView.inputPortSegmentView.markForDeletion();
-            console.log(' actionView.inputPortSegmentView: ' + actionView.inputPortSegmentView.isToBeDeleted);
           }
-          if (typeof actionView.outputPortSegmentView !== 'undefined' && existy(actionView.outputPortSegmentView)) {
+          if (actionView.hasOutputPortSegmentView()) {
             actionView.outputPortSegmentView.markForDeletion();
-            console.log('actionView.outputPortSegmentView: ' + actionView.outputPortSegmentView.isToBeDeleted);
           }
         }
       });

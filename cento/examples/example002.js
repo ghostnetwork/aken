@@ -143,23 +143,8 @@ function Example002(dogbone, canvasSize) {
   function configurePubSubSubscribers() {
     PubSub.global.on(kDogboneDidRemoveChildren, function() {
       console.log('\n' + kDogboneDidRemoveChildren + ' ==============');
-      currentGridMap(startProgramView, function(childView, inputPortSegmentView, outputPortSegmentView) {
-        console.log('childView: ' + childView.name + ' (' + childView.nextActionView.name + ')');
-        logConnection(childView, inputPortSegmentView, outputPortSegmentView);
-
-        if (existy(inputPortSegmentView) && inputPortSegmentView.isToBeDeleted) {
-          dogbone.removeChild(inputPortSegmentView);
-        }
-
-        if (existy(outputPortSegmentView) && outputPortSegmentView.isToBeDeleted) {
-          dogbone.removeChild(outputPortSegmentView);
-        }
-      });
-
-      console.log('\ndone removing segment(s) ==============');
-      currentGridMap(startProgramView, function(actionView, inputPortSegmentView, outputPortSegmentView) {
-        console.log('actionView: ' + actionView.name + ' (' + actionView.nextActionView.name + ')');
-        logConnection(actionView, inputPortSegmentView, outputPortSegmentView);
+      dogbone.mainView.displayListMap(function(childView) {
+        console.log(childView.name + ' (' + childView.isMarkedForDeletion + ')');
       });
     });
   }
@@ -173,43 +158,13 @@ function Example002(dogbone, canvasSize) {
       dogbone.mainView.addChild(segmentView);
       connectSegmentViewWithActionViews(segmentView);
     });
-
-    PortConnect.global.on(kPortConnectDidAutoConnect, function(spec) {
-      var sourceView = spec.sourceView;
-      var destView = spec.destView;
-
-      console.log('\n==============');
-      currentGridMap(startProgramView, function(actionView, inputPortSegmentView, outputPortSegmentView) {
-        console.log('actionView: ' + actionView.name + ' (' + actionView.nextActionView.name + ')');
-        logConnection(actionView, inputPortSegmentView, outputPortSegmentView);
-      });
-    });
-  }
-
-  function logConnection(actionView, inputPortSegmentView, outputPortSegmentView) {
-    if (existy(inputPortSegmentView)) {
-        logConnectionBetween(actionView, inputPortSegmentView);
-    } else if (existy(outputPortSegmentView)) {
-        logConnectionBetween(actionView, outputPortSegmentView);
-    }
-  }
-
-  function logConnectionBetween(actionView, segmentView) {
-    if (canLogSegmentView(segmentView) && canLogActionView(actionView)) {
-      var destName = actionView.hasNextActionView()
-                          ? actionView.nextActionView.name
-                          : 'End';
-      var marked = existy(segmentView) ? segmentView.isToBeDeleted : undefined;
-      console.log('segmentView: from: ' + actionView.name 
-                + ' to: ' + destName
-                + ' (marked: ' + marked + ')');
-    }
   }
 
   function connectSegmentViewWithActionViews(segmentView) {
     gridMap(startProgramView, function(actionView) {
       if (actionViewInputPortMatchesSegmentViewEndPort(actionView, segmentView)) {
         actionView.inputPortSegmentView = segmentView;
+        actionView.inputPortSegmentView.name = 'inputTo:' + actionView.name;
         var prevActionView = actionViewBefore(actionView);
         if (existy(prevActionView)) {
           prevActionView.outputPortSegmentView = segmentView;
@@ -217,6 +172,7 @@ function Example002(dogbone, canvasSize) {
       }
       if (actionViewOutputPortMatchesSegmentViewStartPort(actionView, segmentView)) {
         actionView.outputPortSegmentView = segmentView;
+        actionView.outputPortSegmentView.name = 'outputFrom:' + actionView.name;
         if (actionView.hasNextActionView()) {
           actionView.nextActionView.inputPortSegmentView = segmentView;
         }
@@ -246,7 +202,7 @@ function Example002(dogbone, canvasSize) {
 
   function actionViewBefore(actionView) {
     var prevActionView = null;
-    currentGridMap(startProgramView, function(childView, inputPortSegmentView, outputPortSegmentView) {
+    gridMap(startProgramView, function(childView) {
       if (childView.isConnectable() && childView.hasNextActionView()) {
         if (childView.nextActionView.name === actionView.name) {
           prevActionView = childView;
@@ -254,65 +210,6 @@ function Example002(dogbone, canvasSize) {
       }
     });
     return prevActionView;
-  }
-
-  function currentGridMap(startView, worker) {
-    var actionView = startView;
-    worker(actionView, 
-           actionView.inputPortSegmentView, 
-           actionView.outputPortSegmentView);
-    do {
-      actionView = actionView.nextActionView;
-      worker(actionView, 
-             actionView.inputPortSegmentView, 
-             actionView.outputPortSegmentView);
-    } while(actionView.hasNextActionView());
-  }
-
-  function traverseGrid(startView) {
-    console.log('\n==============');
-    var actionView = startView;
-
-    var inputPortSegmentView = startView.inputPortSegmentView;
-    console.log('actionView: ' + actionView.name + ' (' + actionView.nextActionView.name + ')');
-    logSegmentView(inputPortSegmentView);
-
-    var outputPortSegmentView = startView.outputPortSegmentView;
-    logSegmentView(outputPortSegmentView);
-
-    do {
-      actionView = actionView.nextActionView;
-      console.log('actionView: ' + actionView.name + ' (' + actionView.nextActionView.name + ')');
-      
-      inputPortSegmentView = actionView.inputPortSegmentView;
-      logSegmentView(inputPortSegmentView);
-
-      outputPortSegmentView = actionView.outputPortSegmentView;
-      logSegmentView(outputPortSegmentView);
-
-    } while(actionView.hasNextActionView());
-  }
-
-  function canLogSegmentView(segmentView) {
-    return (typeof segmentView !== 'undefined' 
-         && existy(segmentView)
-         && _.isFunction(segmentView.debugString));
-  }
-
-  function logSegmentView(segmentView) {
-    if (typeof segmentView !== 'undefined' 
-      && existy(segmentView)
-      && _.isFunction(segmentView.debugString)) {
-    //   console.log('segmentView: ' + segmentView.debugString());
-    // }
-    // if (canLogSegmentView(segmentView)) {
-      console.log('segmentView: ' + segmentView.debugString());
-    }
-  }
-
-  function canLogActionView(actionView) {
-    return (typeof actionView !== 'undefined' 
-         && existy(actionView));
   }
 
   var lastAddedView
@@ -327,12 +224,19 @@ function Example002(dogbone, canvasSize) {
 
 gridMap = function(startView, worker) {
   var view = startView;
-  worker(view);
 
-  while(view.hasNextActionView()){
-    view = view.nextActionView;
+  do {
     worker(view);
-  } 
+    
+    if (view.hasOutputPortSegmentView())
+      worker(view.outputPortSegmentView);
+    
+    view = view.nextActionView;
+
+    if (view.hasInputPortSegmentView())
+      worker(view.inputPortSegmentView);
+
+  } while(view.hasNextActionView());
 }
 
 Example002.create = function(dogbone, canvasSize){return new Example002(dogbone, canvasSize);};

@@ -22,7 +22,7 @@ function SegmentView(segment, connector) {
           + that.connector.endPort.name + ')';
   }
 
-  that.markForDeletion = function() {_toBeDeleted = true;};
+  that.markForDeletion = function() {_markedForDeletion = true;};
 
   function frameForSegment(segment) {
     var origin = segment.startPoint
@@ -53,11 +53,11 @@ function SegmentView(segment, connector) {
 
   Object.defineProperty(that, 'segment', {get : function() {return _segment;},enumerable : true});
   Object.defineProperty(that, 'connector', {get : function() {return _connector;},enumerable : true});
-  Object.defineProperty(that, 'isToBeDeleted', {get : function() {return _toBeDeleted;},enumerable : true});
+  Object.defineProperty(that, 'isMarkedForDeletion', {get : function() {return _markedForDeletion;},enumerable : true});
 
   var _segment = segment
     , _connector = connector
-    , _toBeDeleted = false;;
+    , _markedForDeletion = false;;
 
   return that;
 }
