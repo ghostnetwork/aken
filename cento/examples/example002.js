@@ -10,6 +10,8 @@ function Example002(dogbone, canvasSize) {
     configureProgramEndView();
     configureActionFactoryView();
     configureValueFactoryView();
+
+    configurePortConnectionMadeHandlers();
   }
 
   function configureProgramStartView() {
@@ -71,7 +73,7 @@ function Example002(dogbone, canvasSize) {
   }
 
   function makeActionView() {
-    var origin = determineViewOrigin();
+    var origin = viewOriginHorizontalLayout();
     var size = Size.create(50, 50);
     var frame = Rectangle.createWithOriginAndSize(origin, size);
     var name = "Action." + numViews;
@@ -84,34 +86,51 @@ function Example002(dogbone, canvasSize) {
 
     autoConnect(view);
     lastAddedView = view;
-  }
+  
+    traverseModel();
+}
 
   function makeValueView() {
+    var value = Value.create(0);
+    value.description = "Value." + numViews;
+
     var origin = viewOriginVerticalLayout();
     var size = Size.create(50, 50);
     var frame = Rectangle.createWithOriginAndSize(origin, size);
-    var name = "Value." + numViews;
-    var value = Value.create(0);
-    value.description = "ValueView." + numViews;
-    var view = ValueView.create(frame, value.toString(), value);
+    var view = ValueView.create(frame, value);
     view.name = "ValueView." + numViews;
     view.backgroundColor = colorWithAlpha('#c700c7', 0.7);
+    
     dogbone.addChild(view);
 
     autoConnect(view);
     lastAddedView = view;
+
+    traverseModel();
   }
 
   function autoConnect(view) {
-    if (numViews++ === 0) {
-      PortConnect.global.autoConnect(startProgramView, view);
-    }
-    else {
-      PortConnect.global.autoConnect(lastAddedView, view);
+    var originView = null;
+
+    if (numViews++ === 0) {originView = startProgramView;}
+    else {originView = lastAddedView;}
+
+    if (existy(originView)) {
+      PortConnect.global.autoConnect(originView, view);
     }
   }
 
-  function determineViewOrigin() {
+  function configurePortConnectionMadeHandlers() {
+    PortConnect.global.on(kPortConnectMadeConnection, function(specJSON) {
+      var spec = JSON.parse(specJSON);
+      var segment = Segment.create(spec.segment);
+      var connector = Connector.create(spec.connector);
+      var segmentView = SegmentView.create(segment, connector);
+      dogbone.mainView.addChild(segmentView);
+    });
+  }
+
+  function viewOriginHorizontalLayout() {
     var viewOrigin = Point.Empty;
     if (existy(lastAddedView)) {
       x = lastAddedView.frame.origin.x + lastAddedView.frame.size.width + 40;
@@ -135,6 +154,26 @@ function Example002(dogbone, canvasSize) {
       y = startProgramView.frame.origin.y;
     }
     return Point.create(x, y);
+  }
+
+  function traverseModel(worker) {
+    console.log('==============');
+    modelMap(startProgramView.action, function(action) {
+      console.log(':: ' + action.description);
+    });
+    console.log('');
+  }
+
+  function modelMap(startAction, worker) {
+    var action = startAction;
+    var isNotEnd = false;
+    do {
+      if (existy(action)) {
+        worker(action);
+      }
+      action = action.nextAction;
+      isNotEnd = action.isNotEndAction();
+    } while (isNotEnd);
   }
 
   var lastAddedView

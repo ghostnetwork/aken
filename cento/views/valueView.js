@@ -1,6 +1,6 @@
 
-function ValueView(frame, label, value) {
-  var that = ActionView.create(frame, label, Action.create(label, valueViewWorker));
+function ValueView(frame, value) {
+  var that = ActionView.create(frame, value.name, value);
 
   that.enableOutputPort();
 
@@ -11,7 +11,7 @@ function ValueView(frame, label, value) {
   return that;
 }
 
-ValueView.create = function(frame, label, value){return new ValueView(frame, label, value);};
+ValueView.create = function(frame, value){return new ValueView(frame, value);};
 
 if (typeof module !== 'undefined') {
   module.exports = ValueView;

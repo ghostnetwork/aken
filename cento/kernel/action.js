@@ -1,6 +1,7 @@
 function Action(name, worker) {
   var that = PubSub.create();
 
+  that.name = name;
   that.description = name;
 
   that.actionFromSpec = function(spec) {
@@ -29,14 +30,16 @@ function Action(name, worker) {
     _outputPort = OutputPort.create(portNumber);
   };
 
+  that.isEndAction = function() {return that.name === Action.End.name;};
+  that.isNotEndAction = function() {return not(that.isEndAction());};
+
   Object.defineProperty(that, 'name', {get : function() {return _name;},enumerable : true});
   Object.defineProperty(that, 'worker', {get : function() {return _worker;},enumerable : true});
   Object.defineProperty(that, 'nextAction', {get : function() {return _nextAction;},enumerable : true});
   Object.defineProperty(that, 'inputPort', {get : function() {return _inputPort;},enumerable : true});
   Object.defineProperty(that, 'outputPort', {get : function() {return _outputPort;},enumerable : true});
   
-  var _name = name
-    , _worker = worker
+  var _worker = worker
     , _nextAction = Action.None
     , _inputPort
     , _outputPort;
@@ -76,3 +79,4 @@ if (typeof module !== 'undefined') {
 // This needs to come after the above check of 'module'
 // for the unit tests to run.
 Action.None = Action.create('None', actionDrone);
+Action.End = Action.None;
