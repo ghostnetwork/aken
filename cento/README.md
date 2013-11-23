@@ -2,6 +2,8 @@ cento
 =====
 
 * To Do:
+  * Drive the UI from the model
+  
   * Need a way to remove connections
     * PortConnect should handle this
 
