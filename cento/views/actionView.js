@@ -1,5 +1,5 @@
 
-function ActionView(frame, label, action, hasPorts) {
+function ActionView(frame, label, action, wantsPorts) {
   var that = CentoView.create(frame);
 
   that.label = label;
@@ -24,6 +24,18 @@ function ActionView(frame, label, action, hasPorts) {
       invokeAction(action, that);
     }
   };
+
+  that.onWillRemove = function() {
+    console.log('removing: ' + that.name);
+    markSegmentViewForDeletion(that.inputSegmentView);
+    markSegmentViewForDeletion(that.outputSegmentView);
+  };
+
+  function markSegmentViewForDeletion(segmentView) {
+    if (typeof segmentView != 'undefined' && existy(segmentView)) {
+      segmentView.markForDeletion();
+    }
+  }
 
   function attachInputPortToView(inputPort) {
     var frameCenter = frame.center;
@@ -58,17 +70,58 @@ function ActionView(frame, label, action, hasPorts) {
 
   var _action = action
     , _inputPortView
-    , _outputPortView;
+    , _outputPortView
+    , _inputSegmentView
+    , _outputSegmentView
+    , _hasPorts = wantsPorts;
   
   Object.defineProperty(that, 'action', {get : function() {return _action;},enumerable : true});
   Object.defineProperty(that, 'inputPortView', {get : function() {return _inputPortView;},enumerable : true});
   Object.defineProperty(that, 'outputPortView', {get : function() {return _outputPortView;},enumerable : true});
+  Object.defineProperty(that, 'inputSegmentView', {get : function() {return _inputSegmentView;},enumerable : true});
+  Object.defineProperty(that, 'outputSegmentView', {get : function() {return _outputSegmentView;},enumerable : true});
+  Object.defineProperty(that, 'hasPorts', {get : function() {return _hasPorts;},enumerable : true});
 
   function configure() {
-    if (hasPorts) {
+    if (wantsPorts) {
       that.enableInputPort();
       that.enableOutputPort();
     }
+
+    function guidForPortView(portView) {
+      var guid = null;
+      if (typeof portView != 'undefined' && existy(portView)) {
+        if (typeof portView.port != 'undefined') {
+          guid = portView.port.guid;
+        }
+      }
+      return guid;
+    }
+
+    PortConnect.global.on(kPortConnectDidAutoConnect, function(spec) {
+      if (spec.sourceView === that) {
+        _outputSegmentView = spec.segmentView;
+        console.log('\n' + that.name + '.' + kPortConnectDidAutoConnect 
+          + '\n       source: ' + spec.sourceView.name
+          + '\n       inputPort:' + guidForPortView(spec.sourceView.inputPortView)
+          + '\n      outputPort:' + guidForPortView(spec.sourceView.outputPortView)
+          + '\n            --> :' + _outputSegmentView.connector.startPort.guid
+          + '\n  segmentView: ' 
+          + '\n      startPort: ' + spec.segmentView.connector.startPort.guid
+          + '\n        endPort: ' + spec.segmentView.connector.endPort.guid);
+      }
+      else if (spec.destView === that) {
+        _inputSegmentView = spec.segmentView;
+        console.log('\n' + that.name + '.' + kPortConnectDidAutoConnect 
+          + '\n         dest:' + spec.destView.name
+          + '\n       inputPort:' + guidForPortView(spec.destView.inputPortView)
+          + '\n      outputPort:' + guidForPortView(spec.destView.outputPortView)
+          + '\n            <-- :' + _inputSegmentView.connector.startPort.guid
+          + '\n  segmentView: '
+          + '\n      startPort: ' + spec.segmentView.connector.startPort.guid
+          + '\n        endPort: ' + spec.segmentView.connector.endPort.guid);
+      }
+    });
   }
   configure();
   return that;
@@ -82,6 +135,7 @@ if (typeof module !== 'undefined') {
   module.exports = ActionView;
   var util = require('util')
     , _ = require('underscore')
+    , PubSub = require('../../verdoux/pubSub.js')
     , View = require('../../dogbone/views/view.js')
     , Rectangle = require('../../dogbone/geometry/rectangle.js')
     , Action = require('../kernel/action.js')

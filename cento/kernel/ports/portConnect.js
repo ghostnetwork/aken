@@ -55,11 +55,16 @@ function PortConnect() {
   };
 
   that.autoConnect = function(sourceView, destView) {
+
+    var segmentView = null;
+    PortConnect.global.on("did.add.segment.view", function(view) {
+      segmentView = view;
+    });
+
     that.beginConnecting(sourceView.action.outputPort, sourceView.outputPortView.frame, sourceView.action);
     that.endConnecting(destView.action.inputPort, destView.inputPortView.frame, destView.action);
 
-    
-    var spec = {"sourceView":sourceView, "destView":destView};
+    var spec = {"sourceView":sourceView, "destView":destView, "segmentView":segmentView};
     that.publish(kPortConnectDidAutoConnect, spec);
   }
 

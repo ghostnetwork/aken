@@ -127,6 +127,24 @@ function Example002(dogbone, canvasSize) {
       var connector = Connector.create(spec.connector);
       var segmentView = SegmentView.create(segment, connector);
       dogbone.mainView.addChild(segmentView);
+
+      PortConnect.global.publish("did.add.segment.view", segmentView);
+    });
+
+    PubSub.global.on(kDogboneDidRemoveChildren, function(spec) {
+      console.log('\n>>>---------------->');
+      var deadSegmentViews = [];
+      dogbone.mainView.displayListMap(function(childView) {
+        if (SegmentView.isSegmentView(childView)) {
+          console.log('  isMarkedForDeletion: ' + childView.isMarkedForDeletion);
+          if (childView.isMarkedForDeletion) {
+            deadSegmentViews.push(childView);
+          }
+        }
+      });
+      deadSegmentViews.forEach(function(deadSegmentView) {
+        dogbone.removeChild(deadSegmentView);
+      });
     });
   }
 
@@ -174,6 +192,24 @@ function Example002(dogbone, canvasSize) {
       action = action.nextAction;
       isNotEnd = action.isNotEndAction();
     } while (isNotEnd);
+  }
+
+/*
+    traverseModel(function(action) {
+      
+    });
+*/
+
+  function segmentViewForActionView(actionView) {
+    console.log('------------');
+    dogbone.mainView.displayListMap(function(childView) {
+      if (SegmentView.isSegmentView(childView)) {
+        console.log('  --> ' + childView.name);
+      }
+    });
+  }
+
+  function portForActionView(actionView) {
   }
 
   var lastAddedView

@@ -17,9 +17,9 @@ function SegmentView(segment, connector) {
   that.debugString = function() {
     return 'start: [' 
           + that.segment.startPoint.debugString() + '] ('
-          + that.connector.startPort.name + ') end: ['
+          + that.connector.startPort.guid + ') end: ['
           + that.segment.endPoint.debugString() + '] ('
-          + that.connector.endPort.name + ')';
+          + that.connector.endPort.guid + ')';
   }
 
   that.markForDeletion = function() {_markedForDeletion = true;};
@@ -65,6 +65,14 @@ function SegmentView(segment, connector) {
 SegmentView.create = function(segment, connector){
   return new SegmentView(segment, connector);
 };
+
+SegmentView.isSegmentView = function(view) {
+  var result = false;
+  if (typeof view != 'undefined' && existy(view)) {
+    result = _.isFunction(view.markForDeletion);
+  }
+  return result;
+}
 
 if (typeof module !== 'undefined') {
   module.exports = SegmentView;

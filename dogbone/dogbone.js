@@ -1,10 +1,11 @@
+kDogboneDidCreateChild    = 'dogbone.did.create.child';
+kDogboneDidRemoveChildren = 'dogbone.did.remove.children';
 kDogboneMainViewName      = 'Dogbone'; 
 kDogboneMouseDown         = 'dogbone.mousedown'; 
 kDogboneMouseMove         = 'dogbone.mousemove'; 
 kDogboneMouseUp           = 'dogbone.mouseup'; 
 kDogboneSelectionChanged  = 'dogbone.selection.changed';
 kDogboneWillRemoveChild   = 'dogbone.will.remove.child';
-kDogboneDidRemoveChildren = 'dogbone.did.remove.children';
 kDeleteKey                = 46;
 
 function Dogbone(canvas) {
@@ -30,6 +31,7 @@ function Dogbone(canvas) {
 
   that.addChild = function(child) { 
     that.mainView.addChild(child);
+    PubSub.global.publish(kDogboneDidCreateChild, child);
     return that;
   };
 
