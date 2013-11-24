@@ -46,12 +46,14 @@ function Action(name, worker) {
   Object.defineProperty(that, 'inputPort', {get : function() {return _inputPort;},enumerable : true});
   Object.defineProperty(that, 'outputPort', {get : function() {return _outputPort;},enumerable : true});
   Object.defineProperty(that, 'isMarkedForDeletion', {get : function() {return _markedForDeletion;},enumerable : true});
+  Object.defineProperty(that, 'guid', {get : function() {return _guid;},enumerable : true});
   
   var _worker = worker
     , _nextAction = Action.None
     , _inputPort
     , _outputPort
-    , _markedForDeletion = false;
+    , _markedForDeletion = false
+    , _guid = guid();
 
   return that;
 }
@@ -84,6 +86,7 @@ if (typeof module !== 'undefined') {
     , PubSub = require('../../verdoux/pubsub.js')
     , InputPort = require('./ports/inputPort.js')
     , OutputPort = require('./ports/outputPort.js');
+  require('../../../verdoux/guid.js');
 }
 // This needs to come after the above check of 'module'
 // for the unit tests to run.

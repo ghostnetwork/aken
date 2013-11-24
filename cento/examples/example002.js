@@ -179,7 +179,7 @@ function Example002(dogbone, canvasSize) {
     var previousAction = null;
     traverseModel(function(action) {
       if (action.hasNextAction()) {
-        if (action.nextAction.name === toAction.name) {
+        if (action.nextAction.guid === toAction.guid) {
           previousAction = action;
         }
       }
@@ -191,7 +191,7 @@ function Example002(dogbone, canvasSize) {
     var view = null;
     dogbone.mainView.displayListMap(function(childView) {
       if (childView.isConnectable()) {
-        if (childView.action.name === action.name) {
+        if (childView.action.guid === action.guid) {
           view = childView;
         }
       }
