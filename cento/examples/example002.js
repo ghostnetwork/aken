@@ -87,7 +87,7 @@ function Example002(dogbone, canvasSize) {
     autoConnect(view);
     lastAddedView = view;
   
-    traverseModel();
+    logModel();
 }
 
   function makeValueView() {
@@ -106,7 +106,7 @@ function Example002(dogbone, canvasSize) {
     autoConnect(view);
     lastAddedView = view;
 
-    traverseModel();
+    logModel();
   }
 
   function autoConnect(view) {
@@ -145,7 +145,58 @@ function Example002(dogbone, canvasSize) {
       deadSegmentViews.forEach(function(deadSegmentView) {
         dogbone.removeChild(deadSegmentView);
       });
+
+      console.log('\n++++++++++');
+      var deadActions = [];
+      traverseModel(function(action) {
+        console.log('++ ' + action.description 
+          + ' markedForDeletion: ' + action.isMarkedForDeletion);
+        if (action.isMarkedForDeletion) {
+          deadActions.push(action);
+        }
+      });
+      deadActions.forEach(function(deadAction) {
+        var prevAction = previousAction(deadAction);
+        if (existy(prevAction)) {
+          console.log(deadAction.name + '.prevAction: ' + prevAction.name);
+          console.log('deadAction.hasNextAction: ' + deadAction.hasNextAction());
+          if (deadAction.hasNextAction()) {
+            prevAction.connectWith(deadAction.nextAction);
+            var sourceView = viewForAction(prevAction);
+            var destView = viewForAction(deadAction.nextAction);
+            console.log(prevAction.name + '.nextAction.name: ' + prevAction.nextAction.name);
+            if (existy(sourceView) && existy(destView)) {
+              PortConnect.global.autoConnect(sourceView, destView);
+            }
+          }
+        }
+      });
+
     });
+  }
+
+  function previousAction(toAction) {
+    var previousAction = null;
+    traverseModel(function(action) {
+      if (action.hasNextAction()) {
+        if (action.nextAction.name === toAction.name) {
+          previousAction = action;
+        }
+      }
+    });
+    return previousAction;
+  }
+
+  function viewForAction(action) {
+    var view = null;
+    dogbone.mainView.displayListMap(function(childView) {
+      if (childView.isConnectable()) {
+        if (childView.action.name === action.name) {
+          view = childView;
+        }
+      }
+    });
+    return view;
   }
 
   function viewOriginHorizontalLayout() {
@@ -174,11 +225,15 @@ function Example002(dogbone, canvasSize) {
     return Point.create(x, y);
   }
 
+  function logModel() {
+    traverseModel(function(action) {
+      console.log(':: ' + action.description);
+    })
+  }
+
   function traverseModel(worker) {
     console.log('==============');
-    modelMap(startProgramView.action, function(action) {
-      console.log(':: ' + action.description);
-    });
+    modelMap(startProgramView.action, worker);
     console.log('');
   }
 
@@ -192,24 +247,6 @@ function Example002(dogbone, canvasSize) {
       action = action.nextAction;
       isNotEnd = action.isNotEndAction();
     } while (isNotEnd);
-  }
-
-/*
-    traverseModel(function(action) {
-      
-    });
-*/
-
-  function segmentViewForActionView(actionView) {
-    console.log('------------');
-    dogbone.mainView.displayListMap(function(childView) {
-      if (SegmentView.isSegmentView(childView)) {
-        console.log('  --> ' + childView.name);
-      }
-    });
-  }
-
-  function portForActionView(actionView) {
   }
 
   var lastAddedView

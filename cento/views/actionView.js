@@ -27,6 +27,7 @@ function ActionView(frame, label, action, wantsPorts) {
 
   that.onWillRemove = function() {
     console.log('removing: ' + that.name);
+    that.action.markForDeletion();
     markSegmentViewForDeletion(that.inputSegmentView);
     markSegmentViewForDeletion(that.outputSegmentView);
   };

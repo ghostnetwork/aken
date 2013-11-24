@@ -34,15 +34,24 @@ function Action(name, worker) {
   that.isNotEndAction = function() {return not(that.isEndAction());};
 
   Object.defineProperty(that, 'name', {get : function() {return _name;},enumerable : true});
+  that.markForDeletion = function() {_markedForDeletion = true;};
+
+  that.hasNextAction = function() {
+    return typeof that.nextAction != 'undefined'
+        && existy(that.nextAction);
+  };
+
   Object.defineProperty(that, 'worker', {get : function() {return _worker;},enumerable : true});
   Object.defineProperty(that, 'nextAction', {get : function() {return _nextAction;},enumerable : true});
   Object.defineProperty(that, 'inputPort', {get : function() {return _inputPort;},enumerable : true});
   Object.defineProperty(that, 'outputPort', {get : function() {return _outputPort;},enumerable : true});
+  Object.defineProperty(that, 'isMarkedForDeletion', {get : function() {return _markedForDeletion;},enumerable : true});
   
   var _worker = worker
     , _nextAction = Action.None
     , _inputPort
-    , _outputPort;
+    , _outputPort
+    , _markedForDeletion = false;
 
   return that;
 }
