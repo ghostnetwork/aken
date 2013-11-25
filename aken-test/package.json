@@ -12,6 +12,7 @@
   "dependencies": { "underscore": "1.4.4" },
   "devDependencies": {
     "mocha": "*",
+    "node-localstorage": "0.3.4",
     "should": "1.2.2",
     "sinon": "1.7.3",
     "util": "0.4.9"
