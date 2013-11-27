@@ -31,3 +31,6 @@ supportsLocalStorage = function() {
     return false;
   }
 }
+
+if (supportsLocalStorage())
+  LocalStorage = window['localStorage'];

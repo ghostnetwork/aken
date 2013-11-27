@@ -13,6 +13,7 @@
   "devDependencies": {
     "mocha": "*",
     "node-localstorage": "0.3.4",
+    "rimraf": "2.0.1",
     "should": "1.2.2",
     "sinon": "1.7.3",
     "util": "0.4.9"

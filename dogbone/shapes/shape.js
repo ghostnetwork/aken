@@ -2,7 +2,8 @@ if (typeof module !== 'undefined') {
   module.exports = Shape;
   var Graphics = require('../graphics.js')
     , PubSub = require('../../verdoux/pubsub.js')
-    , Dogbone = require('../../dogbone/dogbone.js');
+    , Dogbone = require('../../dogbone/dogbone.js')
+    , Rectangle = require('../../dogbone/geometry/rectangle.js');
 }
 
 kShapeMoved       = "shape.moved";
@@ -95,3 +96,26 @@ function Shape(frame) {
 }
 
 Shape.create = function(frame){return new Shape(frame);};
+Shape.createFromSpec = function(spec) {
+  var frame = Rectangle.createFromSpec(spec.frame);
+  var shape = Shape.create(frame);
+  
+  if (spec.isDraggable) shape.makeDraggable();
+  else shape.makeUndraggable();
+
+  if (spec.isSelectable) shape.makeSelectable();
+  else shape.makeUnselectable();
+
+  if (spec.isSelected) shape.select();
+  else shape.unselect();
+
+  shape.backgroundColor = spec.backgroundColor;
+  shape.highlightBgColor = spec.highlightBgColor;
+  shape.zOrder = spec.zOrder;
+  shape.label = spec.label;
+
+  return shape;
+};
+Shape.createFromJSON = function(shapeJSON) {
+  return Shape.createFromSpec(JSON.parse(shapeJSON));
+};

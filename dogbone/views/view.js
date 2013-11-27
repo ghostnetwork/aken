@@ -177,6 +177,11 @@ function View(frame) {
 
 View.create = function(frame){return new View(frame);};
 
+View.createFromSpec = function(spec) {
+  var frame = Rectangle.createFromSpec(spec.frame);
+  var view = View.create(frame);
+};
+
 if (typeof module !== 'undefined') {
   module.exports = View;
   var util = require('util');
@@ -184,5 +189,6 @@ if (typeof module !== 'undefined') {
     , Shape = require('../shapes/shape.js')
     , Box = require('../shapes/box.js')
     , DragDrop = require('../dragdrop.js')
-    , Point = require('../geometry/point.js');
+    , Point = require('../geometry/point.js')
+    , Rectangle = require('../geometry/rectangle.js');
 }

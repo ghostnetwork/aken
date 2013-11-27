@@ -56,4 +56,13 @@ describe('Point', function(){
     });
   });
 
+  describe('createFromJSON / createFromSpec', function(){
+    it('should be able to create a Point from JSON', function(){
+      var pointJSON = JSON.stringify(point);
+      var clone = Point.createFromJSON(pointJSON);
+      clone.x.should.equal(point.x);
+      clone.y.should.equal(point.y);
+    });
+  });
+
 });

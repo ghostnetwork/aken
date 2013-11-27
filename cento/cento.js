@@ -17,7 +17,8 @@ function initialize() {
 
   var canvasSize = Size.createWithCanvas(canvas);
   // var example001 = Example001.create(globals.cento.dogbone, canvasSize);
-  var example002 = Example002.create(globals.cento.dogbone, canvasSize);
+  // var example002 = Example002.create(globals.cento.dogbone, canvasSize);
+  var example003 = Example003.create({"dogbone":globals.cento.dogbone, "canvasSize":canvasSize});
 
   globals.cento.start();
 }

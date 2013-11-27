@@ -4,19 +4,18 @@ var sinon = require('sinon');
 var util = require('util');
 var fs = require('fs');
 var LocalStorage = require('node-localstorage').LocalStorage;
+var LSF = require('../localStorageFixtures.js');
 require('../../../verdoux/predicates.js');
 
 describe('LocalStorage', function(){
   'use strict';
 
-  var kLocalStorageFileName = './unitTest.localStorage'
-    , kLocalStorageKey = "LocalStorageSpec.Foo";
+  var kLocalStorageKey = "LocalStorageSpec.Foo"
+    , localStorage = null;
 
-  var localStorage = new LocalStorage(kLocalStorageFileName);
-
+  beforeEach(function() {localStorage = LSF.global.initialize();});
 
   it('should be able to be created', function(){assert(existy(localStorage));});
-
 
   describe('setItem-getItem', function(){
 
@@ -41,10 +40,8 @@ describe('LocalStorage', function(){
       loadedValue = localStorage.getItem(kLocalStorageKey);
       notExisty(loadedValue).should.be.true;
 
-      fs.rmdir(kLocalStorageFileName, function(error){
-        if (error) {
-          console.log('error: ' + error);
-        }
+      LSF.global.cleanup(function(error){
+        if (error) {throw error;}
         done();
       });
     });

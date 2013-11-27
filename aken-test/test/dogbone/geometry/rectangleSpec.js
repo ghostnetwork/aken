@@ -162,6 +162,19 @@ describe('Rectangle', function(){
     });
   });
 
+  describe('createFromJSON / createFromSpec', function(){
+    it('should be able to create a new Rectangle given a spec', function(){
+      var rectJSON = JSON.stringify(rectangle);
+      var spec = JSON.parse(rectJSON);
+      var clone = Rectangle.createFromSpec(spec);
+      existy(clone).should.be.true;
+      clone.origin.x.should.equal(rectangle.origin.x);
+      clone.origin.y.should.equal(rectangle.origin.y);
+      clone.size.width.should.equal(rectangle.size.width);
+      clone.size.height.should.equal(rectangle.size.height);
+    });
+  });
+
   function testRectangleFromJSON(sourceRect, rectMaker) {
     var rectJSON = sourceRect.jsonString();
     existy(rectJSON).should.be.true;

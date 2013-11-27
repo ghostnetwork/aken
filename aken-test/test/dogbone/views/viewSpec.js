@@ -139,4 +139,18 @@ describe('View', function(){
       view.frame.origin.y.should.equal(destinationPoint.y);
     });
   });
+
+  describe('LocalStorage', function(){
+    it('should be able to save and restore from LocalStorage', function(){
+      var zOrderFixture = 1234;
+      view.zOrder = zOrderFixture;
+
+      var data = JSON.stringify(view);
+      existy(data).should.be.true;
+
+      var result = JSON.parse(data);
+      existy(result).should.be.true;
+      result.zOrder.should.equal(zOrderFixture);
+    });
+  });
 });
