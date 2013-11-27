@@ -21,6 +21,8 @@ function Connector(spec) {
 
 Connector.create = function(spec){return new Connector(spec);};
 
+Connector.createFromJSON = function(connectorJSON) {return Connector.create(JSON.parse(connectorJSON));};
+
 if (typeof module !== 'undefined') {
   module.exports = Connector;
   var util = require('util')
