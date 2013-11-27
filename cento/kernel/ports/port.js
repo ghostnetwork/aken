@@ -27,7 +27,6 @@ function Port(number) {
 Port.create = function(number){return new Port(number);};
 
 Port.createFromSpec = function(spec) {
-  // console.log('\n --> spec: ' + util.inspect(spec));
   var port = Port.create(spec.number);
   port.portFromSpec(spec);
   return port;

@@ -9,6 +9,14 @@ function OutputPort(number) {
 
 OutputPort.create = function(number){return new OutputPort(number);};
 
+OutputPort.createFromSpec = function(spec) {
+  var port = OutputPort.create(spec.number);
+  port.portFromSpec(spec);
+  return port;
+};
+
+OutputPort.createFromJSON = function(portJSON) {return OutputPort.createFromSpec(JSON.parse(portJSON));};
+
 if (typeof module !== 'undefined') {
   module.exports = OutputPort;
   var util = require('util')
