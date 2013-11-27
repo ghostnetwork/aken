@@ -18,6 +18,16 @@ function CentoView(frame) {
 
 CentoView.create = function(frame){return new CentoView(frame);};
 
+CentoView.createFromSpec = function(spec) {
+  var frame = Rectangle.createFromSpec(spec.frame);
+  var centoView = CentoView.create(frame);
+  centoView.shapeFromSpec(spec);
+  centoView.viewFromSpec(spec);
+  return centoView;
+};
+
+CentoView.createFromJSON = function(centoViewJSON) {return CentoView.createFromSpec(JSON.parse(centoViewJSON));};
+
 if (typeof module !== 'undefined') {
   module.exports = CentoView;
   var util = require('util')
