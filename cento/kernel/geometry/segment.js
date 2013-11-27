@@ -19,6 +19,15 @@ function Segment(spec) {
 
 Segment.create = function(spec){return new Segment(spec);};
 
+Segment.createFromSpec = function(spec) {
+  var startPoint = Point.createFromSpec(spec.startPoint);
+  var endPoint = Point.createFromSpec(spec.endPoint);
+  var segment = Segment.create({"startPoint":startPoint, "endPoint":endPoint});
+  return segment;
+};
+
+Segment.createFromJSON = function(segmentJSON) {return Segment.createFromSpec(JSON.parse(segmentJSON));};
+
 if (typeof module !== 'undefined') {
   module.exports = Segment;
   var util = require('util')

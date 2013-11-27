@@ -190,9 +190,7 @@ View.createFromSpec = function(spec) {
   return view;
 };
 
-View.createFromJSON = function(viewJSON) {
-  return View.createFromSpec(JSON.parse(viewJSON));
-};
+View.createFromJSON = function(viewJSON) {return View.createFromSpec(JSON.parse(viewJSON));};
 
 if (typeof module !== 'undefined') {
   module.exports = View;

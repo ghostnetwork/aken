@@ -2,6 +2,8 @@ var assert = require('assert');
 var should = require('should');
 var sinon = require('sinon');
 var util = require('util');
+var LocalStorage = require('node-localstorage').LocalStorage;
+var LSF = require('../../localStorageFixtures.js');
 var GF = require('../geometry/geometryFixtures.js');
 var View = require('../../../../dogbone/views/view.js');
 var Point = require('../../../../dogbone/geometry/point.js');
@@ -152,18 +154,28 @@ describe('View', function(){
     });
   });
 
-
   describe('LocalStorage', function(){
-    it('should be able to save and restore from LocalStorage', function(){
-      var zOrderFixture = 1234;
-      view.zOrder = zOrderFixture;
+    it('should be able to save and restore from LocalStorage', function(done){
+      var origView = createOriginalView();
 
-      var data = JSON.stringify(view);
+      var data = JSON.stringify(origView);
       existy(data).should.be.true;
 
-      var result = JSON.parse(data);
-      existy(result).should.be.true;
-      result.zOrder.should.equal(zOrderFixture);
+      var lsKey = "ViewSpec.LocalStorage";
+      LSF.global.initialize();
+      LSF.global.localStorage.setItem(lsKey, data);
+
+      var rawJSON = LSF.global.localStorage.getItem(lsKey);
+      existy(rawJSON).should.be.true;
+
+      var clone = View.createFromJSON(rawJSON);
+      verifyClone(clone, origView);
+
+      LSF.global.cleanup(function(error){
+        if (error) {throw error;}
+        done();
+      });
+
     });
   });
 
