@@ -9,9 +9,10 @@ require('../../../../verdoux/predicates.js');
 describe('ValueView', function(){
   'use strict';
 
+  var kValueFixture = 12345;
   var valueView;
 
-  beforeEach(function() {valueView = ValueView.create(GF.Frame);});
+  beforeEach(function() {valueView = ValueView.create(GF.Frame, kValueFixture);});
 
   it('should be able to be created', function(){assert(existy(valueView));});
 

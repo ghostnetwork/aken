@@ -142,6 +142,7 @@ if (typeof module !== 'undefined') {
     , Action = require('../kernel/action.js')
     , InputPort = require('../kernel/ports/inputPort.js')
     , OutputPort = require('../kernel/ports/outputPort.js')
+    , PortConnect = require('../kernel/ports/portConnect.js')
     , PortView = require('./portView.js')
     , CentoView = require('./centoView.js');
 }

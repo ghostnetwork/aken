@@ -30,11 +30,10 @@ function Action(name, worker) {
     _outputPort = OutputPort.create(portNumber);
   };
 
+  that.markForDeletion = function() {_markedForDeletion = true;};
+
   that.isEndAction = function() {return that.name === Action.End.name;};
   that.isNotEndAction = function() {return not(that.isEndAction());};
-
-  Object.defineProperty(that, 'name', {get : function() {return _name;},enumerable : true});
-  that.markForDeletion = function() {_markedForDeletion = true;};
 
   that.hasNextAction = function() {
     return typeof that.nextAction != 'undefined'
@@ -86,7 +85,7 @@ if (typeof module !== 'undefined') {
     , PubSub = require('../../verdoux/pubsub.js')
     , InputPort = require('./ports/inputPort.js')
     , OutputPort = require('./ports/outputPort.js');
-  require('../../../verdoux/guid.js');
+  require('../../verdoux/guid.js');
 }
 // This needs to come after the above check of 'module'
 // for the unit tests to run.

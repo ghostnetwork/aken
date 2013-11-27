@@ -23,7 +23,8 @@ if (typeof module !== 'undefined') {
   var util = require('util')
     , _ = require('underscore')
     , View = require('../../dogbone/views/view.js')
-    , Rectangle = require('../../dogbone/geometry/rectangle.js');
+    , Rectangle = require('../../dogbone/geometry/rectangle.js')
+    , PubSub = require('../../verdoux/pubsub.js');
 }
 
 CentoView.global = CentoView.create(Rectangle.Empty);
