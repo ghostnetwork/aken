@@ -27,6 +27,24 @@ function Shape(frame) {
   that.zOrder = ZORDER_MIDDLE;
   that.label = '';
 
+  that.shapeFromSpec = function(spec) {
+    if (spec.isDraggable) that.makeDraggable();
+    else that.makeUndraggable();
+
+    if (spec.isSelectable) that.makeSelectable();
+    else that.makeUnselectable();
+
+    if (spec.isSelected) that.select();
+    else that.unselect();
+
+    that.backgroundColor = spec.backgroundColor;
+    that.highlightBgColor = spec.highlightBgColor;
+    that.zOrder = spec.zOrder;
+    that.label = spec.label;
+
+    return that;
+  }
+
   that.hitTest = function(point) {return existy(_frame) ? _frame.contains(point) : false;};
 
   that.resizeFrame = function(newFrame) {_frame = newFrame.clone();};
@@ -99,21 +117,7 @@ Shape.create = function(frame){return new Shape(frame);};
 Shape.createFromSpec = function(spec) {
   var frame = Rectangle.createFromSpec(spec.frame);
   var shape = Shape.create(frame);
-  
-  if (spec.isDraggable) shape.makeDraggable();
-  else shape.makeUndraggable();
-
-  if (spec.isSelectable) shape.makeSelectable();
-  else shape.makeUnselectable();
-
-  if (spec.isSelected) shape.select();
-  else shape.unselect();
-
-  shape.backgroundColor = spec.backgroundColor;
-  shape.highlightBgColor = spec.highlightBgColor;
-  shape.zOrder = spec.zOrder;
-  shape.label = spec.label;
-
+  shape.shapeFromSpec(spec);
   return shape;
 };
 Shape.createFromJSON = function(shapeJSON) {

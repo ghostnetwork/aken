@@ -7,7 +7,15 @@ function View(frame) {
   Object.defineProperty(that, 'center', {get : function() {
     return that.frame.center;},enumerable : true
   });
+
+  that.borderColor;
+  that.clearBorderColor = function() {that.borderColor = undefined;};
   
+  that.viewFromSpec = function(spec) {
+    that.borderColor = spec.borderColor;
+    that.clearBorderColor = spec.clearBorderColor;
+  }
+
   that.update = function() {sortDisplayListByZOrder();};
 
   that.render = function(graphics) {
@@ -107,9 +115,6 @@ function View(frame) {
     }
   }
 
-  that.borderColor;
-  that.clearBorderColor = function() {that.borderColor = undefined;};
-
   that.logDisplayList = function() {
     for (var i = 0; i < displayList.length; i++) {
       var shape = displayList[i];
@@ -180,6 +185,13 @@ View.create = function(frame){return new View(frame);};
 View.createFromSpec = function(spec) {
   var frame = Rectangle.createFromSpec(spec.frame);
   var view = View.create(frame);
+  view.shapeFromSpec(spec);
+  view.viewFromSpec(spec);
+  return view;
+};
+
+View.createFromJSON = function(viewJSON) {
+  return View.createFromSpec(JSON.parse(viewJSON));
 };
 
 if (typeof module !== 'undefined') {

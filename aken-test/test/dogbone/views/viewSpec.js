@@ -140,6 +140,19 @@ describe('View', function(){
     });
   });
 
+  describe('createFromJSON / createFromSpec', function(){
+    it('should be able to create a new object from the given JSON', function(){
+      var origView = createOriginalView();
+
+      var data = JSON.stringify(origView);
+      existy(data).should.be.true;
+
+      var clone = View.createFromJSON(data);
+      verifyClone(clone, origView);
+    });
+  });
+
+
   describe('LocalStorage', function(){
     it('should be able to save and restore from LocalStorage', function(){
       var zOrderFixture = 1234;
@@ -153,4 +166,40 @@ describe('View', function(){
       result.zOrder.should.equal(zOrderFixture);
     });
   });
+
+  var bgColorFixture = '#dead00'
+    , highlightBgColorFixture = '#deffed'
+    , borderColorFixture = '#ffeedd'
+    , clearBorderColorFixture = '#ccbbaa'
+    , zOrderFixture = 54321
+    , labelFixture = 'View.Label';
+
+  function createOriginalView() {
+    var origView = View.create(GF.Frame);
+    origView.backgroundColor = bgColorFixture;
+    origView.highlightBgColor = highlightBgColorFixture;
+    origView.borderColor = borderColorFixture;
+    origView.clearBorderColor = clearBorderColorFixture;
+    origView.zOrder = zOrderFixture;
+    origView.label = labelFixture;
+    return origView;
+  }
+
+  function verifyClone(clone, origView) {
+    existy(clone).should.be.true;
+    
+    clone.frame.debugString().should.equal(origView.frame.debugString());
+    clone.bounds.debugString().should.equal(origView.bounds.debugString());
+    clone.isDraggable.should.equal(origView.isDraggable);
+    clone.isSelected.should.equal(origView.isSelected);
+    clone.isSelectable.should.equal(origView.isSelectable);
+
+    clone.backgroundColor.should.equal(bgColorFixture);
+    clone.highlightBgColor.should.equal(highlightBgColorFixture);
+    clone.zOrder.should.equal(zOrderFixture);
+    clone.label.should.equal(labelFixture);
+
+    clone.borderColor.should.equal(borderColorFixture);
+    clone.clearBorderColor.should.equal(clearBorderColorFixture);
+  }
 });
