@@ -26,7 +26,6 @@ var PF = require('../ports/portFixtures.js');
   CentoGeometryFixtures.SegmentSpec = kSegmentSpec;
   CentoGeometryFixtures.Segment = Segment.create(kSegmentSpec);
 
-
   var kConnectorSpec = {
     "startPort":PF.OutputPort,
     "endPort":PF.InputPort

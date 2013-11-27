@@ -2,6 +2,11 @@
 function Port(number) {
   var that = PubSub.create();
 
+  that.portFromSpec = function(spec) {
+    that.number = spec.number;
+    _connected = spec.isConnected;
+  };
+
   that.makeConnected = function() {_connected = true;};
   that.makeDisconnected = function() {_connected = false;};
 
@@ -20,6 +25,15 @@ function Port(number) {
 }
 
 Port.create = function(number){return new Port(number);};
+
+Port.createFromSpec = function(spec) {
+  // console.log('\n --> spec: ' + util.inspect(spec));
+  var port = Port.create(spec.number);
+  port.portFromSpec(spec);
+  return port;
+};
+
+Port.createFromJSON = function(portJSON) {return Port.createFromSpec(JSON.parse(portJSON));};
 
 if (typeof module !== 'undefined') {
   module.exports = Port;
