@@ -20,6 +20,14 @@ function Value(value) {
 
 Value.create = function(value){return new Value(value);};
 
+Value.createFromSpec = function(spec) {
+  var value = Value.create(spec.value);
+  value.actionFromSpec(spec);
+  return value;
+};
+
+Value.createFromJSON = function(valueJSON) {return Value.createFromSpec(JSON.parse(valueJSON));};
+
 if (typeof module !== 'undefined') {
   module.exports = Value;
   var util = require('util')
