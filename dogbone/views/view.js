@@ -14,6 +14,7 @@ function View(frame) {
   that.viewFromSpec = function(spec) {
     that.borderColor = spec.borderColor;
     that.clearBorderColor = spec.clearBorderColor;
+    return that;
   }
 
   that.update = function() {sortDisplayListByZOrder();};

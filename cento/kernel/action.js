@@ -2,6 +2,17 @@ function Action(name, worker) {
   var that = PubSub.create();
 
   that.description = name;
+
+  that.actionFromSpec = function(spec) {
+    _name = spec.name;
+    _worker = worker;
+    _nextAction = spec.nextAction;
+    _inputPort = spec.inputPort;
+    _outputPort = spec.outputPort;
+    that.description = spec.description;
+    return that;
+  };
+
   that.perform = function(args) {
     if (worker) {
       invokeAction(worker, args);
@@ -17,7 +28,6 @@ function Action(name, worker) {
   that.enableOutputPort = function(portNumber) {
     _outputPort = OutputPort.create(portNumber);
   };
-
 
   Object.defineProperty(that, 'name', {get : function() {return _name;},enumerable : true});
   Object.defineProperty(that, 'worker', {get : function() {return _worker;},enumerable : true});
@@ -36,6 +46,14 @@ function Action(name, worker) {
 
 var actionDrone = function(){};
 Action.create = function(name, worker){return new Action(name, worker);};
+
+Action.createFromSpec = function(spec) {
+  var action = Action.create(spec.name, spec.worker);
+  action.actionFromSpec(spec);
+  return action;
+};
+
+Action.createFromJSON = function(actionJSON) {return Action.createFromSpec(JSON.parse(actionJSON));};
 
 invokeAction = function(action, args) { 
   if (action) {
