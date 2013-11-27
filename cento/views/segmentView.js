@@ -1,9 +1,20 @@
 
 function SegmentView(segment, connector) {
-  var that = CentoView.create(frameForSegment(segment));
-  
-  that.zOrder = -1000;
   var kSegmentColor = colorWithAlpha('#ff0000', 1.0);
+
+  var that = CentoView.create(frameForSegment(segment));
+
+  Object.defineProperty(that, 'segment', {get : function() {return _segment;},enumerable : true});
+  Object.defineProperty(that, 'connector', {get : function() {return _connector;},enumerable : true});
+  Object.defineProperty(that, 'isMarkedForDeletion', {get : function() {return _markedForDeletion;},enumerable : true});
+
+  that.zOrder = -1000;
+
+  that.segmentViewFromSpec = function(spec) {
+    _segment = Segment.createFromSpec(spec.segment);
+    _connector = Connector.createFromSpec(spec.connector);
+    _markedForDeletion = spec.isMarkedForDeletion;
+  }
 
   that.render = function(graphics) {
     graphics.drawLine(
@@ -14,6 +25,8 @@ function SegmentView(segment, connector) {
       , kSegmentColor);
   };
 
+  that.markForDeletion = function() {_markedForDeletion = true;};
+
   that.debugString = function() {
     return 'start: [' 
           + that.segment.startPoint.debugString() + '] ('
@@ -21,8 +34,6 @@ function SegmentView(segment, connector) {
           + that.segment.endPoint.debugString() + '] ('
           + that.connector.endPort.guid + ')';
   }
-
-  that.markForDeletion = function() {_markedForDeletion = true;};
 
   function frameForSegment(segment) {
     var origin = segment.startPoint
@@ -51,10 +62,6 @@ function SegmentView(segment, connector) {
     }
   });
 
-  Object.defineProperty(that, 'segment', {get : function() {return _segment;},enumerable : true});
-  Object.defineProperty(that, 'connector', {get : function() {return _connector;},enumerable : true});
-  Object.defineProperty(that, 'isMarkedForDeletion', {get : function() {return _markedForDeletion;},enumerable : true});
-
   var _segment = segment
     , _connector = connector
     , _markedForDeletion = false;;
@@ -62,9 +69,18 @@ function SegmentView(segment, connector) {
   return that;
 }
 
-SegmentView.create = function(segment, connector){
-  return new SegmentView(segment, connector);
+SegmentView.create = function(segment, connector){return new SegmentView(segment, connector);};
+
+SegmentView.createFromSpec = function(spec) {
+  var segment = Segment.createFromSpec(spec.segment);
+  var connector = Connector.create(spec.connector);
+  var segmentView = SegmentView.create(segment, connector);
+  segmentView.shapeFromSpec(spec);
+  segmentView.viewFromSpec(spec);
+  return segmentView;
 };
+
+SegmentView.createFromJSON = function(segmentViewJSON) {return SegmentView.createFromSpec(JSON.parse(segmentViewJSON));};
 
 SegmentView.isSegmentView = function(view) {
   var result = false;
@@ -79,6 +95,7 @@ if (typeof module !== 'undefined') {
   var util = require('util')
     , View = require('../../dogbone/views/view.js')
     , Segment = require('../../cento/kernel/geometry/segment.js')
+    , Connector = require('../../cento/kernel/connector.js')
     , Rectangle = require('../../dogbone/geometry/rectangle.js')
     , Size = require('../../dogbone/geometry/size.js')
     , PortConnect = require('../../cento/kernel/ports/portConnect.js')
