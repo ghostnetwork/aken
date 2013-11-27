@@ -38,8 +38,8 @@ describe('Action', function(){
 
   describe('connectWith', function(){
     it('should retain the action given', function(){
-      var actionA = Action.create('Action.A');
-      var actionB = Action.create('Action.B');
+      var actionA = Action.create('Action.A', kWorker);
+      var actionB = Action.create('Action.B', kWorker);
       actionA.connectWith(actionB);
 
       existy(actionA.nextAction).should.be.true;

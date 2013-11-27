@@ -15,8 +15,11 @@ require('../../../../../verdoux/predicates.js');
 describe('PortConnect', function(){
   'use strict';
 
-  var kStartAction = Action.create('PortConnectSpec.StartAction')
-    , kEndAction = Action.create('PortConnectSpec.StartAction');
+  var kStartWorker = function(){return 'PortConnectSpec.StartWorker';}
+    , kEndWorker = function(){return 'PortConnectSpec.EndWorker';};
+
+  var kStartAction = Action.create('PortConnectSpec.StartAction', kStartWorker)
+    , kEndAction = Action.create('PortConnectSpec.StartAction', kEndWorker);
   var portConnect;
 
   beforeEach(function() {portConnect = PortConnect.create();});

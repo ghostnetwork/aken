@@ -1,6 +1,13 @@
 
 function ActionView(frame, label, action, wantsPorts) {
   var that = CentoView.create(frame);
+  
+  Object.defineProperty(that, 'action', {get : function() {return _action;},enumerable : true});
+  Object.defineProperty(that, 'inputPortView', {get : function() {return _inputPortView;},enumerable : true});
+  Object.defineProperty(that, 'outputPortView', {get : function() {return _outputPortView;},enumerable : true});
+  Object.defineProperty(that, 'inputSegmentView', {get : function() {return _inputSegmentView;},enumerable : true});
+  Object.defineProperty(that, 'outputSegmentView', {get : function() {return _outputSegmentView;},enumerable : true});
+  Object.defineProperty(that, 'hasPorts', {get : function() {return _hasPorts;},enumerable : true});
 
   that.label = label;
   that.isConnectable = function(){return true;};
@@ -75,13 +82,6 @@ function ActionView(frame, label, action, wantsPorts) {
     , _inputSegmentView
     , _outputSegmentView
     , _hasPorts = wantsPorts;
-  
-  Object.defineProperty(that, 'action', {get : function() {return _action;},enumerable : true});
-  Object.defineProperty(that, 'inputPortView', {get : function() {return _inputPortView;},enumerable : true});
-  Object.defineProperty(that, 'outputPortView', {get : function() {return _outputPortView;},enumerable : true});
-  Object.defineProperty(that, 'inputSegmentView', {get : function() {return _inputSegmentView;},enumerable : true});
-  Object.defineProperty(that, 'outputSegmentView', {get : function() {return _outputSegmentView;},enumerable : true});
-  Object.defineProperty(that, 'hasPorts', {get : function() {return _hasPorts;},enumerable : true});
 
   function configure() {
     if (wantsPorts) {
@@ -128,12 +128,33 @@ function ActionView(frame, label, action, wantsPorts) {
   return that;
 }
 
+ActionView.toJSON = function(that) {return JSON.stringify(JSON.decycle(that));};
+ActionView.fromJSON = function(thatJSON) {return JSON.retrocycle(JSON.parse(thatJSON));}
+
 ActionView.create = function(frame, label, action){return new ActionView(frame, label, action, true);};
 ActionView.createWithNoPorts = function(frame, label, action){return new ActionView(frame, label, action, false);};
+
+ActionView.createFromSpec = function(spec) {
+  var frame = Rectangle.createFromSpec(spec.frame);
+  var label = spec.label;
+
+  // console.log('\n --> spec.action: ' + util.inspect(spec.action));
+
+  var action = Action.createFromSpec(spec.action);
+  var actionView = ActionView.create(frame, label, action);
+  actionView.shapeFromSpec(spec);
+  actionView.viewFromSpec(spec);
+  return actionView;
+};
+
+ActionView.createFromJSON = function(actionViewJSON) {
+  return ActionView.createFromSpec(ActionView.fromJSON(actionViewJSON));
+};
 
 
 if (typeof module !== 'undefined') {
   module.exports = ActionView;
+  require('../../libs/cycle.js');
   var util = require('util')
     , _ = require('underscore')
     , PubSub = require('../../verdoux/pubSub.js')

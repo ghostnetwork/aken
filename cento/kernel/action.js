@@ -1,15 +1,22 @@
 function Action(name, worker) {
   var that = PubSub.create();
 
+  Object.defineProperty(that, 'worker', {get : function() {return _worker;},enumerable : true});
+  Object.defineProperty(that, 'nextAction', {get : function() {return _nextAction;},enumerable : true});
+  Object.defineProperty(that, 'inputPort', {get : function() {return _inputPort;},enumerable : true});
+  Object.defineProperty(that, 'outputPort', {get : function() {return _outputPort;},enumerable : true});
+  Object.defineProperty(that, 'isMarkedForDeletion', {get : function() {return _markedForDeletion;},enumerable : true});
+  Object.defineProperty(that, 'guid', {get : function() {return _guid;},enumerable : true});
+
   that.name = name;
   that.description = name;
 
   that.actionFromSpec = function(spec) {
-    _name = spec.name;
-    _worker = worker;
     _nextAction = spec.nextAction;
+    _worker = spec.worker;
     _inputPort = spec.inputPort;
     _outputPort = spec.outputPort;
+    that.name = spec.name;
     that.description = spec.description;
     return that;
   };
@@ -39,13 +46,6 @@ function Action(name, worker) {
     return typeof that.nextAction != 'undefined'
         && existy(that.nextAction);
   };
-
-  Object.defineProperty(that, 'worker', {get : function() {return _worker;},enumerable : true});
-  Object.defineProperty(that, 'nextAction', {get : function() {return _nextAction;},enumerable : true});
-  Object.defineProperty(that, 'inputPort', {get : function() {return _inputPort;},enumerable : true});
-  Object.defineProperty(that, 'outputPort', {get : function() {return _outputPort;},enumerable : true});
-  Object.defineProperty(that, 'isMarkedForDeletion', {get : function() {return _markedForDeletion;},enumerable : true});
-  Object.defineProperty(that, 'guid', {get : function() {return _guid;},enumerable : true});
   
   var _worker = worker
     , _nextAction = Action.None
@@ -62,7 +62,7 @@ Action.create = function(name, worker){return new Action(name, worker);};
 
 Action.createFromSpec = function(spec) {
   var action = Action.create(spec.name, spec.worker);
-  action.actionFromSpec(spec);
+  action = action.actionFromSpec(spec);
   return action;
 };
 

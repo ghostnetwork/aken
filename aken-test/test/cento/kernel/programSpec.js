@@ -9,8 +9,9 @@ require('../../../../verdoux/predicates.js');
 describe('Program', function(){
   'use strict';
 
-  var kName = "ProgramSpec";
-  var kAction = Action.create("ProgramSpec.Action");
+  var kName = "ProgramSpec"
+    , kWorker = function(){return 'ProgramSpec.Worker';}
+    , kAction = Action.create("ProgramSpec.Action", kWorker);
   var program;
 
   beforeEach(function() {
