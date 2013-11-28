@@ -69,6 +69,4 @@ describe('StartProgramView', function(){
     clone.label.should.equal(origStartProgramView.label);
     clone.action.name.should.equal(origStartProgramView.action.name);
   }
-
-
 });
