@@ -137,9 +137,6 @@ ActionView.createWithNoPorts = function(frame, label, action){return new ActionV
 ActionView.createFromSpec = function(spec) {
   var frame = Rectangle.createFromSpec(spec.frame);
   var label = spec.label;
-
-  // console.log('\n --> spec.action: ' + util.inspect(spec.action));
-
   var action = Action.createFromSpec(spec.action);
   var actionView = ActionView.create(frame, label, action);
   actionView.shapeFromSpec(spec);
