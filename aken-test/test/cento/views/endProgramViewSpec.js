@@ -3,7 +3,6 @@ var should = require('should');
 var sinon = require('sinon');
 var util = require('util');
 var LSF = require('../../localStorageFixtures.js');
-var PF = require('../kernel/ports/portFixtures.js');
 var GF = require('../../dogbone/geometry/geometryFixtures.js');
 var Action = require('../../../../cento/kernel/action.js');
 var EndProgramView = require('../../../../cento/views/endProgramView.js');
