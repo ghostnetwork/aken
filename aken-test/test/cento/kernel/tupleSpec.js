@@ -13,7 +13,7 @@ describe('Tuple', function(){
     , kSpec = {"first":kFirstItem, "second":kSecondItem};
   var tuple;
 
-  beforeEach(function() {tuple = Tuple.create(kSpec);});
+  beforeEach(function() {tuple = Tuple.createWithSpec(kSpec);});
 
   it('should be able to be created', function(){assert(existy(tuple));});
   
@@ -24,6 +24,20 @@ describe('Tuple', function(){
     existy(secondItem).should.be.true;
     firstItem.should.equal(kFirstItem);
     secondItem.should.equal(kSecondItem);
+  });
+
+  describe('create', function(){
+    it('should be able to create a tuple given separate first and second items', function(){
+      var myFirstItem = 'My.First.Item';
+      var mySecondItem = 'My.Second.Item';
+      var myTuple = Tuple.create(myFirstItem, mySecondItem);
+      var firstItem = myTuple.first;
+      var secondItem = myTuple.second;
+      existy(firstItem).should.be.true;
+      existy(secondItem).should.be.true;
+      firstItem.should.equal(myFirstItem);
+      secondItem.should.equal(mySecondItem);
+    });
   });
 
   describe('map', function(){

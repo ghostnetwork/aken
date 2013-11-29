@@ -13,7 +13,8 @@ function Tuple(spec) {
   return that;
 }
 
-Tuple.create = function(spec){return new Tuple(spec);};
+Tuple.createWithSpec = function(spec){return new Tuple(spec);};
+Tuple.create = function(first, second){return Tuple.createWithSpec({"first":first, "second":second});};
 
 if (typeof module !== 'undefined') {
   module.exports = Tuple;
