@@ -19,4 +19,37 @@ describe('CentoMath', function(){
       result.should.equal(expected);
     });
   });
+
+  describe('minus', function(){
+    it('should be able to add two items', function(){
+      var firstItem = 2;
+      var secondItem = 3;
+      var expected = firstItem - secondItem;
+      var result = CentoMath.minus(Tuple.create(firstItem, secondItem));
+      existy(result).should.be.true;
+      result.should.equal(expected);
+    });
+  });
+
+  describe('multiply', function(){
+    it('should be able to add two items', function(){
+      var firstItem = 2;
+      var secondItem = 3;
+      var expected = firstItem * secondItem;
+      var result = CentoMath.multiply(Tuple.create(firstItem, secondItem));
+      existy(result).should.be.true;
+      result.should.equal(expected);
+    });
+  });
+
+  describe('divide', function(){
+    it('should be able to add two items', function(){
+      var firstItem = 2;
+      var secondItem = 3;
+      var expected = firstItem / secondItem;
+      var result = CentoMath.divide(Tuple.create(firstItem, secondItem));
+      existy(result).should.be.true;
+      result.should.equal(expected);
+    });
+  });
 });

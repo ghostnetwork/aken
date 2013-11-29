@@ -5,7 +5,7 @@ function Tuple(spec) {
   Object.defineProperty(that, 'first', {get : function() {return _firstItem;},enumerable : true});
   Object.defineProperty(that, 'second', {get : function() {return _secondItem;},enumerable : true});
 
-  that.map = function(worker) {worker(that);};
+  that.map = function(worker) {return worker(that);};
 
   var _firstItem = spec.first
     , _secondItem = spec.second;

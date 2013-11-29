@@ -4,11 +4,12 @@ function CentoMath() {
   return that;
 }
 
-CentoMath.plus = function(input) {
-  var result = null;
-  input.map(function(tuple) {result = tuple.first + tuple.second;});
-  return result;
-};
+CentoMath.plus = function(input) {return drone(input, function(tuple) {return tuple.first + tuple.second;});};
+CentoMath.minus = function(input) {return drone(input, function(tuple) {return tuple.first - tuple.second;});};
+CentoMath.multiply = function(input) {return drone(input, function(tuple) {return tuple.first * tuple.second;});};
+CentoMath.divide = function(input) {return drone(input, function(tuple) {return tuple.first / tuple.second;});};
+
+function drone(input, worker) {return input.map(worker);}
 
 if (typeof module !== 'undefined') {
   module.exports = CentoMath;
