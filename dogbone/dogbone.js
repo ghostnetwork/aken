@@ -112,7 +112,6 @@ function Dogbone(canvas) {
         else {
           if (View.isView(shape)) {
             var view = shape;
-            console.log('view.childCount: ' + view.childCount);
             view.displayListMap(function(childView) {
               childView.frameContainsPoint(startPoint, frameContainsPointCallback);
             });

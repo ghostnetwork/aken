@@ -41,36 +41,11 @@ function Example003(spec) {
   }
 
   function createSystemActions() {
-    createAddViewSystemAction();
-    createSaveToLocalStorageSystemAction();
-  }
+    var startFrame = that.sysActionStartFrame.clone();
+    var createView = createViewSystemActionView(startFrame.clone(), createViewAndAddToWorkshop);
+    dogbone.addChild(createView);
 
-  function createAddViewSystemAction() {
-    var frame = that.sysActionStartFrame.clone();
-    var createViewWorker = function() {createViewAndAddToWorkshop();};
-    var createViewName = 'View';
-    var createViewAction = Action.create(createViewName, createViewWorker);
-    var view = ActionView.createWithNoPorts(frame, createViewName, createViewAction);
-    view.name = 'System.Action.Create.View';
-    view.backgroundColor = colorWithAlpha('#00c7c7', 0.7);
-    view.makeUnselectable();
-    view.makeUndraggable();
-    dogbone.addChild(view);
-  }
-
-  function createSaveToLocalStorageSystemAction() {
-    var saveViewFrame = that.sysActionStartFrame.clone();
-    var y = saveViewFrame.origin.y + saveViewFrame.size.height + saveViewFrame.origin.y;
-    var saveViewPoint = Point.create(saveViewFrame.origin.x, y);
-    saveViewFrame.moveToPoint(saveViewPoint);
-    var saveViewName = 'Save';
-    var saveViewWorker = function(){saveToLocalStorage();};
-    var saveViewAction = Action.create(saveViewName, saveViewWorker);
-    var saveView = ActionView.createWithNoPorts(saveViewFrame, saveViewName, saveViewAction);
-    saveView.name = 'System.Action.View.Save.To.Local.Storage';
-    saveView.backgroundColor = colorWithAlpha('#c700c7', 0.7);
-    saveView.makeUnselectable();
-    saveView.makeUndraggable();
+    var saveView = createSaveToLocalStorageSystemActionView(startFrame.clone(), saveToLocalStorage);
     dogbone.addChild(saveView);
   }
 
@@ -127,16 +102,12 @@ function Example003(spec) {
 
     var clonedView = View.create(frame);
     clonedView.name = "ClonedView." + that.workshopView.childCount;
-
-    console.log(clonedView.name + '.isView: ' + View.isView(clonedView));
-    console.log(frame.debugString() + '.isView: ' + View.isView(frame));
+    clonedView.backgroundColor = colorWithAlpha('#00c7c7', 0.7);
 
     that.workshopView.addChild(clonedView);
   }
 
   function saveToLocalStorage() {
-    console.log('that.workshopView.childCount: ' + that.workshopView.childCount);
-
     var data = View.toJSON(that.workshopView);
     LocalStorage.setItem(kExample003MainViewKey, data);
 
@@ -164,7 +135,6 @@ function Example003(spec) {
         }
         that.workshopView.addChild(childView);
       };
-      console.log('--> that.workshopView.childCount: ' + that.workshopView.childCount);
     }
   }
 
