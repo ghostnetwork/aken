@@ -1,9 +1,8 @@
     
 function ValueView(frame, value) {
   var that = ActionView.create(frame, value.name, value);
-
   Object.defineProperty(that, 'value', {get : function() {return _value;},enumerable : true});
-
+  that.type = 'ValueView';
   that.enableOutputPort();
 
 

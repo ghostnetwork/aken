@@ -37,7 +37,11 @@ function Dogbone(canvas) {
 
   that.removeChild = function(child) {
     PubSub.global.publish(kDogboneWillRemoveChild, child);
-    that.mainView.removeChild(child);
+    var parentView = child.parent;
+    if (existy(parentView)) {
+      parentView.removeChild(child);
+    }
+    // that.mainView.removeChild(child);
     return that;
   }
 
@@ -106,7 +110,16 @@ function Dogbone(canvas) {
           }
         }
         else {
-          shouldDrawLine = true;
+          if (View.isView(shape)) {
+            var view = shape;
+            console.log('view.childCount: ' + view.childCount);
+            view.displayListMap(function(childView) {
+              childView.frameContainsPoint(startPoint, frameContainsPointCallback);
+            });
+          } 
+          else {
+            shouldDrawLine = true;
+          }
         }
       }
   }
@@ -165,8 +178,16 @@ function Dogbone(canvas) {
     var mousePoint = Point.createFromMouseEventWithPageCoords(event);
 
     if (shouldDrawLine) {
-      that.mainView.displayListMap(function(childView) { 
-        childView.onMouseUp(event);
+      that.mainView.displayListMap(function(shape) { 
+        if (View.isView(shape)) {
+          var view = shape;
+          view.displayListMap(function(childView) {
+            childView.onMouseUp(event);
+          })
+        } 
+        else {
+          shape.onMouseUp(event);
+        }
       });
     }
 
@@ -198,31 +219,68 @@ function Dogbone(canvas) {
   } 
   
   function notifyChildViewsOfSelection() { 
-    that.mainView.displayListMap(function(shape) { 
-      var isSelected = selectionFrame.intersect(shape.frame); 
-      shape.pubsub.publish(kDogboneSelectionChanged, selectionFrame.intersect(shape.frame)); 
+    that.mainView.displayListMap(function(shape) {
+      if (View.isView(shape)) {
+        var view = shape;
+        view.displayListMap(function(childView) {
+          var isSelected = selectionFrame.intersect(childView.frame);
+          childView.pubsub.publish(kDogboneSelectionChanged, 
+                                   selectionFrame.intersect(childView.frame)); 
+        })
+      }
+      else {
+        var isSelected = selectionFrame.intersect(shape.frame); 
+        shape.pubsub.publish(kDogboneSelectionChanged, 
+                             selectionFrame.intersect(shape.frame)); 
+      }
     }); 
   }
 
   function selectedChildViewCount() {
     var numSelectedChildViews = 0;
     that.mainView.displayListMap(function(shape) { 
-      if (shape.isSelected) numSelectedChildViews++;
+      if (View.isView(shape)) {
+        var view = shape;
+        view.displayListMap(function(childView) {
+          if (childView.isSelected) numSelectedChildViews++;
+        });
+      }
+      else {
+        if (shape.isSelected) numSelectedChildViews++;
+      }
     });
     return numSelectedChildViews;
   }
 
   function clearSelectedChildViewsSelection() { 
-    that.mainView.displayListMap(function(shape) { 
-      shape.pubsub.publish(kDogboneSelectionChanged, false); 
+    that.mainView.displayListMap(function(shape) {  
+      if (View.isView(shape)) {
+        var view = shape;
+        view.displayListMap(function(childView) {
+          childView.pubsub.publish(kDogboneSelectionChanged, false); 
+        });
+      }
+      else {
+        shape.pubsub.publish(kDogboneSelectionChanged, false); 
+      }
     }); 
   }
 
   function targetIsSelectedChildView() {
     var result = false;
     that.mainView.displayListMap(function(shape) { 
-      if (shape.isSelected && shape === target) {
-        result = true;
+      if (View.isView(shape)) {
+        var view = shape;
+        view.displayListMap(function(childView) {
+          if (childView.isSelected && childView === target) {
+            result = true;
+          }
+        });
+      }
+      else {
+        if (shape.isSelected && shape === target) {
+          result = true;
+        }
       }
     });
     return result;
@@ -230,8 +288,18 @@ function Dogbone(canvas) {
 
   function moveSelectedChildViews(dragOffset) {
     that.mainView.displayListMap(function(shape) { 
-      if (shape.isSelected && shape !== target) {
-        shape.moveBy(dragOffset);
+      if (View.isView(shape)) {
+        var view = shape;
+        view.displayListMap(function(childView) {
+          if (childView.isSelected && childView !== target) {
+            childView.moveBy(dragOffset);
+          }
+        });
+      } 
+      else {
+        if (shape.isSelected && shape !== target) {
+          shape.moveBy(dragOffset);
+        }
       }
     });
   }
@@ -240,8 +308,18 @@ function Dogbone(canvas) {
     var shapesToRemove = [];
 
     that.mainView.displayListMap(function(shape) {
-      if (shape.isSelected) {
-        shapesToRemove.push(shape);
+      if (View.isView(shape)) {
+        var view = shape;
+        view.displayListMap(function(childView) {
+          if (childView.isSelected) {
+            shapesToRemove.push(childView);
+          }
+        })
+      }
+      else {
+        if (shape.isSelected) {
+          shapesToRemove.push(shape);
+        }
       }
     });
 

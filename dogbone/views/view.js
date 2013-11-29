@@ -7,15 +7,41 @@ function View(frame) {
   Object.defineProperty(that, 'center', {get : function() {
     return that.frame.center;},enumerable : true
   });
+  Object.defineProperty(that, 'children', {get : function() {
+    return displayList.slice();},enumerable : true
+  });
 
+  that.type = 'View';
   that.borderColor;
   that.clearBorderColor = function() {that.borderColor = undefined;};
   
   that.viewFromSpec = function(spec) {
-    that.borderColor = spec.borderColor;
-    that.clearBorderColor = spec.clearBorderColor;
+    that.shapeFromSpec(spec);
+
+    // that.borderColor = spec.borderColor;
+    // that.clearBorderColor = spec.clearBorderColor;
+
+    for (var i = 0; i < spec.children.length; i++) {
+      var childViewSpec = spec.children[i];
+      var childView = View.createFromSpec(childViewSpec);
+      that.addChild(childView);
+    };
+
     return that;
   }
+
+  that.onSelectionChanged = function(selected){
+    if (that.isSelectable) {
+      if (selected) {
+        that.select();
+        that.borderColor = colorWithAlpha('#ffffff', 1.0);
+      }
+      else {
+        that.unselect();
+        that.clearBorderColor();
+      }
+    }
+  };
 
   that.update = function() {sortDisplayListByZOrder();};
 
@@ -82,6 +108,13 @@ function View(frame) {
       that.addChild(child);
     }
   }
+
+  that.willAcceptChild = function(child) {
+    if (child.parent.containsChild(child)) 
+      return false;
+    else
+      return true;
+  }
  
   that.displayListMap = function(action) {
     displayList.forEach(function(shape) {
@@ -144,7 +177,9 @@ function View(frame) {
   function configure() {
     that.pubsub.on(kDropTargetItemDropped, function(item) {
       if (existy(item)) {
-        that.transferChild(item);
+        if (that.willAcceptChild(item)) {
+          that.transferChild(item);
+        }
       }
     });
   }
@@ -181,17 +216,29 @@ function View(frame) {
   return that;
 }
 
-View.create = function(frame){return new View(frame);};
+View.toJSON = function(that) {
+  return JSON.stringify(JSON.decycle(that));
+};
+View.fromJSON = function(thatJSON) {
+  return JSON.retrocycle(JSON.parse(thatJSON));
+}
+
+View.isView = function(thing) {
+  return _.isFunction(thing.viewFromSpec);
+}
+
+View.create = function(frame){
+  return new View(frame);
+};
 
 View.createFromSpec = function(spec) {
   var frame = Rectangle.createFromSpec(spec.frame);
   var view = View.create(frame);
-  view.shapeFromSpec(spec);
   view.viewFromSpec(spec);
   return view;
 };
 
-View.createFromJSON = function(viewJSON) {return View.createFromSpec(JSON.parse(viewJSON));};
+View.createFromJSON = function(viewJSON) {return View.createFromSpec(View.fromJSON(viewJSON));};
 
 if (typeof module !== 'undefined') {
   module.exports = View;

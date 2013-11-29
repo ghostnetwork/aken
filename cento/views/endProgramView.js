@@ -1,6 +1,7 @@
 
 function EndProgramView(frame, label, action) {
   var that = ActionView.createWithNoPorts(frame, label, action);
+  that.type = 'EndProgramView';
   that.enableInputPort();
   return that;
 }
@@ -12,7 +13,6 @@ EndProgramView.createFromSpec = function(spec) {
   var label = spec.label;
   var action = Action.createFromSpec(spec.action);
   var endProgramView = EndProgramView.create(frame, label, action);
-  endProgramView.shapeFromSpec(spec);
   endProgramView.viewFromSpec(spec);
   return endProgramView;
 };

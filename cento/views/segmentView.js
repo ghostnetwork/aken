@@ -8,6 +8,7 @@ function SegmentView(segment, connector) {
   Object.defineProperty(that, 'connector', {get : function() {return _connector;},enumerable : true});
   Object.defineProperty(that, 'isMarkedForDeletion', {get : function() {return _markedForDeletion;},enumerable : true});
 
+  that.type = 'SegmentView';
   that.zOrder = -1000;
 
   that.segmentViewFromSpec = function(spec) {
@@ -75,7 +76,6 @@ SegmentView.createFromSpec = function(spec) {
   var segment = Segment.createFromSpec(spec.segment);
   var connector = Connector.create(spec.connector);
   var segmentView = SegmentView.create(segment, connector);
-  segmentView.shapeFromSpec(spec);
   segmentView.viewFromSpec(spec);
   return segmentView;
 };

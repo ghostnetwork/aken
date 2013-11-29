@@ -9,6 +9,7 @@ function ActionView(frame, label, action, wantsPorts) {
   Object.defineProperty(that, 'outputSegmentView', {get : function() {return _outputSegmentView;},enumerable : true});
   Object.defineProperty(that, 'hasPorts', {get : function() {return _hasPorts;},enumerable : true});
 
+  that.type = 'ActionView';
   that.label = label;
   that.isConnectable = function(){return true;};
 
@@ -139,7 +140,6 @@ ActionView.createFromSpec = function(spec) {
   var label = spec.label;
   var action = Action.createFromSpec(spec.action);
   var actionView = ActionView.create(frame, label, action);
-  actionView.shapeFromSpec(spec);
   actionView.viewFromSpec(spec);
   return actionView;
 };

@@ -6,6 +6,8 @@ function PortView(frame, port, actionView) {
   Object.defineProperty(that, 'port', {get : function() {return _port;},enumerable : true});
   Object.defineProperty(that, 'actionView', {get : function() {return _actionView;},enumerable : true});
 
+  that.type = 'PortView';
+  
   that.onMoved = function(delta) {
     var payload = {
       "delta":delta,
@@ -49,9 +51,8 @@ PortView.create = function(frame, port, actionView){return new PortView(frame, p
 PortView.createFromSpec = function(spec) {
   var frame = Rectangle.createFromSpec(spec.frame);
   var port = Port.createFromSpec(spec.port);
-  var actionView = null;//ActionView.createFromSpec(spec.actionView);
+  var actionView = ActionView.createFromSpec(spec.actionView);
   var portView = PortView.create(frame, port, actionView);
-  portView.shapeFromSpec(spec);
   portView.viewFromSpec(spec);
   return portView;
 };

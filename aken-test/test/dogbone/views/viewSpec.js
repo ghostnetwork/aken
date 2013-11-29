@@ -146,7 +146,7 @@ describe('View', function(){
     it('should be able to create a new object from the given JSON', function(){
       var origView = createOriginalView();
 
-      var data = JSON.stringify(origView);
+      var data = View.toJSON(origView);
       existy(data).should.be.true;
 
       var clone = View.createFromJSON(data);
@@ -158,7 +158,7 @@ describe('View', function(){
     it('should be able to save and restore from LocalStorage', function(done){
       var origView = createOriginalView();
 
-      var data = JSON.stringify(origView);
+      var data = View.toJSON(origView);
       existy(data).should.be.true;
 
       var lsKey = "ViewSpec.LocalStorage";
@@ -184,7 +184,10 @@ describe('View', function(){
     , borderColorFixture = '#ffeedd'
     , clearBorderColorFixture = '#ccbbaa'
     , zOrderFixture = 54321
-    , labelFixture = 'View.Label';
+    , labelFixture = 'View.Label'
+    , childViewAlpha = createChildView("Alpha")
+    , childViewBeta = createChildView("Beta")
+    , origChildViewCount;
 
   function createOriginalView() {
     var origView = View.create(GF.Frame);
@@ -194,7 +197,18 @@ describe('View', function(){
     origView.clearBorderColor = clearBorderColorFixture;
     origView.zOrder = zOrderFixture;
     origView.label = labelFixture;
+    origView.addChild(childViewAlpha);
+    origView.addChild(childViewBeta);
+    origChildViewCount = origView.childCount;
     return origView;
+  }
+
+  function createChildView(id) {
+    var frame = GF.Frame.clone();
+    frame.shrinkBy(75);
+    var childView = View.create(frame);
+    childView.label = "ViewSpec.ChildView." + id;
+    return childView;
   }
 
   function verifyClone(clone, origView) {
@@ -213,5 +227,6 @@ describe('View', function(){
 
     clone.borderColor.should.equal(borderColorFixture);
     clone.clearBorderColor.should.equal(clearBorderColorFixture);
+    clone.childCount.should.equal(origChildViewCount);
   }
 });

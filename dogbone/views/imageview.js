@@ -1,5 +1,7 @@
 function ImageView(frame, source) {
   var that = View.create(frame);
+
+  that.type = 'ImageView';
   
   Object.defineProperty(that, 'image', {get : function() {
     return _image;},enumerable : true

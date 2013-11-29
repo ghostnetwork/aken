@@ -2,6 +2,8 @@ function Action(name, worker) {
   var that = PubSub.create();
 
   Object.defineProperty(that, 'worker', {get : function() {return _worker;},enumerable : true});
+  Object.defineProperty(that, 'workerAsString', {get : function() {return _worker.toString();},enumerable : true});
+
   Object.defineProperty(that, 'nextAction', {get : function() {return _nextAction;},enumerable : true});
   Object.defineProperty(that, 'inputPort', {get : function() {return _inputPort;},enumerable : true});
   Object.defineProperty(that, 'outputPort', {get : function() {return _outputPort;},enumerable : true});
@@ -13,7 +15,21 @@ function Action(name, worker) {
 
   that.actionFromSpec = function(spec) {
     _nextAction = spec.nextAction;
-    _worker = spec.worker;
+
+    // console.log('spec.workerAsString:\n' + spec.workerAsString);
+
+    // Just for hoots, having persisted the function as a String, we can
+    // resurrect it as a Function object. In theory this sounds great, but 
+    // in practice it won't work except for maybe the most trivial of actions.
+    // The main problem is that the persisted function-as-string does not 
+    // capture the surrounding variables the way closures do. So invoking the 
+    // resurrected action can (and typically does) result in an error.
+    // Keeping the code here as an example, for now.
+    // TODO: Extract this out to a gist / wiki, something other than in this code
+    var prefix = "function ()";
+    var body = spec.workerAsString.substring(prefix.length);
+    _worker = new Function([], body);
+
     _inputPort = spec.inputPort;
     _outputPort = spec.outputPort;
     that.name = spec.name;
@@ -22,8 +38,8 @@ function Action(name, worker) {
   };
 
   that.perform = function(args) {
-    if (worker) {
-      invokeAction(worker, args);
+    if (_worker) {
+      invokeAction(_worker, args);
     }
   };
 
@@ -58,7 +74,9 @@ function Action(name, worker) {
 }
 
 var actionDrone = function(){};
-Action.create = function(name, worker){return new Action(name, worker);};
+Action.create = function(
+  name, worker){return new Action(name, worker);
+};
 
 Action.createFromSpec = function(spec) {
   var action = Action.create(spec.name, spec.worker);

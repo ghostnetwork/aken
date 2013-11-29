@@ -1,47 +1,170 @@
 
 function Example003(spec) {
-  var that = {};
+  var that = {
+    get sysActionStartFrame(){return _sysActionStartFrame;},
+    get workshopFrame(){return _workshopFrame;},
+    get workshopView(){return _workshopView;}
+  };
 
   var canvasSize = spec.canvasSize
-    , dogbone = spec.dogbone;
+    , dogbone = spec.dogbone
+    , canvas = spec.canvas
+    , _sysActionStartFrame = null
+    , _workshopFrame = null
+    , _workshopView = null;
+
+  var kExample003MainViewKey = "Example003.MainView";
 
   dogbone.mainView.backgroundColor = colorWithAlpha('#1D1E1A', 1.0);
   dogbone.mainView.highlightBgColor = dogbone.mainView.backgroundColor;
   dogbone.selectionFrameColor = colorWithAlpha('#ffffff', 1.0);
 
-  (function(){
-    var frame = Rectangle.create(50, 50, 50, 50);
-    var view = View.create(frame);
-    view.name = 'Example003.View';
+  function initializeSystemViews() {
+    createSystemActionStartFrame();
+    createWorkshopFrame();
+    createSystemActions();
+    createWorkshopView();
+  }
+
+  function createSystemActionStartFrame() {
+    _sysActionStartFrame = Rectangle.createWithOriginAndSize(Point.create(10, 10), Size.create(50, 50));
+  }
+
+  function createWorkshopFrame() {
+    var x = that.sysActionStartFrame.size.width + (that.sysActionStartFrame.origin.x * 2);
+    var y = that.sysActionStartFrame.origin.y;
+    var origin = Point.create(x, y);
+    var width = canvasSize.width - ((that.sysActionStartFrame.size.width * 2) - (that.sysActionStartFrame.origin.x * 2));
+    var height = canvasSize.height - (that.sysActionStartFrame.origin.y * 2)
+    var size = Size.create(width, height);
+    _workshopFrame = Rectangle.createWithOriginAndSize(origin, size);
+  }
+
+  function createSystemActions() {
+    createAddViewSystemAction();
+    createSaveToLocalStorageSystemAction();
+  }
+
+  function createAddViewSystemAction() {
+    var frame = that.sysActionStartFrame.clone();
+    var createViewWorker = function() {createViewAndAddToWorkshop();};
+    var createViewName = 'View';
+    var createViewAction = Action.create(createViewName, createViewWorker);
+    var view = ActionView.createWithNoPorts(frame, createViewName, createViewAction);
+    view.name = 'System.Action.Create.View';
     view.backgroundColor = colorWithAlpha('#00c7c7', 0.7);
     view.makeUnselectable();
+    view.makeUndraggable();
     dogbone.addChild(view);
-    startProgramView = view;
+  }
 
-    view.onTouch = function() {
-      saveToLocalStorage(view);
-    };
+  function createSaveToLocalStorageSystemAction() {
+    var saveViewFrame = that.sysActionStartFrame.clone();
+    var y = saveViewFrame.origin.y + saveViewFrame.size.height + saveViewFrame.origin.y;
+    var saveViewPoint = Point.create(saveViewFrame.origin.x, y);
+    saveViewFrame.moveToPoint(saveViewPoint);
+    var saveViewName = 'Save';
+    var saveViewWorker = function(){saveToLocalStorage();};
+    var saveViewAction = Action.create(saveViewName, saveViewWorker);
+    var saveView = ActionView.createWithNoPorts(saveViewFrame, saveViewName, saveViewAction);
+    saveView.name = 'System.Action.View.Save.To.Local.Storage';
+    saveView.backgroundColor = colorWithAlpha('#c700c7', 0.7);
+    saveView.makeUnselectable();
+    saveView.makeUndraggable();
+    dogbone.addChild(saveView);
+  }
+
+  function createWorkshopView() {
+    _workshopView = View.create(that.workshopFrame);
+    _workshopView.backgroundColor = colorWithAlpha('#c70000', 0.2);
+    _workshopView.zOrder = -2000;
+    _workshopView.makeUnselectable();
+    _workshopView.makeUndraggable();
+    _workshopView.label = 'Workshop.View';
+    dogbone.addChild(_workshopView);
+  }
+
+  // LocalStorage.removeItem(kExample003MainViewKey);
+
+  (function(){
+    initializeSystemViews();
+    loadWorkshopeViewFromLocalStorage();
   })();
 
-  function saveToLocalStorage(view) {
-    var viewJSON = LocalStorage.getItem("view");
-    if (existy(viewJSON)) {
-      var viewTemplate = JSON.parse(viewJSON);
-      var point = Point.create(viewTemplate.frame.origin.x, viewTemplate.frame.origin.y);
-      point = Point.create(point.x + (60 * dogbone.mainView.childCount), point.y);
-
-      var frame = Rectangle.createFromSpec(viewTemplate.frame);
-      frame.moveToPoint(point);
-
-      var clonedView = View.create(frame);
-      clonedView.name = "ClonedView." + dogbone.mainView.childCount;
-      clonedView.onTouch = view.onTouch;
-      dogbone.addChild(clonedView);
+  function viewFactoryForSpec(viewSpec) {
+    var viewType = viewSpec.type;
+    if (typeof  viewType == 'undefined' || notExisty(viewType)) {
+      return;
     }
-    else {
-      var data = JSON.stringify(view);
-      LocalStorage.setItem("view", data);
-      console.log('LocalStorage: ' + inspect(LocalStorage));
+
+    var result = function(spec){console.log('default viewFactory; does nothing');};
+
+    switch(viewType) {
+      case "ActionView": result = ActionView.createFromSpec; break;
+      case "Box": result = Shape.createFromSpec; break;
+      case "CentoView": result = CentoView.createFromSpec; break;
+      case "EndProgramView": result = EndProgramView.createFromSpec; break;
+      case "ImageView": result = ImageView.createFromSpec; break;
+      case "PortView": result = PortView.createFromSpec; break;
+      case "SegmentView": result = SegmentView.createFromSpec; break;
+      case "Shape": result = Shape.createFromSpec; break;
+      case "StartProgramView": result = StartProgramView.createFromSpec; break;
+      case "ValueView": result = ValueView.createFromSpec; break;
+      case "View": result = View.createFromSpec; break;
+    }
+
+    return result;
+  }
+
+  function createViewAndAddToWorkshop() {
+    var origX = that.workshopView.frame.origin.x 
+              + that.sysActionStartFrame.origin.x 
+              + (that.workshopView.childCount * that.sysActionStartFrame.origin.x);
+    var origY = that.workshopFrame.origin.y + that.sysActionStartFrame.origin.y;
+    var offsetX = that.workshopView.childCount * that.sysActionStartFrame.size.width;
+    var origin = Point.create(origX + offsetX, origY);
+    var frame = Rectangle.createWithOriginAndSize(origin, that.sysActionStartFrame.size);
+
+    var clonedView = View.create(frame);
+    clonedView.name = "ClonedView." + that.workshopView.childCount;
+
+    console.log(clonedView.name + '.isView: ' + View.isView(clonedView));
+    console.log(frame.debugString() + '.isView: ' + View.isView(frame));
+
+    that.workshopView.addChild(clonedView);
+  }
+
+  function saveToLocalStorage() {
+    console.log('that.workshopView.childCount: ' + that.workshopView.childCount);
+
+    var data = View.toJSON(that.workshopView);
+    LocalStorage.setItem(kExample003MainViewKey, data);
+
+    // TODO: Alert user before automatically blowing away the current contents
+    // var mainViewJSON = LocalStorage.getItem(kExample003MainViewKey);
+    // if (notExisty(mainViewJSON)) {
+    //   var data = View.toJSON(dogbone.mainView);
+    //   LocalStorage.setItem(kExample003MainViewKey, data);
+    // }
+  }
+
+  function loadWorkshopeViewFromLocalStorage()   {
+    var mainViewJSON = LocalStorage.getItem(kExample003MainViewKey);
+    if (existy(mainViewJSON)) {
+      var mainViewObj = View.fromJSON(mainViewJSON);
+
+      for (var i = 0; i < mainViewObj.children.length; i++) {
+        var viewSpec = mainViewObj.children[i];
+
+        var childView = null;
+        var viewFactory = viewFactoryForSpec(viewSpec);
+        if (existy(viewFactory)) {
+          childView = viewFactory(viewSpec);
+          childView.unselect();
+        }
+        that.workshopView.addChild(childView);
+      };
+      console.log('--> that.workshopView.childCount: ' + that.workshopView.childCount);
     }
   }
 

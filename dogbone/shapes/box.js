@@ -1,6 +1,8 @@
 function Box(frame) {
   var that = Shape.create(frame);
 
+  that.type = 'Box';
+  
   that.onRender = function(graphics) {
     graphics.drawFilledRect(that.frame, that.backgroundColor);
   };

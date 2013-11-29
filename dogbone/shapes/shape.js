@@ -26,6 +26,7 @@ function Shape(frame) {
   that.highlightBgColor = colorWithAlpha('#c7c70000', 1.0);
   that.zOrder = ZORDER_MIDDLE;
   that.label = '';
+  that.type = 'Shape';
 
   that.shapeFromSpec = function(spec) {
     if (spec.isDraggable) that.makeDraggable();

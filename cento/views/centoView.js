@@ -2,6 +2,7 @@
 function CentoView(frame) {
   var that = View.create(frame);
 
+  that.type = 'CentoView';
   that.isConnectable = function(){return false;};
   that.onWillRemove = function(){};
 
@@ -21,7 +22,6 @@ CentoView.create = function(frame){return new CentoView(frame);};
 CentoView.createFromSpec = function(spec) {
   var frame = Rectangle.createFromSpec(spec.frame);
   var centoView = CentoView.create(frame);
-  centoView.shapeFromSpec(spec);
   centoView.viewFromSpec(spec);
   return centoView;
 };
