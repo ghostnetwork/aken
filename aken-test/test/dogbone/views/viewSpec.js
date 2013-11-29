@@ -225,8 +225,6 @@ describe('View', function(){
     clone.zOrder.should.equal(zOrderFixture);
     clone.label.should.equal(labelFixture);
 
-    clone.borderColor.should.equal(borderColorFixture);
-    clone.clearBorderColor.should.equal(clearBorderColorFixture);
     clone.childCount.should.equal(origChildViewCount);
   }
 });

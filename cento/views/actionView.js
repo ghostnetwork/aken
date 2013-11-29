@@ -136,11 +136,14 @@ ActionView.create = function(frame, label, action){return new ActionView(frame, 
 ActionView.createWithNoPorts = function(frame, label, action){return new ActionView(frame, label, action, false);};
 
 ActionView.createFromSpec = function(spec) {
-  var frame = Rectangle.createFromSpec(spec.frame);
-  var label = spec.label;
-  var action = Action.createFromSpec(spec.action);
-  var actionView = ActionView.create(frame, label, action);
-  actionView.viewFromSpec(spec);
+  var actionView = null;
+  if (existy(spec)) {
+    var frame = Rectangle.createFromSpec(spec.frame);
+    var label = spec.label;
+    var action = Action.createFromSpec(spec.action);
+    actionView = ActionView.create(frame, label, action);
+    actionView.viewFromSpec(spec);
+  }
   return actionView;
 };
 

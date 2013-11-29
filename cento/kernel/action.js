@@ -2,7 +2,9 @@ function Action(name, worker) {
   var that = PubSub.create();
 
   Object.defineProperty(that, 'worker', {get : function() {return _worker;},enumerable : true});
-  Object.defineProperty(that, 'workerAsString', {get : function() {return _worker.toString();},enumerable : true});
+  Object.defineProperty(that, 'workerAsString', {get : function() {
+    return existy(_worker) ? _worker.toString() : '';
+  },enumerable : true});
 
   Object.defineProperty(that, 'nextAction', {get : function() {return _nextAction;},enumerable : true});
   Object.defineProperty(that, 'inputPort', {get : function() {return _inputPort;},enumerable : true});
@@ -26,9 +28,9 @@ function Action(name, worker) {
     // resurrected action can (and typically does) result in an error.
     // Keeping the code here as an example, for now.
     // TODO: Extract this out to a gist / wiki, something other than in this code
-    var prefix = "function ()";
-    var body = spec.workerAsString.substring(prefix.length);
-    _worker = new Function([], body);
+    // var prefix = "function ()";
+    // var body = spec.workerAsString.substring(prefix.length);
+    // _worker = new Function([], body);
 
     _inputPort = spec.inputPort;
     _outputPort = spec.outputPort;
