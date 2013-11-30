@@ -90,6 +90,8 @@ function Dogbone(canvas) {
     startPoint = Point.createFromMouseEventWithPageCoords(event);
     that.mainView.frameContainsPoint(startPoint, frameContainsPointCallback);
 
+    console.log('--> event.metaKey: ' + event.metaKey);
+
     maybeClearSelection(event);
     publishDogboneMouseDownEvent();
     publishTargetSelectionChangedEvent();
@@ -103,6 +105,10 @@ function Dogbone(canvas) {
           target = shape;
           if (event.shiftKey) {
             // we'll extend selection to the newly selected item below, in maybeClearSelection()
+          }
+          else if (event.metaKey) {
+            console.log(shape.name + ' touched with metaKey pressed');
+            that.dragdrop.beginDrag(target, startPoint);
           }
           else {
             that.dragdrop.beginDrag(target, startPoint);
@@ -163,6 +169,14 @@ function Dogbone(canvas) {
 
   function onMouseMove(event) {
     var mousePoint = Point.createFromMouseEventWithPageCoords(event);
+    if (event.metaKey) {
+      var dragOffset = that.dragdrop.moveDrag(event);
+      if (existy(dragOffset)) {
+        // console.log('mouse move with metaKey pressed [' + dragOffset.debugString() + ']');
+        notifyChildViewsOfMetaKeyPressed(dragOffset);
+      }
+      return;
+    }
     if (mouseDownReceived) { 
       if (existy(target)) {
         if (that.dragdrop.isDragging) {
@@ -244,6 +258,19 @@ function Dogbone(canvas) {
         var isSelected = selectionFrame.intersect(shape.frame); 
         shape.pubsub.publish(kDogboneSelectionChanged, 
                              selectionFrame.intersect(shape.frame)); 
+      }
+    }); 
+  }
+
+  function notifyChildViewsOfMetaKeyPressed(dragOffset) {
+    console.log('notifyChildViewsOfMetaKeyPressed: ' + dragOffset);
+    
+    that.mainView.displayListMap(function(shape) {
+      if (View.isView(shape)) {
+        var view = shape;
+        view.displayListMap(function(childView) {
+          childView.onMetaKeyPressed(dragOffset);
+        });
       }
     }); 
   }

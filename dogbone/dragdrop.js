@@ -25,7 +25,14 @@ function DragDrop() {
   }
 
   that.moveDrag = function(event) {
+    if (notExisty(draggedItem))
+      return;
+
     var dragOffset = Point.create(event.clientX - dragStartPoint.x, event.clientY - dragStartPoint.y);
+    if (event.metaKey) {
+      return dragOffset;
+    }
+    
     var newX = draggedItem.frame.x + dragOffset.x;
     var newY = draggedItem.frame.y + dragOffset.y;
 

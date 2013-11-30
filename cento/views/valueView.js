@@ -5,6 +5,10 @@ function ValueView(frame, value) {
   that.type = 'ValueView';
   that.enableOutputPort();
 
+  that.onMetaKeyPressed = function(dragOffset) {
+    console.log('ValueView.onMetaKeyPressed: ' + dragOffset.debugString());
+  }
+
   var valueViewWorker = function(){return _value;};
   var _value = value;
   return that;

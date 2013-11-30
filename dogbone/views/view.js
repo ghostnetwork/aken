@@ -43,6 +43,10 @@ function View(frame) {
     }
   };
 
+  that.onMetaKeyPressed = function(dragOffset) {
+    console.log('*** View.onMetaKeyPressed: ' + dragOffset);
+  }
+
   that.update = function() {sortDisplayListByZOrder();};
 
   that.render = function(graphics) {
