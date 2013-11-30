@@ -51,6 +51,14 @@ function Example003(spec) {
     saveViewFrame.moveToPoint(position);
     var saveView = createSaveToLocalStorageSystemActionView(saveViewFrame, saveToLocalStorage);
     dogbone.addChild(saveView);
+
+    var x = startFrame.origin.x;
+    var y = startFrame.bottom + (that.sysActionStartFrame.y * 2);
+    var width = that.sysActionStartFrame.size.width;
+    var height = that.sysActionStartFrame.size.height;
+    var createValueFrame = Rectangle.create(x, y, width, height);
+    var createValueView = createValueSystemActionView(createValueFrame, createValueAndAddToWorkshop);
+    dogbone.addChild(createValueView);
   }
 
   function createWorkshopView() {
@@ -107,6 +115,23 @@ function Example003(spec) {
     var clonedView = View.create(frame);
     clonedView.name = "ClonedView." + that.workshopView.childCount;
     clonedView.backgroundColor = colorWithAlpha('#00c7c7', 0.7);
+
+    that.workshopView.addChild(clonedView);
+  }
+
+  function createValueAndAddToWorkshop() {
+    var origX = that.workshopView.frame.origin.x 
+              + that.sysActionStartFrame.origin.x 
+              + (that.workshopView.childCount * that.sysActionStartFrame.origin.x);
+    var origY = that.workshopFrame.origin.y + that.sysActionStartFrame.origin.y;
+    var offsetX = that.workshopView.childCount * that.sysActionStartFrame.size.width;
+    var origin = Point.create(origX + offsetX, origY);
+    var frame = Rectangle.createWithOriginAndSize(origin, that.sysActionStartFrame.size);
+
+    var value = Value.create(0);
+    var clonedView = ValueView.create(frame, value);
+    clonedView.name = "ClonedView." + that.workshopView.childCount;
+    clonedView.backgroundColor = colorWithAlpha('#ffcc66', 0.7);
 
     that.workshopView.addChild(clonedView);
   }

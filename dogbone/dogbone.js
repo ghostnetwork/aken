@@ -41,7 +41,6 @@ function Dogbone(canvas) {
     if (existy(parentView)) {
       parentView.removeChild(child);
     }
-    // that.mainView.removeChild(child);
     return that;
   }
 
@@ -112,9 +111,23 @@ function Dogbone(canvas) {
         else {
           if (View.isView(shape)) {
             var view = shape;
+            var didHit = false;
+
+            // TODO: This is ugly. Needs to be cleaned up.
             view.displayListMap(function(childView) {
               childView.frameContainsPoint(startPoint, frameContainsPointCallback);
+              if (not(didHit)) {
+                didHit = childView.hitTest(startPoint);
+              }
+              childView.displayListMap(function(aView) {
+                aView.frameContainsPoint(startPoint, frameContainsPointCallback);
+                if (not(didHit)) {
+                  didHit = aView.hitTest(startPoint);
+                }
+              });
             });
+            if (target === null && didHit)
+              shouldDrawLine = true;
           } 
           else {
             shouldDrawLine = true;

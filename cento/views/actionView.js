@@ -85,7 +85,7 @@ function ActionView(frame, label, action, wantsPorts) {
     , _hasPorts = wantsPorts;
 
   function configure() {
-    if (wantsPorts) {
+    if (_hasPorts) {
       that.enableInputPort();
       that.enableOutputPort();
     }
@@ -141,7 +141,7 @@ ActionView.createFromSpec = function(spec) {
     var frame = Rectangle.createFromSpec(spec.frame);
     var label = spec.label;
     var action = Action.createFromSpec(spec.action);
-    actionView = ActionView.create(frame, label, action);
+    actionView = ActionView.createWithNoPorts(frame, label, action);
     actionView.viewFromSpec(spec);
   }
   return actionView;

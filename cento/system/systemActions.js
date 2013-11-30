@@ -9,6 +9,17 @@ createViewSystemActionView = function(frame, createViewWorker) {
     return view;
 }
 
+createValueSystemActionView = function(frame, createValueWorker) {
+    var createValueName = 'Value';
+    var createValueAction = Action.create(createValueName, createValueWorker);
+    var valueView = ActionView.createWithNoPorts(frame, createValueName, createValueAction);
+    valueView.name = 'System.Action.Create.View';
+    valueView.backgroundColor = colorWithAlpha('#ffcc66', 0.7);
+    valueView.makeUnselectable();
+    valueView.makeUndraggable();
+    return valueView;
+}
+
 createSaveToLocalStorageSystemActionView = function(frame, saveViewWorker) {
   var saveViewName = 'Save';
   var saveViewAction = Action.create(saveViewName, saveViewWorker);

@@ -1,10 +1,9 @@
     
 function ValueView(frame, value) {
-  var that = ActionView.create(frame, value.name, value);
+  var that = ActionView.createWithNoPorts(frame, value.name, value);
   Object.defineProperty(that, 'value', {get : function() {return _value;},enumerable : true});
   that.type = 'ValueView';
   that.enableOutputPort();
-
 
   var valueViewWorker = function(){return _value;};
   var _value = value;
@@ -12,13 +11,16 @@ function ValueView(frame, value) {
 }
 
 ValueView.create = function(frame, value){return new ValueView(frame, value);};
-
 ValueView.createFromSpec = function(spec) {
   var frame = Rectangle.createFromSpec(spec.frame);
   var value = Value.createFromSpec(spec.value);
   var valueView = ValueView.create(frame, value);
+
+  // In our case we don't want to call viewFromSpec() since
+  // we've already added our children (the ports). Instead,
+  // we'll directly call shapeFromSpec().
   valueView.shapeFromSpec(spec);
-  valueView.viewFromSpec(spec);
+
   return valueView;
 };
 
