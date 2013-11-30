@@ -10,7 +10,7 @@ function Value(value) {
     return x;
   }
 
-  function actionWorker() {console.log('Value.actionWorker: '+that.value); return that.value;};
+  function actionWorker() {return that.value;};
 
   Object.defineProperty(that, 'value', {get : function() {return _value;},enumerable : true});
   

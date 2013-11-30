@@ -9,6 +9,7 @@ function Example003(spec) {
   var canvasSize = spec.canvasSize
     , dogbone = spec.dogbone
     , canvas = spec.canvas
+    // , lastAddedViewFrame = Rectangle.Empty
     , _sysActionStartFrame = null
     , _workshopFrame = null
     , _workshopView = null;
@@ -120,14 +121,20 @@ function Example003(spec) {
   }
 
   function createValueAndAddToWorkshop() {
-    var origX = that.workshopView.frame.origin.x 
-              + that.sysActionStartFrame.origin.x 
-              + (that.workshopView.childCount * that.sysActionStartFrame.origin.x);
-    var origY = that.workshopFrame.origin.y + that.sysActionStartFrame.origin.y;
-    var offsetX = that.workshopView.childCount * that.sysActionStartFrame.size.width;
-    var origin = Point.create(origX + offsetX, origY);
-    var frame = Rectangle.createWithOriginAndSize(origin, that.sysActionStartFrame.size);
+    var x, y;
+    var numKids = that.workshopView.childCount;
+    if (numKids > 0) {
+      var lastAddedView = that.workshopView.children[numKids - 1];
+      x = lastAddedView.frame.origin.x;
+      y = lastAddedView.frame.origin.y + that.sysActionStartFrame.size.height + that.sysActionStartFrame.y;
+    }
+    else {
+      x = that.workshopFrame.origin.x + that.sysActionStartFrame.origin.x;
+      y = that.workshopFrame.origin.y + that.sysActionStartFrame.origin.y;
+    }
 
+    var origin = Point.create(x, y);
+    var frame = Rectangle.createWithOriginAndSize(origin, that.sysActionStartFrame.size);
     var value = Value.create(0);
     var clonedView = ValueView.create(frame, value);
     clonedView.name = "ClonedView." + that.workshopView.childCount;
