@@ -32,10 +32,10 @@ function Example003(spec) {
 
   function createWorkshopFrame() {
     var x = that.sysActionStartFrame.size.width + (that.sysActionStartFrame.origin.x * 2);
-    var y = that.sysActionStartFrame.origin.y;
+    var y = that.sysActionStartFrame.size.height + (that.sysActionStartFrame.origin.y * 2);
     var origin = Point.create(x, y);
     var width = canvasSize.width - ((that.sysActionStartFrame.size.width * 2) - (that.sysActionStartFrame.origin.x * 2));
-    var height = canvasSize.height - (that.sysActionStartFrame.origin.y * 2)
+    var height = canvasSize.height - (x + that.sysActionStartFrame.origin.y);
     var size = Size.create(width, height);
     _workshopFrame = Rectangle.createWithOriginAndSize(origin, size);
   }
@@ -45,7 +45,11 @@ function Example003(spec) {
     var createView = createViewSystemActionView(startFrame.clone(), createViewAndAddToWorkshop);
     dogbone.addChild(createView);
 
-    var saveView = createSaveToLocalStorageSystemActionView(startFrame.clone(), saveToLocalStorage);
+    var saveViewFrame = startFrame.clone();
+    var x = (that.workshopFrame.origin.x + that.workshopFrame.size.width) - that.sysActionStartFrame.size.width;
+    var position = Point.create(x, startFrame.origin.y);
+    saveViewFrame.moveToPoint(position);
+    var saveView = createSaveToLocalStorageSystemActionView(saveViewFrame, saveToLocalStorage);
     dogbone.addChild(saveView);
   }
 

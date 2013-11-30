@@ -10,9 +10,6 @@ createViewSystemActionView = function(frame, createViewWorker) {
 }
 
 createSaveToLocalStorageSystemActionView = function(frame, saveViewWorker) {
-  var y = frame.origin.y + frame.size.height + frame.origin.y;
-  var saveViewPoint = Point.create(frame.origin.x, y);
-  frame.moveToPoint(saveViewPoint);
   var saveViewName = 'Save';
   var saveViewAction = Action.create(saveViewName, saveViewWorker);
   var saveView = ActionView.createWithNoPorts(frame, saveViewName, saveViewAction);
