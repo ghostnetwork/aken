@@ -55,6 +55,31 @@ describe('Value', function(){
     });
   });
 
+  describe('increment', function(){
+    it('should increment the current value by one', function(){
+      var expected = kValueFixture + 1;
+      value.increment();
+      value.value.should.equal(expected);
+    });
+  });
+
+  describe('decrement', function(){
+    it('should decrement the current value by one', function(){
+      var expected = kValueFixture - 1;
+      value.decrement();
+      value.value.should.equal(expected);
+    });
+  });
+
+  describe('adjustBy', function(){
+    it('should be able to adjust the current value by the given positive amount', function(){
+      var amount = 1000;
+      var expected = kValueFixture + amount;
+      value.adjustBy(amount);
+      value.value.should.equal(expected);
+    });
+  });
+
   var descriptionFixture = 'ValueSpec.Description';
 
   function createOrigValue() {

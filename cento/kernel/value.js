@@ -2,6 +2,10 @@
 function Value(value) {
   var that = Action.create(normalize(value).toString(), actionWorker);
 
+  that.increment = function(){_value++; return that;};
+  that.decrement = function(){_value--; return that;};
+  that.adjustBy = function(amount){_value += amount; return that;};
+
   that.toString = function() {return that.name;};
 
   function normalize(x) {
