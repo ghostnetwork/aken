@@ -6,7 +6,7 @@ function Value(value) {
   that.decrement = function(){_value--; return that;};
   that.adjustBy = function(amount){_value += amount; return that;};
 
-  that.toString = function() {return that.name;};
+  that.toString = function() {return _value.toString();};
 
   function normalize(x) {
     if (typeof x === 'undefined')

@@ -6,7 +6,13 @@ function ValueView(frame, value) {
   that.enableOutputPort();
 
   that.onMetaKeyPressed = function(dragOffset) {
-    console.log('ValueView.onMetaKeyPressed: ' + dragOffset.debugString());
+    if (dragOffset.y > 0) {
+      value.decrement();
+    }
+    else {
+      value.increment();
+    }
+    that.label = value.toString();
   }
 
   var valueViewWorker = function(){return _value;};

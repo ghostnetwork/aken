@@ -90,8 +90,6 @@ function Dogbone(canvas) {
     startPoint = Point.createFromMouseEventWithPageCoords(event);
     that.mainView.frameContainsPoint(startPoint, frameContainsPointCallback);
 
-    console.log('--> event.metaKey: ' + event.metaKey);
-
     maybeClearSelection(event);
     publishDogboneMouseDownEvent();
     publishTargetSelectionChangedEvent();
@@ -107,7 +105,6 @@ function Dogbone(canvas) {
             // we'll extend selection to the newly selected item below, in maybeClearSelection()
           }
           else if (event.metaKey) {
-            console.log(shape.name + ' touched with metaKey pressed');
             that.dragdrop.beginDrag(target, startPoint);
           }
           else {
@@ -172,7 +169,6 @@ function Dogbone(canvas) {
     if (event.metaKey) {
       var dragOffset = that.dragdrop.moveDrag(event);
       if (existy(dragOffset)) {
-        // console.log('mouse move with metaKey pressed [' + dragOffset.debugString() + ']');
         notifyChildViewsOfMetaKeyPressed(dragOffset);
       }
       return;
@@ -263,13 +259,13 @@ function Dogbone(canvas) {
   }
 
   function notifyChildViewsOfMetaKeyPressed(dragOffset) {
-    console.log('notifyChildViewsOfMetaKeyPressed: ' + dragOffset);
-    
     that.mainView.displayListMap(function(shape) {
       if (View.isView(shape)) {
         var view = shape;
         view.displayListMap(function(childView) {
-          childView.onMetaKeyPressed(dragOffset);
+          if (childView.isSelected) {
+            childView.onMetaKeyPressed(dragOffset);
+          }
         });
       }
     }); 
