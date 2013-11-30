@@ -53,13 +53,19 @@ function Example003(spec) {
     var saveView = createSaveToLocalStorageSystemActionView(saveViewFrame, saveToLocalStorage);
     dogbone.addChild(saveView);
 
-    var x = startFrame.origin.x;
+    x = startFrame.origin.x;
     var y = startFrame.bottom + (that.sysActionStartFrame.y * 2);
     var width = that.sysActionStartFrame.size.width;
     var height = that.sysActionStartFrame.size.height;
     var createValueFrame = Rectangle.create(x, y, width, height);
     var createValueView = createValueSystemActionView(createValueFrame, createValueAndAddToWorkshop);
     dogbone.addChild(createValueView);
+
+    y = createValueFrame.bottom + (that.sysActionStartFrame.y * 2);
+    var triangleFrame = Rectangle.create(x, y, width, height);
+    var triangleView = TriangleView.create(triangleFrame);
+    console.log('triangleView: ' + inspect(triangleView));
+    dogbone.addChild(triangleView);
   }
 
   function createWorkshopView() {

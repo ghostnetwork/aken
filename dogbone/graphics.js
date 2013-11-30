@@ -19,8 +19,22 @@ function Graphics(context) {
     popStrokeStyle();
   }
 
-  that.strokeRect = function(rect) {
+  that.strokeRect = function(rect, strokeStyle) {
+    pushStrokeStyle(strokeStyle);
     _context.strokeRect(rect.x, rect.y, rect.width, rect.height);
+    popStrokeStyle();
+  };
+
+  that.dashRect = function(rect, strokeStyle) {
+    pushStrokeStyle(strokeStyle);
+    var origLineDash = _context.getLineDash();
+
+    var lineDash = [2, 3, 2, 3];
+    _context.setLineDash(lineDash);
+    _context.strokeRect(rect.x, rect.y, rect.width, rect.height);
+
+    _context.setLineDash(origLineDash);
+    popStrokeStyle();
   };
 
   that.drawText = function(what, where, style) {
@@ -53,6 +67,28 @@ function Graphics(context) {
     _context.beginPath();
     _context.moveTo(startX, startY);
     _context.lineTo(endX, endY);
+    _context.closePath();
+    _context.stroke();
+
+    popStrokeStyle();
+  }
+
+  that.drawTriangle = function(points, color) {
+    pushStrokeStyle(color);
+
+    _context.beginPath();
+
+    var x = points[0].x
+      , y = points[0].y;
+    _context.moveTo(x, y);
+
+    var numPoints = points.length;
+    for (var i = 1; i < numPoints; i++) {
+      x = points[i].x;
+      y = points[i].y;
+      _context.lineTo(x, y);
+    };
+
     _context.closePath();
     _context.stroke();
 
