@@ -1,6 +1,7 @@
 
 function TriangleView(frame) {
   var that = View.create(frame);
+
   var outlineColor = colorWithAlpha('#888888', 1.0);
   var triangleColor = colorWithAlpha('#00c7c7', 1.0);
 
@@ -15,6 +16,13 @@ function TriangleView(frame) {
 
   that.onRender = function(graphics) {
     var points = [];
+
+    that.buildPoints(points);
+
+    graphics.drawTriangle(points, triangleColor);
+  };
+
+  that.buildPoints = function(points) {
     var x = that.frame.center.x;
     var y = that.frame.top;
     points.push(Point.create(x,y));
@@ -30,10 +38,8 @@ function TriangleView(frame) {
     x = that.frame.center.x;
     y = that.frame.top
     points.push(Point.create(x,y));
+  }
 
-    graphics.drawTriangle(points, triangleColor);
-  };
-  
   return that;
 }
 

@@ -64,8 +64,22 @@ function Example003(spec) {
     y = createValueFrame.bottom + (that.sysActionStartFrame.y * 2);
     var triangleFrame = Rectangle.create(x, y, width, height);
     var triangleView = TriangleView.create(triangleFrame);
-    console.log('triangleView: ' + inspect(triangleView));
     dogbone.addChild(triangleView);
+
+    y = triangleFrame.bottom + (that.sysActionStartFrame.y * 2);
+    var rightTriangleFrame = Rectangle.create(x, y, width, height);
+    var rightTriangleView = RightTriangleView.create(rightTriangleFrame);
+    dogbone.addChild(rightTriangleView);
+
+    y = rightTriangleFrame.bottom + (that.sysActionStartFrame.y * 2);
+    var leftTriangleFrame = Rectangle.create(x, y, width, height);
+    var leftTriangleView = LeftTriangleView.create(leftTriangleFrame);
+    dogbone.addChild(leftTriangleView);
+
+    y = leftTriangleFrame.bottom + (that.sysActionStartFrame.y * 2);
+    var downTriangleFrame = Rectangle.create(x, y, width, height);
+    var downTriangleView = DownTriangleView.create(downTriangleFrame);
+    dogbone.addChild(downTriangleView);
   }
 
   function createWorkshopView() {
