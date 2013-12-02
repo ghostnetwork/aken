@@ -2,23 +2,7 @@ cento
 =====
 
 * To Do:
-  * Drive the UI from the model
-  
-  * Need a way to remove connections
-    * PortConnect should handle this
-
-  * Disconnect by dragging off of port
-
-  * Add name to SegmentView?
-    * To help in debugging
-
-  * Last view should auto-connect to EndProgramView
-    * Relies on ability to remove connection
-    * Draw dashed line to EndProgramView?
-  
-  * Repair connections after deleting items
-    * Need to auto-connect views that were on either side of deleted item
-
+  * 
   * Make a Dogbone z-order registry
     * Instead of using global constants
     * Is a dictionary

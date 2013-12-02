@@ -18,6 +18,9 @@ function TupleView(spec) {
     // graphics.drawRect(secondRect, that.backgroundColor);
   };
 
+  that.tupleViewFromSpec = function(spec) {
+  }
+
   function configurePorts() {
     that.enableOutputPort();
     var oneQuarterHeight = spec.frame.size.height / 4;
@@ -44,6 +47,25 @@ function TupleView(spec) {
 }
 
 TupleView.create = function(spec){return new TupleView(spec);};
+
+TupleView.createFromSpec = function(spec) {
+  var tupleView = null;
+  if (existy(spec)) {
+    var frame = Rectangle.createFromSpec(spec.frame);
+    // TODO: Find out why tuple isn't being persisted in LocalStorage;
+    // create tuple from spec when it's being persisted
+    var tuple = Tuple.createWithSpec({"first":0, "second":0});
+    var tupleAction = Action.create('', function(){});
+    var tupleSpec = {"frame":frame, "tuple":tuple, "tupleAction":tupleAction};
+    tupleView = TupleView.create(tupleSpec);
+    tupleView.viewFromSpec(spec);
+  }
+  return tupleView;
+};
+
+TupleView.createFromJSON = function(tupleViewJSON) {
+  return TupleView.createFromSpec(TupleView.fromJSON(tupleViewJSON));
+};
 
 if (typeof module !== 'undefined') {
   module.exports = TupleView;

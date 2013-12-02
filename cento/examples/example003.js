@@ -147,6 +147,7 @@ function Example003(spec) {
       case "SegmentView": result = SegmentView.createFromSpec; break;
       case "Shape": result = Shape.createFromSpec; break;
       case "StartProgramView": result = StartProgramView.createFromSpec; break;
+      case "TupleView": result = TupleView.createFromSpec; break;
       case "ValueView": result = ValueView.createFromSpec; break;
       case "View": result = View.createFromSpec; break;
     }
