@@ -43,38 +43,29 @@ function Example003(spec) {
 
   function createSystemActions() {
     var startFrame = that.sysActionStartFrame.clone();
-    var createView = createViewSystemActionView(startFrame.clone(), createViewAndAddToWorkshop);
-    dogbone.addChild(createView);
 
-    var saveViewFrame = startFrame.clone();
+    createTopRowActions();
+    createLeftColumnActions();
+  }
+
+  function createTopRowActions() {
+    var saveViewFrame = that.sysActionStartFrame.clone();
     var x = (that.workshopFrame.origin.x + that.workshopFrame.size.width) - that.sysActionStartFrame.size.width;
-    var position = Point.create(x, startFrame.origin.y);
+    var y = that.sysActionStartFrame.origin.y;
+    var position = Point.create(x, y);
     saveViewFrame.moveToPoint(position);
     var saveView = createSaveToLocalStorageSystemActionView(saveViewFrame, saveToLocalStorage);
     dogbone.addChild(saveView);
 
-    x = startFrame.origin.x;
-    var y = startFrame.bottom + (that.sysActionStartFrame.y * 2);
+    x = saveViewFrame.x - saveViewFrame.width - (that.sysActionStartFrame.y * 2);
+    y = saveViewFrame.y;
     var width = that.sysActionStartFrame.size.width;
     var height = that.sysActionStartFrame.size.height;
-    var createValueFrame = Rectangle.create(x, y, width, height);
-    var createValueView = createValueSystemActionView(createValueFrame, createValueAndAddToWorkshop);
-    dogbone.addChild(createValueView);
-
-    y = createValueFrame.bottom + (that.sysActionStartFrame.y * 2);
     var triangleFrame = Rectangle.create(x, y, width, height);
     var triangleView = TriangleView.create(triangleFrame);
     triangleView.makeUnselectable();
     triangleView.makeUndraggable();
     dogbone.addChild(triangleView);
-
-    y = triangleFrame.bottom + (that.sysActionStartFrame.y * 2);
-    var w = width / 4;
-    var tupleFrame = Rectangle.create(x, y, width, height);
-    var tupleView = createTupleSystemActionView(tupleFrame, createTupleAndAddToWorkshop);
-    tupleView.makeUnselectable();
-    tupleView.makeUndraggable();
-    dogbone.addChild(tupleView);
 
     /*
     y = triangleFrame.bottom + (that.sysActionStartFrame.y * 2);
@@ -98,6 +89,27 @@ function Example003(spec) {
     downTriangleView.makeUndraggable();
     dogbone.addChild(downTriangleView);
     */
+  }
+
+  function createLeftColumnActions() {
+    var createView = createViewSystemActionView(that.sysActionStartFrame.clone(), createViewAndAddToWorkshop);
+    dogbone.addChild(createView);
+    
+    var x = that.sysActionStartFrame.origin.x;
+    var y = that.sysActionStartFrame.bottom + (that.sysActionStartFrame.y * 2);
+    var width = that.sysActionStartFrame.size.width;
+    var height = that.sysActionStartFrame.size.height;
+    var createValueFrame = Rectangle.create(x, y, width, height);
+    var createValueView = createValueSystemActionView(createValueFrame, createValueAndAddToWorkshop);
+    dogbone.addChild(createValueView);
+
+    y = createValueFrame.bottom + (that.sysActionStartFrame.y * 2);
+    var w = width / 4;
+    var tupleFrame = Rectangle.create(x, y, width, height);
+    var tupleView = createTupleSystemActionView(tupleFrame, createTupleAndAddToWorkshop);
+    tupleView.makeUnselectable();
+    tupleView.makeUndraggable();
+    dogbone.addChild(tupleView);
   }
 
   function createWorkshopView() {

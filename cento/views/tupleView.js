@@ -1,4 +1,5 @@
 
+// spec: frame, tuple, tupleAction
 function TupleView(spec) {
   var that = ActionView.createWithNoPorts(spec.frame, '', spec.tupleAction);
   
@@ -8,12 +9,13 @@ function TupleView(spec) {
   that.type = 'TupleView';
   that.borderColor = colorWithAlpha('#ff8ade', 0.7);
 
-  var innerWidth = spec.frame.size.width - 10;
+  // var innerWidth = spec.frame.size.width - 10;
   that.renderBackground = function(graphics) {
-    var firstRect = Rectangle.create(that.frame.origin.x + 5, that.frame.origin.y + 5, innerWidth, 15);
-    var secondRect = Rectangle.create(that.frame.origin.x + 5, that.frame.origin.y + that.frame.size.height - 20, innerWidth, 15);
-    graphics.drawRect(firstRect, that.backgroundColor);
-    graphics.drawRect(secondRect, that.backgroundColor);
+    // var firstRect = Rectangle.create(that.frame.origin.x + 5, that.frame.origin.y + 5, innerWidth, 15);
+    // var secondRect = Rectangle.create(
+      // that.frame.origin.x + 5, that.frame.origin.y + that.frame.size.height - 20, innerWidth, 15);
+    // graphics.drawRect(firstRect, that.backgroundColor);
+    // graphics.drawRect(secondRect, that.backgroundColor);
   };
 
   function configurePorts() {
