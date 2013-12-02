@@ -7,6 +7,8 @@ function Tuple(spec) {
 
   that.map = function(worker) {return worker(that);};
 
+  that.toString = function(){return '(' + that.first + ', ' + that.second + ')';};
+
   var _firstItem = spec.first
     , _secondItem = spec.second;
 
@@ -14,7 +16,6 @@ function Tuple(spec) {
 }
 
 Tuple.createWithSpec = function(spec){return new Tuple(spec);};
-Tuple.create = function(first, second){return Tuple.createWithSpec({"first":first, "second":second});};
 
 if (typeof module !== 'undefined') {
   module.exports = Tuple;

@@ -14,7 +14,8 @@ describe('CentoMath', function(){
       var firstItem = 2;
       var secondItem = 3;
       var expected = firstItem + secondItem;
-      var result = CentoMath.plus(Tuple.create(firstItem, secondItem));
+      var input = Tuple.createWithSpec({"first":firstItem, "second":secondItem});
+      var result = CentoMath.plus(input);
       existy(result).should.be.true;
       result.should.equal(expected);
     });
@@ -25,7 +26,8 @@ describe('CentoMath', function(){
       var firstItem = 2;
       var secondItem = 3;
       var expected = firstItem - secondItem;
-      var result = CentoMath.minus(Tuple.create(firstItem, secondItem));
+      var input = Tuple.createWithSpec({"first":firstItem, "second":secondItem});
+      var result = CentoMath.minus(input);
       existy(result).should.be.true;
       result.should.equal(expected);
     });
@@ -36,7 +38,8 @@ describe('CentoMath', function(){
       var firstItem = 2;
       var secondItem = 3;
       var expected = firstItem * secondItem;
-      var result = CentoMath.multiply(Tuple.create(firstItem, secondItem));
+      var input = Tuple.createWithSpec({"first":firstItem, "second":secondItem});
+      var result = CentoMath.multiply(input);
       existy(result).should.be.true;
       result.should.equal(expected);
     });
@@ -47,7 +50,8 @@ describe('CentoMath', function(){
       var firstItem = 2;
       var secondItem = 3;
       var expected = firstItem / secondItem;
-      var result = CentoMath.divide(Tuple.create(firstItem, secondItem));
+      var input = Tuple.createWithSpec({"first":firstItem, "second":secondItem});
+      var result = CentoMath.divide(input);
       existy(result).should.be.true;
       result.should.equal(expected);
     });

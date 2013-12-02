@@ -20,6 +20,18 @@ createValueSystemActionView = function(frame, createValueWorker) {
     return valueView;
 }
 
+createTupleSystemActionView = function(frame, createTupleWorker) {
+    var createTupleName = 'Tuple';
+    var createTupleAction = Action.create(createTupleName, createTupleWorker);
+    var tupleView = TupleView.create({"frame":frame, "tupleAction":createTupleAction});
+    tupleView.name = 'System.Action.Create.View';
+    tupleView.backgroundColor = colorWithAlpha('#ff8ade', 0.7);
+    tupleView.borderColor = tupleView.backgroundColor;
+    tupleView.makeUnselectable();
+    tupleView.makeUndraggable();
+    return tupleView;
+}
+
 createSaveToLocalStorageSystemActionView = function(frame, saveViewWorker) {
   var saveViewName = 'Save';
   var saveViewAction = Action.create(saveViewName, saveViewWorker);

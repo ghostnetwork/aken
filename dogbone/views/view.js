@@ -13,7 +13,11 @@ function View(frame) {
 
   that.type = 'View';
   that.borderColor;
-  that.clearBorderColor = function() {that.borderColor = undefined;};
+  that.clearBorderColor = function() {
+    // TODO: this breaks TupleView, because it's setting the borderColor to undefined
+    // need to use a separate property, selectionBorderColor
+    // that.borderColor = undefined;
+  };
   
   that.viewFromSpec = function(spec) {
     that.shapeFromSpec(spec);
@@ -60,7 +64,9 @@ function View(frame) {
   }
 
   that.renderBorder = function(graphics) {
-    if (existy(that.borderColor)) {graphics.drawRect(that.frame, that.borderColor);}
+    if (existy(that.borderColor)) {
+      graphics.drawRect(that.frame, that.borderColor);
+    }
   }
 
   that.renderLabel = function(graphics) {

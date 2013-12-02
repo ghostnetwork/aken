@@ -26,6 +26,17 @@ function ActionView(frame, label, action, wantsPorts) {
       attachOutputPortToView(_action.outputPort);
     }
   }
+
+  that.attachPortToView = function(portFrame, port) {
+    var portView = PortView.create(portFrame, port, that);
+    portView.name = port.name;
+    portView.makeUndraggable();
+
+    portView.onTouch = function() {}
+
+    that.addChild(portView);
+    return portView;
+  }
   
   that.onTouch = function() {
     if (existy(action)) {

@@ -1,5 +1,6 @@
 var Segment = require('../../../../../cento/kernel/geometry/segment.js');
 var Connector = require('../../../../../cento/kernel/connector.js');
+var Tuple = require('../../../../../cento/kernel/tuple.js');
 var Point = require('../../../../../dogbone/geometry/point.js');
 var PF = require('../ports/portFixtures.js');
 
@@ -31,6 +32,15 @@ var PF = require('../ports/portFixtures.js');
     "endPort":PF.InputPort
   };
   CentoGeometryFixtures.Connector = Connector.create(kConnectorSpec);
+
+  var kTupleFirstItem = 'TupleSpec.Item.First'
+    , kTupleSecondItem = 'TupleSpec.Item.Second'
+    , kTupleSpec = {"first":kTupleFirstItem, "second":kTupleSecondItem};
+  CentoGeometryFixtures.Tuple = Tuple.createWithSpec(kTupleSpec);
+  CentoGeometryFixtures.Tuple.FirstItem = kTupleFirstItem;
+  CentoGeometryFixtures.Tuple.SecondItem = kTupleSecondItem;
+  CentoGeometryFixtures.Tuple.TupleSpec = kTupleSpec;
+
 
   function CentoGeometryFixtures(){};
   CentoGeometryFixtures.create = function() {return new CentoGeometryFixtures();};

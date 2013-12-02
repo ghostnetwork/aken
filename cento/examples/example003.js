@@ -64,22 +64,40 @@ function Example003(spec) {
     y = createValueFrame.bottom + (that.sysActionStartFrame.y * 2);
     var triangleFrame = Rectangle.create(x, y, width, height);
     var triangleView = TriangleView.create(triangleFrame);
+    triangleView.makeUnselectable();
+    triangleView.makeUndraggable();
     dogbone.addChild(triangleView);
 
     y = triangleFrame.bottom + (that.sysActionStartFrame.y * 2);
+    var w = width / 4;
+    var tupleFrame = Rectangle.create(x, y, width, height);
+    var tupleView = createTupleSystemActionView(tupleFrame, createTupleAndAddToWorkshop);
+    tupleView.makeUnselectable();
+    tupleView.makeUndraggable();
+    dogbone.addChild(tupleView);
+
+    /*
+    y = triangleFrame.bottom + (that.sysActionStartFrame.y * 2);
     var rightTriangleFrame = Rectangle.create(x, y, width, height);
     var rightTriangleView = RightTriangleView.create(rightTriangleFrame);
+    rightTriangleView.makeUnselectable();
+    rightTriangleView.makeUndraggable();
     dogbone.addChild(rightTriangleView);
 
     y = rightTriangleFrame.bottom + (that.sysActionStartFrame.y * 2);
     var leftTriangleFrame = Rectangle.create(x, y, width, height);
     var leftTriangleView = LeftTriangleView.create(leftTriangleFrame);
+    leftTriangleView.makeUnselectable();
+    leftTriangleView.makeUndraggable();
     dogbone.addChild(leftTriangleView);
 
     y = leftTriangleFrame.bottom + (that.sysActionStartFrame.y * 2);
     var downTriangleFrame = Rectangle.create(x, y, width, height);
     var downTriangleView = DownTriangleView.create(downTriangleFrame);
+    downTriangleView.makeUnselectable();
+    downTriangleView.makeUndraggable();
     dogbone.addChild(downTriangleView);
+    */
   }
 
   function createWorkshopView() {
@@ -134,7 +152,7 @@ function Example003(spec) {
     var frame = Rectangle.createWithOriginAndSize(origin, that.sysActionStartFrame.size);
 
     var clonedView = View.create(frame);
-    clonedView.name = "ClonedView." + that.workshopView.childCount;
+    clonedView.name = "View." + that.workshopView.childCount;
     clonedView.backgroundColor = colorWithAlpha('#00c7c7', 0.7);
 
     that.workshopView.addChild(clonedView);
@@ -157,8 +175,31 @@ function Example003(spec) {
     var frame = Rectangle.createWithOriginAndSize(origin, that.sysActionStartFrame.size);
     var value = Value.create(0);
     var clonedView = ValueView.create(frame, value);
-    clonedView.name = "ClonedView." + that.workshopView.childCount;
+    clonedView.name = "ValueView." + that.workshopView.childCount;
     clonedView.backgroundColor = colorWithAlpha('#ffcc66', 0.7);
+
+    that.workshopView.addChild(clonedView);
+  }
+
+  function createTupleAndAddToWorkshop() {
+    var x, y;
+    var numKids = that.workshopView.childCount;
+    if (numKids > 0) {
+      var lastAddedView = that.workshopView.children[numKids - 1];
+      x = lastAddedView.frame.origin.x;
+      y = lastAddedView.frame.origin.y + that.sysActionStartFrame.size.height + that.sysActionStartFrame.y;
+    }
+    else {
+      x = that.workshopFrame.origin.x + that.sysActionStartFrame.origin.x;
+      y = that.workshopFrame.origin.y + that.sysActionStartFrame.origin.y;
+    }
+
+    var origin = Point.create(x, y);
+    var frame = Rectangle.createWithOriginAndSize(origin, that.sysActionStartFrame.size);
+    var action = Action.create('TupleAction', function(){});
+    var clonedView = TupleView.create({"frame":frame, "tupleAction":action});
+    clonedView.name = "TupleView." + that.workshopView.childCount;
+    clonedView.backgroundColor = colorWithAlpha('#ff8ade', 0.7);
 
     that.workshopView.addChild(clonedView);
   }

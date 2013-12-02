@@ -3,17 +3,15 @@ var should = require('should');
 var sinon = require('sinon');
 var util = require('util');
 var Tuple = require('../../../../cento/kernel/tuple.js');
+var CGF = require('./geometry/centoGeometryFixtures.js');
 require('../../../../verdoux/predicates.js');
 
 describe('Tuple', function(){
   'use strict';
 
-  var kFirstItem = 'TupleSpec.Item.First'
-    , kSecondItem = 'TupleSpec.Item.Second'
-    , kSpec = {"first":kFirstItem, "second":kSecondItem};
   var tuple;
 
-  beforeEach(function() {tuple = Tuple.createWithSpec(kSpec);});
+  beforeEach(function() {tuple = Tuple.createWithSpec(CGF.Tuple.TupleSpec);});
 
   it('should be able to be created', function(){assert(existy(tuple));});
   
@@ -22,22 +20,8 @@ describe('Tuple', function(){
     var secondItem = tuple.second;
     existy(firstItem).should.be.true;
     existy(secondItem).should.be.true;
-    firstItem.should.equal(kFirstItem);
-    secondItem.should.equal(kSecondItem);
-  });
-
-  describe('create', function(){
-    it('should be able to create a tuple given separate first and second items', function(){
-      var myFirstItem = 'My.First.Item';
-      var mySecondItem = 'My.Second.Item';
-      var myTuple = Tuple.create(myFirstItem, mySecondItem);
-      var firstItem = myTuple.first;
-      var secondItem = myTuple.second;
-      existy(firstItem).should.be.true;
-      existy(secondItem).should.be.true;
-      firstItem.should.equal(myFirstItem);
-      secondItem.should.equal(mySecondItem);
-    });
+    firstItem.should.equal(CGF.Tuple.FirstItem);
+    secondItem.should.equal(CGF.Tuple.SecondItem);
   });
 
   describe('map', function(){
@@ -47,11 +31,11 @@ describe('Tuple', function(){
         , didSeeSecondItem = false;
       var worker = function(input) {
 
-        if (input.first === kFirstItem) {
+        if (input.first === CGF.Tuple.FirstItem) {
           count++;
           didSeeFirstItem = true;
         }
-        if (input.second == kSecondItem) {
+        if (input.second == CGF.Tuple.SecondItem) {
           count++;
           didSeeSecondItem = true;
         }
@@ -62,6 +46,16 @@ describe('Tuple', function(){
       count.should.equal(2);
       didSeeFirstItem.should.be.true;
       didSeeSecondItem.should.be.true;
+    });
+  });
+
+  describe('toString', function(){
+    it('should return the contents of the tuple as a string', function(){
+      var result = tuple.toString();
+      existy(result).should.be.true;
+
+      var expected = '(' + CGF.Tuple.FirstItem + ', ' + CGF.Tuple.SecondItem + ')';
+      result.should.equal(expected);
     });
   });
 });
