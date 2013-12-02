@@ -64,7 +64,7 @@ TupleView.createFromSpec = function(spec) {
 };
 
 TupleView.createFromJSON = function(tupleViewJSON) {
-  return TupleView.createFromSpec(TupleView.fromJSON(tupleViewJSON));
+  return TupleView.createFromSpec(ActionView.fromJSON(tupleViewJSON));
 };
 
 if (typeof module !== 'undefined') {
@@ -74,5 +74,7 @@ if (typeof module !== 'undefined') {
     , Size = require('../../dogbone/geometry/size.js')
     , Point = require('../../dogbone/geometry/point.js')
     , InputPort = require('../kernel/ports/inputPort.js')
+    , Action = require('../kernel/action.js')
+    , Tuple = require('../kernel/tuple.js')
     , ActionView = require('./actionView.js');
 }
