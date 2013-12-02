@@ -3,6 +3,7 @@ var should = require('should');
 var sinon = require('sinon');
 var util = require('util');
 var Tuple = require('../../../../cento/kernel/tuple.js');
+var LSF = require('../../localStorageFixtures.js');
 var CGF = require('./geometry/centoGeometryFixtures.js');
 require('../../../../verdoux/predicates.js');
 
@@ -58,4 +59,55 @@ describe('Tuple', function(){
       result.should.equal(expected);
     });
   });
+
+  describe('createFromJSON / createFromSpec', function(){
+    it('should be able to create a new object from the given JSON', function(){
+      var origTuple = createOrigTuple();
+
+      var data = JSON.stringify(origTuple);
+      existy(data).should.be.true;
+
+      var clone = Tuple.createFromJSON(data);
+      verifyClone(clone, origTuple);
+    });
+  });
+
+  describe('LocalStorage', function(done){
+    it('should be able to save and restore from LocalStorage', function(done){
+      var origTuple = createOrigTuple();
+      var data = JSON.stringify(origTuple);
+
+      var lsKey = "TupleSpec.LocalStorage";
+      LSF.global.initialize();
+      LSF.global.localStorage.setItem(lsKey, data);
+
+      var rawJSON = LSF.global.localStorage.getItem(lsKey);
+      existy(rawJSON).should.be.true;
+
+      var clone = Tuple.createFromJSON(rawJSON);
+      verifyClone(clone, origTuple);
+
+      LSF.global.cleanup(function(error){
+        if (error) {throw error;}
+        done();
+      });
+    });
+  });
+
+  var tupleName   = 'TupleSpec.Tuple';
+  var tupleFirst  = 'TupleSpec.Tuple.First';
+  var tupleSecond = 'TupleSpec.Tuple.Second';
+  function createOrigTuple() {
+    var origTuple = Tuple.createWithSpec({
+      "first":tupleFirst, 
+      "second":tupleSecond
+    });
+    return origTuple;
+  };
+
+  function verifyClone(clone, origTuple) {
+    existy(clone).should.be.true;
+    existy(clone.first).should.be.true;
+    existy(clone.second).should.be.true;
+  }
 });

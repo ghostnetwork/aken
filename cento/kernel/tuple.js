@@ -17,6 +17,8 @@ function Tuple(spec) {
 
 Tuple.createWithSpec = function(spec){return new Tuple(spec);};
 
+Tuple.createFromJSON = function(tupleJSON) {return Tuple.createWithSpec(JSON.parse(tupleJSON));};
+
 if (typeof module !== 'undefined') {
   module.exports = Tuple;
   var util = require('util')
