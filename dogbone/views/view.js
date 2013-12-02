@@ -11,14 +11,12 @@ function View(frame) {
     return displayList.slice();},enumerable : true
   });
 
+
   that.type = 'View';
   that.borderColor;
-  that.clearBorderColor = function() {
-    // TODO: this breaks TupleView, because it's setting the borderColor to undefined
-    // need to use a separate property, selectionBorderColor
-    // that.borderColor = undefined;
-  };
   
+  var origBorderColor = null;
+
   that.viewFromSpec = function(spec) {
     that.shapeFromSpec(spec);
 
@@ -38,11 +36,25 @@ function View(frame) {
     if (that.isSelectable) {
       if (selected) {
         that.select();
+
+        if (notExisty(origBorderColor)) {
+          if (existy(that.borderColor)) {
+            origBorderColor = that.borderColor;
+          }
+          else {
+            origBorderColor = that.backgroundColor;
+          }
+        }
+
         that.borderColor = colorWithAlpha('#ffffff', 1.0);
       }
       else {
         that.unselect();
-        that.clearBorderColor();
+
+        if (existy(origBorderColor)) {
+          that.borderColor = origBorderColor;
+          origBorderColor = null;
+        }
       }
     }
   };
